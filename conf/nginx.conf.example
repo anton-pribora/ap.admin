@@ -1,0 +1,44 @@
+server {
+    listen *:80;
+    server_name admin.pribora.info;
+
+    root       /www/admin.pribora.info/docs/web_public;
+    access_log /www/admin.pribora.info/logs/access.log;
+    error_log  /www/admin.pribora.info/logs/error.log;
+    
+    set $phpini "
+        error_log=/www/admin.pribora.info/logs/php-errors.log
+    ";
+    
+    set $script index.php;
+    
+    index index.php index.html;
+
+    location ^~ /asset/ {
+    }
+
+    location ^~ /cdn/cache/ {
+        try_files $uri /cdn/index.php?file=$uri;
+    }
+    
+    location ^~ /cdn/ {
+        set $script cdn/index.php;
+        try_files - @run_script;
+    }
+
+    location ^~ /public/file/ {
+        try_files - @run_script;
+    }
+
+    location ~ ^[^\.]+(\.(php|html))?$ {
+        try_files - @run_script;
+    }
+    
+    location @run_script {
+        include fastcgi_params;
+        fastcgi_param PHP_VALUE $phpini;
+        fastcgi_param REQUEST_ID $request_id;
+        fastcgi_param SCRIPT_FILENAME $document_root/$script;
+        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+    }
+}

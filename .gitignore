@@ -1,0 +1,10 @@
+# ZendStudio files
+.buildpath
+.project
+.settings
+
+# NetBeans files
+nbproject/
+
+# VisualStudioCode
+.vscode/
