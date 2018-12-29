@@ -2,7 +2,7 @@ server {
     listen *:80;
     server_name admin.pribora.info;
 
-    root       /www/admin.pribora.info/docs/web_public;
+    root       /www/admin.pribora.info/docs/web_docroot;
     access_log /www/admin.pribora.info/logs/access.log;
     error_log  /www/admin.pribora.info/logs/error.log;
     

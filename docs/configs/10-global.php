@@ -54,4 +54,17 @@ Config()->setup([
         'uploads'    => ROOT_DIR . '/uploads/',
         'thumbnails' => ROOT_DIR . '/public/thumbnails/',
     ],
+    
+    'thumbnail' => [
+        'user' => [
+            'width'  => '192',
+            'height' => '192',
+            'url'    => 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png',
+        ],
+        'product' => [
+            'width'  => '192',
+            'height' => '192',
+            'url'    => '/img/default.jpg',
+        ],
+    ],
 ]);

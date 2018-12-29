@@ -1,49 +1,49 @@
 <?php
 
 $categories = [
-    ['id' => 1, 'title' => 'Control panel', 'class' => 'title-purple'],
-    ['id' => 2, 'title' => 'Global goals' , 'class' => 'title-success'],
-    ['id' => 3, 'title' => 'Integration' , 'class' => 'title-danger'],
+    ['id' => 1, 'title' => 'Панель управления', 'class' => 'title-purple'],
+    ['id' => 2, 'title' => 'Глобальные планы' , 'class' => 'title-success'],
+    ['id' => 3, 'title' => 'Интеграция' , 'class' => 'title-danger'],
 ];
 
 $urgent = ' (<span title="as soon as possible">ASAP <i class="fa fa-bolt text-danger"></i></span>)';
 
 $tasks = [
-    ['category' => 1, 'title' => 'Backups', 'class' => 'default', 'works' => [
-        ['title' => 'Make system backups', 'done' => false],
-        ['title' => 'Download backups', 'done' => false],
-        ['title' => 'Restore backups', 'done' => false],
-        ['title' => 'Remove backups', 'done' => false],
+    ['category' => 1, 'title' => 'Бэкапы', 'class' => 'default', 'works' => [
+        ['title' => 'Бэкапы систем', 'done' => false],
+        ['title' => 'Загрузка бэкапов', 'done' => false],
+        ['title' => 'Восстановление из бэкапа', 'done' => false],
+        ['title' => 'Удаление бэкапов', 'done' => false],
     ],],
-    ['category' => 1, 'title' => 'System control', 'class' => 'success', 'works' => [
-        ['title' => 'Edit system users', 'done' => true],
-        ['title' => 'View system settings', 'done' => true],
+    ['category' => 1, 'title' => 'Управление системой', 'class' => 'success', 'works' => [
+        ['title' => 'Настройка пользователей', 'done' => true],
+        ['title' => 'Просмотр настроек', 'done' => true],
     ],],
-    ['category' => 1, 'title' => 'System git', 'class' => 'success', 'works' => [
-        ['title' => 'View branches', 'done' => true],
-        ['title' => 'Chechout branch', 'done' => true],
-        ['title' => 'Apply migrations', 'done' => true],
+    ['category' => 1, 'title' => 'Работа с git', 'class' => 'success', 'works' => [
+        ['title' => 'Просмотр веток', 'done' => true],
+        ['title' => 'Переключение веток', 'done' => true],
+        ['title' => 'Применение миграций', 'done' => true],
     ],],
-    ['category' => 1, 'title' => 'Panel', 'class' => 'default', 'works' => [
-        ['title' => 'Settings', 'done' => false],
-        ['title' => 'Emailing', 'done' => true],
+    ['category' => 1, 'title' => 'Панель администратора', 'class' => 'default', 'works' => [
+        ['title' => 'Настройки', 'done' => false],
+        ['title' => 'Отправка почты', 'done' => true],
     ],],
-    ['category' => 2, 'title' => 'Tariffs', 'class' => 'default', 'works' => [
-        ['title' => 'System balance', 'done' => true],
-        ['title' => 'Payments', 'done' => true],
-        ['title' => 'Invoices', 'done' => false],
-        ['title' => 'Reports', 'done' => false],
-        ['title' => 'Blocking systems', 'done' => false],
+    ['category' => 2, 'title' => 'Тарифы', 'class' => 'default', 'works' => [
+        ['title' => 'Баланс', 'done' => true],
+        ['title' => 'Платежи', 'done' => true],
+        ['title' => 'Счета', 'done' => false],
+        ['title' => 'Отчёты', 'done' => false],
+        ['title' => 'Блокировка', 'done' => false],
     ],],
-    ['category' => 2, 'title' => 'Server', 'class' => 'default', 'works' => [
-        ['title' => 'Move wordpress out of here' . $urgent, 'done' => false],
-        ['title' => 'Replace MySQL with MariaDB' . $urgent, 'done' => false],
-        ['title' => 'Remove useless systems and backups' . $urgent, 'done' => false],
-        ['title' => 'Remove GNOME' . $urgent, 'done' => false],      
+    ['category' => 2, 'title' => 'Сервер', 'class' => 'default', 'works' => [
+        ['title' => 'Убрать wordpress' . $urgent, 'done' => false],
+        ['title' => 'Заменить MySQL на MariaDB' . $urgent, 'done' => false],
+        ['title' => 'Удалить ненужные данные' . $urgent, 'done' => false],
+        ['title' => 'Удалить GNOME' . $urgent, 'done' => false],      
     ],],
-    ['category' => 3, 'title' => 'kryptos24.pl', 'class' => 'success', 'works' => [
-        ['title' => 'Register new system', 'done' => true],
-        ['title' => 'Send notify to admin after registration', 'done' => true],
+    ['category' => 3, 'title' => 'Основной сайт', 'class' => 'success', 'works' => [
+        ['title' => 'Форма регистрации', 'done' => true],
+        ['title' => 'Отправка уедомлений о новой регистрации', 'done' => true],
     ],],
 ];
 
