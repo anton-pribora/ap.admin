@@ -70,7 +70,7 @@ $nname = strtr(dirname($fname), '/', '\\');     // Пространство им
 
 
 $billetNamspace = new PhpNamespace('ApCode\\Billet');
-$billetAbstract = $billetNamspace->createClass('AbstractBillet2');
+$billetAbstract = $billetNamspace->createClass('AbstractBillet');
 
 $namespace = new PhpNamespace('{{class | namespace}}');
 
