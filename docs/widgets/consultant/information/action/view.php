@@ -19,7 +19,7 @@ if ($enableEdit) {
 Layout()->append('body.js.code', file_get_contents(__dir('../dist/view_controller.js')));
 Layout()->append('body.js.code', file_get_contents(__dir('../dist/service.js')));
 
-Layout()->append('body.js.code', 'window.consultantInformation = '. json_encode($this->include('encodeItem.php'), JSON_UNESCAPED_UNICODE) .';');
-Layout()->append('body.js.code', 'window.consultantId = '. json_encode(Identity()->consultant()->id(), JSON_UNESCAPED_UNICODE) .';');
+Layout()->append('body.js.code', 'window.consultantInformation = '. json_encode_array($this->include('encodeItem.php')) .';');
+Layout()->append('body.js.code', 'window.consultantId = '. json_encode_array(Identity()->consultant()->id()) .';');
 
 $this->execute('../dist/view_form.php', $consultant, ['enableEdit' => $enableEdit] + $this->paramList());
