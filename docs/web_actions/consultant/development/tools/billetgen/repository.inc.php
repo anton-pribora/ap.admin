@@ -96,6 +96,15 @@ class {{class | class}}Repository
         return current(\$list);
     }
 
+    /**
+     * @param \\{{class}} \$item
+     */
+    public static function drop(\\{{class}} \$item)
+    {
+        \$sql = 'DELETE FROM ' . Db()->quoteName(\$item::tableName()) . ' WHERE "{$idfield}" = ?';
+        Db()->query(\$sql, [\$item->billetId()]);
+    }
+
     private static function buildWhere(&\$params)
     {
         \$where = [];

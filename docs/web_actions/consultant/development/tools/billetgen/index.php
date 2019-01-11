@@ -76,6 +76,7 @@ $namespace = new PhpNamespace('{{class | namespace}}');
 
 $primaryClass = $namespace->createClass('{{class | class}}');
 $primaryClass->addExtension($billetAbstract);
+$primaryClass->style()->setOption('function.phpdoc', false);
 
 $tableInfo = new MysqlReflectionTable(Db(), $currentTable, $currentDb);
 

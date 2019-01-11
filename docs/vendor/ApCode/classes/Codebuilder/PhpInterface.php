@@ -9,10 +9,10 @@ namespace ApCode\Codebuilder;
 
 class PhpInterface extends PhpElement
 {
+    private $style;
+    
     protected $namespace = null;
-    
     protected $extensions = [];
-    
     protected $functions = [];
     
     public function __construct($name, PhpNamespace $namespace = null)
@@ -103,9 +103,23 @@ class PhpInterface extends PhpElement
         return $function;
     }
     
+    public function style()
+    {
+        if (empty($this->style)) {
+            $this->style = new Style();
+        }
+        
+        return $this->style;
+    }
+    
+    public function setStyle(Style $style)
+    {
+        $this->style = $style;
+        return $this;
+    }
+    
     public function render()
     {
-        $style = new Style();
-        return $style->render($this);
+        return $this->style()->render($this);
     }
 }

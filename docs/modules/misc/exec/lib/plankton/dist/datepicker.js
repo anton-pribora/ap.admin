@@ -7,7 +7,7 @@ app.directive("ngDatepicker", ['jquery', function($) {
         },
         link : function(scope, element, attrs, ngModel) {
             var $picker = $(element).datepicker({
-                language: "en",
+                language: "ru",
                 autoclose: true,
                 keepEmptyValues: true
             });

@@ -20,7 +20,7 @@ class Pagination implements \JsonSerializable
     
     public function totalPages()
     {
-        return ceil($this->total / $this->limit);
+        return $this->limit ? ceil($this->total / $this->limit) : -1;
     }
     
     public function setTotalItems($totalItems)
