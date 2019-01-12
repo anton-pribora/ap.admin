@@ -1,6 +1,6 @@
 <?php
 
-glob_include(ROOT_DIR .'/vendor/*/bootstrap.php');
+glob_include(ROOT_DIR .'/components/*/bootstrap.php');
 
 spl_autoload_register(function ($class) {
     $file = ROOT_DIR .'/classes/'. strtr($class, '\\', '/') .'.php';
