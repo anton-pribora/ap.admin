@@ -76,3 +76,33 @@ git commit -m 'Начальный коммит'
 ```
 
 Приятной работы :)
+
+## Composer
+
+Чтобы подключить composer к проекту, перейдите в папку `docs` и выполните:
+
+```bash
+% composer init
+```
+
+После этого добавьте в файл `docs/init/20-autoload.php` подключение конфига composer:
+
+```php
+<?php
+// Файл docs/init/20-autoload.php
+
+// Компоненты проекта вне композера
+glob_include(ROOT_DIR . '/components/*/bootstrap.php');
+
+// Компоненты композера
+glob_include(ROOT_DIR . '/vendor/autoload.php');
+
+// Классы проекта
+spl_autoload_register(function ($class) {
+    $file = ROOT_DIR . '/classes/' . strtr($class, '\\', '/') . '.php';
+    
+    if (file_exists($file)) {
+        require $file;
+    }
+});
+```
