@@ -37,8 +37,8 @@ Config()->setup([
     ],
 
     'mail' => [
-        'defaultEmail' => 'default@email',
-        'transports'   => [
+        'defaultFrom' => 'default@email',
+        'transports'  => [
             [
                 'type' => 'file',
                 'dir'  => ROOT_DIR . '/../mails/'. date('Y-m/d/'),
