@@ -37,7 +37,6 @@ server {
     location @run_script {
         include fastcgi_params;
         fastcgi_param PHP_VALUE $phpini;
-        fastcgi_param REQUEST_ID $request_id;
         fastcgi_param SCRIPT_FILENAME $document_root/$script;
         fastcgi_pass unix:/run/php/php7.2-fpm.sock;
     }
