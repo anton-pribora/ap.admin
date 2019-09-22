@@ -7,7 +7,7 @@
 
 namespace ApCode\Html\Element;
 
-class Object extends ContentableElement
+class ObjectElement extends ContentableElement
 {
     protected $tagName = 'object';
 
