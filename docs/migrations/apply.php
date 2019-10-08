@@ -1,4 +1,4 @@
-#!/usr/bin/env php7.2
+#!/usr/bin/env php
 <?php
 
 namespace migrations;
