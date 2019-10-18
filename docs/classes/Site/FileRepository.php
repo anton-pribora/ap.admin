@@ -62,7 +62,9 @@ class FileRepository
      */
     public static function findOne($params)
     {
-        $pagination = new Pagination(['limit' => 1]);
+        $pagination = new Pagination();
+        $pagination->setLimit(1);
+
         $list = self::findMany($params, $pagination);
 
         return current($list);
