@@ -27,7 +27,7 @@ class Image extends File
             $this->height   = $imageinfo[1];
             $this->mimeType = $imageinfo['mime'];
             
-            if ( preg_match('~image/(png|gif|jpeg)~', $this->mimeType, $matches) ) {
+            if ( preg_match('~image/(png|gif|jpeg|webp)~', $this->mimeType, $matches) ) {
                 $this->openFunction = 'imagecreatefrom'. $matches[1];
                 $this->saveFunction = 'image'. $matches[1];
             }
