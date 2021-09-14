@@ -1,11 +1,11 @@
 <?php
 
 function Html($html) {
-    return htmlentities($html, ENT_QUOTES, 'utf-8');
+    return htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8');
 }
 
 function HtmlAndBr($html) {
-    return nl2br(htmlentities($html, ENT_QUOTES, 'utf-8'));
+    return nl2br(htmlentities($html, ENT_QUOTES | ENT_SUBSTITUTE, 'utf-8'));
 }
 
 function json_encode_array($data) {
