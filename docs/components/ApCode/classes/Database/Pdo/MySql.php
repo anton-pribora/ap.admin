@@ -16,37 +16,43 @@ class MySql implements DatabaseInterface
     private $login;
     private $password;
     private $options;
-    
+
+    private $ansiQuotes = false;
+
     /**
      * @var PDO
      */
     private $pdo;
-    
+
     private $totalQueries = 0;
     private $totalTime = 0;
-    
+
     public function __construct($dsn, $login, $password, array $options = [])
     {
         $this->dsn      = $dsn;
         $this->login    = $login;
         $this->password = $password;
-        
+
         $this->options = $options + [
-            PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-            PDO::MYSQL_ATTR_INIT_COMMAND => 'SET sql_mode="ANSI"',
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
         ];
     }
-    
+
     private function connect()
     {
         $this->pdo = new PDO($this->dsn, $this->login, $this->password, $this->options);
     }
-    
+
     public function disconnect()
     {
         $this->pdo = null;
     }
-    
+
+    public function setAnsiQuotes(bool $value)
+    {
+        $this->ansiQuotes = $value;
+    }
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Database\DatabaseInterface::query()
@@ -56,22 +62,22 @@ class MySql implements DatabaseInterface
         if (empty($this->pdo)) {
             $this->connect();
         }
-        
+
         $startTime = microtime(true);
-        
+
         if ( $params ) {
             $statement = $this->pdo->prepare($sql);
             $statement->execute($params);
         }
-        else { 
+        else {
             $statement = $this->pdo->query($sql);
         }
-        
+
         $elapsed = microtime(true) - $startTime;
-        
+
         $this->totalQueries += 1;
         $this->totalTime += $elapsed;
-        
+
         return new QueryResult($statement, $elapsed);
     }
 
@@ -84,8 +90,18 @@ class MySql implements DatabaseInterface
         if (empty($this->pdo)) {
             $this->connect();
         }
-        
+
         return $this->pdo->quote($data);
+    }
+
+    private function quoteNameAnsi($data)
+    {
+        return '"' . strtr($data, ['"' => '""', '.' => '"."']) . '"';
+    }
+
+    private function quoteNameMySQL($data)
+    {
+        return '`' . strtr($data, ['`' => '\\`', '.' => '`.`']) . '`';
     }
 
     /**
@@ -94,7 +110,7 @@ class MySql implements DatabaseInterface
      */
     public function quoteName($data)
     {
-        return '"'. strtr($data, ['"' =>'""', '.' => '"."']) .'"';
+        return $this->ansiQuotes ? $this->quoteNameAnsi($data) : $this->quoteNameMySQL($data);
     }
 
     /**
@@ -106,15 +122,15 @@ class MySql implements DatabaseInterface
         if (empty($this->pdo)) {
             $this->connect();
         }
-        
+
         return $this->pdo->lastInsertId();
     }
-    
+
     public function totalQueries()
     {
         return $this->totalQueries;
     }
-    
+
     public function totalTime()
     {
         return $this->totalTime;

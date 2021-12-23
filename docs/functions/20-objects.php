@@ -72,11 +72,11 @@ function Gotcha() {
  */
 function Replica() {
     static $replica;
-    
+
     if (empty($replica)) {
         $replica = new Replica\ReplicaExporter(Db());
     }
-    
+
     return $replica;
 }
 
@@ -232,11 +232,11 @@ function FullUrl($path, $params = [], $replaceParams = FALSE)
 function ExternalUrl($path, $params = [])
 {
     static $urlManager;
-    
+
     if (empty($urlManager)) {
         $urlManager = new \ApCode\Web\UrlManager(Request()->fullUri(), UrlAlias());
     }
-    
+
     return $urlManager->fullUrl($path, $params);
 }
 
@@ -249,7 +249,7 @@ function Identity() {
             return Auth()->activeSession()->identity();
         }
     }
-    
+
     return new Auth\Identity();
 }
 
@@ -292,6 +292,9 @@ function Db() {
             Config()->get('db.password'),
             Config()->get('db.options', [])
         );
+
+        // Настройки кавычек для названий таблиц и столбцов
+        $db->setAnsiQuotes(Config()->get('db.ansi_quotes', false));
     }
 
     return $db;
@@ -382,25 +385,25 @@ function Icon($icon, $size = 'small') {
  */
 function Mailer() {
     static $mailer;
-    
+
     if (empty($mailer)) {
         $config = Config()->get('mail', []);
-        
+
         if (!isset($config['onError'])) {
             $config['onError'] = function($text) {
                 Logger()->error($text);
             };
         }
-        
+
         if (!isset($config['afterSend'])) {
             $config['afterSend'] = function($text) {
                 Logger()->log('mails', $text);
             };
         }
-        
+
         $mailer = new ApCode\Mail\Mailer();
         $mailer->init($config);
     }
-    
+
     return $mailer;
 }
