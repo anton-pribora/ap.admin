@@ -5,8 +5,6 @@ namespace migrations;
 
 require_once __DIR__ .'/lib.inc.php';
 
-ini_set('display_errors', true);
-
 install_db();
 
 foreach (migrations_all() as $id => $item) {

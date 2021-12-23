@@ -7,19 +7,18 @@ require_once __DIR__ .'/lib.inc.php';
 
 chdir(__DIR__);
 
-$name = new_migration();
+$comment = join(' ', array_slice($argv, 1));
+$name = new_migration($comment);
 
-file_put_contents($name, <<<TEMPLATE
+file_put_contents('dist/' . $name, <<<TEMPLATE
 <?php
 
 namespace migrations;
 
-require_once __DIR__ .'/lib.inc.php';
+require_once(__DIR__ . '/../lib.inc.php');
 
-// Write you code here
-//
-// You can use
-// Db()->query('some sql');  for quering
+// {$comment}
+Db()->query('some sql');
 
 TEMPLATE
 );

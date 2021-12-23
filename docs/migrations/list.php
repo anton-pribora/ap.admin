@@ -7,8 +7,8 @@ require_once __DIR__ .'/lib.inc.php';
 
 install_db();
 
-printf("%-30s %s\n", 'Migration', 'Applied');
+printf("%-19s %s\n", 'Applied', 'Migration');
 
 foreach (migrations_all() as $id => $item) {
-    printf("%-30s %s\n", $id, $item['applied']);
+    printf("%-19s %s\n", $item['applied'], $id);
 }

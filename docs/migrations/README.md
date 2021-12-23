@@ -1,77 +1,41 @@
 # Migrations
 
-At first you have to create a new migration. 
+At first, you have to create a new migration. 
 
 ```
-% ./new.php
-New migration z_1511620015.822_447.php
-%
+% ./new.php my awesome migration
+New migration 20211223_092956_my_awesome_migration_75f.php
 ```
 
-Edit your migration and execute some sql using db_query() or db_pdo().
+Edit your migration (in folder `dist/`) add some sql queries using db_query() or db_pdo().
 
-When the migration is finished apply it using
+When the migration is finished apply it using apply.php:
 
 ```
-% ./apply.php
+% ./apply.php 
+Apply migration 20211223_092956_my_awesome_migration_75f.php
 ```
 
-If you want to see all migrations use list.php.
+If you want to see all migrations use list.php:
 
 ```
 % ./list.php 
-Migration                      Applied
-z_1511620015.822_447.php       2017-11-25 14:28:39
-z_1511620086.3012_8f4.php      2017-11-25 14:28:39
-
+Applied             Migration
+2021-12-23 07:30:55 20211223_092956_my_awesome_migration_75f.php
 ```
 
 ## Example
 
-Create new migration:
-
-```
-% ./new.php 
-New migration z_1511620855.2155_066.php
-```
-
-Write some contents:
+Typical migration file:
 
 ```php
 <?php
 
 namespace migrations;
 
-require_once __DIR__ .'/lib.inc.php';
+require_once(__DIR__ . '/../lib.inc.php');
 
-// Write you code here
-//
-// You can use
-// Db->query('some sql');  for quering
+// my awesome migration
+Db()->query('create table test (data varchar(255))');
 
-Db()->query('
-CREATE TABLE IF NOT EXISTS "_test" (
-    "test" text
-) DEFAULT CHARSET=utf8
-');
-
-Db()->query('INSERT INTO "_test" VALUES (?), (?)',['hello', 'world']);
-
-$res = Db()->query('SELECT * FROM `_test`');
-
-print_r($res->fetchAllRows());
-
-db_query('DROP TABLE "_test"');
-```
-
-Apply changes:
-
-```
-% ./apply.php
-Apply migration z_1511620855.2155_066.php
-Array
-(
-    [0] => hello
-    [1] => world
-)
 ```
