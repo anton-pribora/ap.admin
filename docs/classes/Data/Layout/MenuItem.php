@@ -9,16 +9,17 @@ namespace Data\Layout;
 
 class MenuItem
 {
-    public $priority = 0;
-    public $href     = NULL;
-    public $text     = NULL;
-    public $active   = NULL;
-    
+    public $priority    = 0;
+    public $href        = null;
+    public $text        = null;
+    public $active      = null;
+    public $isSeparator = null;
+
     /**
      * @var \Data\Layout\Menu
      */
-    private $subMenu = NULL;
-    
+    private $subMenu = null;
+
     public function __construct(array $props)
     {
         foreach ($props as $key => $value) {
@@ -27,12 +28,12 @@ class MenuItem
             }
         }
     }
-    
+
     public function hasSubMenu()
     {
         return $this->subMenu && count($this->subMenu->items());
     }
-    
+
     /**
      * @return \Data\Layout\Menu
      */
@@ -41,10 +42,10 @@ class MenuItem
         if (empty($this->subMenu)) {
             $this->subMenu = new Menu();
         }
-        
+
         return $this->subMenu;
     }
-    
+
     public function hasActiveItems()
     {
         return $this->subMenu && $this->subMenu->hasActiveItems();

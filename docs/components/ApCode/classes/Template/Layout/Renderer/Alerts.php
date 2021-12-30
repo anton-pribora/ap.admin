@@ -15,9 +15,10 @@ class Alerts implements RendererInterface
      */
     public function renderValue($value, $data)
     {
-        return '<div class="alert alert-'.($data ?: 'warning').'"><button type="button" class="close" data-dismiss="alert" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>'. $value .'</div>';
+        return '<div class="alert alert-' . ($data ?: 'warning') . ' alert-dismissible fade show">
+  ' . $value . '
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>';
     }
 
     /**
@@ -26,7 +27,6 @@ class Alerts implements RendererInterface
      */
     public function renderResult($values)
     {
-        // TODO Auto-generated method stub
         return join($values);
     }
 }

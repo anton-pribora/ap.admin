@@ -1,29 +1,18 @@
 server {
     listen *:80;
-    server_name admin.pribora.info;
+    server_name ap.admin;
 
-    root       /www/admin.pribora.info/docs/web_docroot;
-    access_log /www/admin.pribora.info/logs/access.log;
-    error_log  /www/admin.pribora.info/logs/error.log;
-    
+    root       /var/www/ap.admin/docs/web_docroot;
+    access_log /var/www/ap.admin/logs/access.log;
+    error_log  /var/www/ap.admin/logs/error.log;
+
     set $phpini "
-        error_log=/www/admin.pribora.info/logs/php-errors.log
+        error_log=/var/www/ap.admin/logs/php-errors.log
     ";
-    
-    set $script index.php;
-    
+
     index index.php index.html;
 
-    location ^~ /asset/ {
-    }
-
-    location ^~ /cdn/cache/ {
-        try_files $uri /cdn/index.php?file=$uri;
-    }
-    
-    location ^~ /cdn/ {
-        set $script cdn/index.php;
-        try_files - @run_script;
+    location ^~ /asset|cdn/ {
     }
 
     location ^~ /public/file/ {
@@ -33,11 +22,11 @@ server {
     location ~ ^[^\.]+(\.(php|html))?$ {
         try_files - @run_script;
     }
-    
+
     location @run_script {
         include fastcgi_params;
         fastcgi_param PHP_VALUE $phpini;
-        fastcgi_param SCRIPT_FILENAME $document_root/$script;
-        fastcgi_pass unix:/run/php/php7.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root/index.php;
+        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
     }
 }

@@ -1,0 +1,4 @@
+curl -L https://unpkg.com/vue@3/dist/vue.global.prod.js > vue.prod.js
+curl -L https://unpkg.com/vuex@4/dist/vuex.global.prod.js > vuex.prod.js
+curl -L https://unpkg.com/vue@3/dist/vue.global.js > vue.dev.js
+curl -L https://unpkg.com/vuex@4/dist/vuex.global.js > vuex.dev.js

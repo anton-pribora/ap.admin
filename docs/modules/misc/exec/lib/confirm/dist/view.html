@@ -1,0 +1,27 @@
+<div id="confirmDialog">
+  <div class="modal fade" ref="modal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <form @submit.prevent="confirm">
+          <div class="modal-header">
+            <h5 class="modal-title">{{title}}</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            {{message}}
+          </div>
+          <div class="modal-footer">
+            <button type="submit" class="btn btn-default">
+              <i class="bi bi-check-lg text-success"></i>
+              Подтверждаю
+            </button>
+            <button type="button" class="btn btn-default" data-bs-dismiss="modal">
+              <i class="bi bi-x-lg text-danger"></i>
+              Отменить
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

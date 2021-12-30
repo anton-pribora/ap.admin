@@ -14,7 +14,7 @@ class Menu
      */
     private $items  = [];
     private $sorted = FALSE;
-    
+
     /**
      * @return \Data\Layout\MenuItem[]
      */
@@ -23,22 +23,22 @@ class Menu
         if (!$this->sorted) {
             $this->sort();
         }
-        
+
         return $this->items;
     }
-    
+
     /**
      * @return \Data\Layout\MenuItem
      */
-    public function createItem($content, $active = FALSE, $priority = 0)
+    public function createItem($props, $active = FALSE, $priority = 0)
     {
-        $item = new MenuItem($content, $active, $priority);
+        $item = new MenuItem($props, $active, $priority);
         $this->items[] = $item;
         $this->sorted  = false;
-        
+
         return $item;
     }
-    
+
     public function hasActiveItems()
     {
         foreach ($this->items as $item) {
@@ -46,16 +46,16 @@ class Menu
                 return true;
             }
         }
-        
+
         return false;
     }
-    
+
     private function sort()
     {
         usort($this->items, function(MenuItem $item1, MenuItem $item2){
             return $item1->priority - $item2->priority;
         });
-        
+
         $this->sorted = true;
     }
 }

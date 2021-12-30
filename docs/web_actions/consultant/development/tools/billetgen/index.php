@@ -25,7 +25,7 @@ foreach (Url()->getStaticParams() as $name => $value) {
 }
 
 $select = $form->createSubElement('select');
-$select->setClass('form-control');
+$select->setClass('form-select');
 $select->setName('t');
 
 $select->setAttribute('onchange', 'this.form.submit()');
@@ -36,7 +36,7 @@ foreach ( getTables() as $db => $tables) {
         $table = $db .'.'. $table;
         $option = $select->createSubElement('option', $table);
         $option->setAttribute('value', $table);
-    
+
         if ( $currentTable == $table ) {
             $option->setAttribute('selected', 'selected');
         }
@@ -99,11 +99,11 @@ foreach ( $tableInfo->getColumns() as $column ) {
         'encode' => null,
         'decode' => null,
     ];
-    
+
     // Getter
     $primaryClass->createFunction($propertyName)
         ->addBodyLine('return $this->data[\''. $propertyName .'\'] ?? null;');
-    
+
     // Setter
     $primaryClass->createFunction('set'. ucfirst($propertyName))
         ->addBodyLine('$this->data[\''. $propertyName .'\'] = $value;')
@@ -145,31 +145,26 @@ $pre2->createSubElement('UnescapedText', hl($metaFile));
 $pre3->createSubElement('UnescapedText', hl(include (__DIR__ . '/repository.inc.php')));
 
 ?>
-<style>
-pre {
-	background-color: white;
-}
-</style>
 <div ng-app="app">
 	<div ng-controller="main">
 		<div class="form-group">
 			<label>Класс</label>
 			<input type="text" class="form-control" ng-model="class" ng-init="class='<?php echo addslashes($qname)?>'">
 		</div>
-		
+
 		<h3>Основной класс <code>{{class | path}}.php</code></h3>
-		<?php echo $pre1?>  
-		
+		<?php echo $pre1->setClass('border p-3')?>
+
 		<h3>Мета файл <code>{{class | path}}.meta.php</code></h3>
-		<?php echo $pre2?> 
-		
+		<?php echo $pre2->setClass('border p-3')?>
+
 		<h3>Репозиторий <code>{{class | path}}Repository.php</code></h3>
-		<?php echo $pre3?> 
+		<?php echo $pre3->setClass('border p-3')?>
 	</div>
 </div>
 
 
-<?php 
+<?php
 
 
 function hl($code) {
@@ -179,26 +174,26 @@ function hl($code) {
         '</span>
 </code>' => '</span></code>'
     ];
-    
+
     $source = preg_replace_callback('/\\{\\{[\w| ]+\\}\\}/', function ($row) use (&$filters) {
         $id = uniqid('hl');
         $filters[ $id ] = $row[0];
         return $id;
     }, $code);
-    
+
     $hl = highlight_string($source, true);
-    
+
     return strtr($hl, $filters);
 }
 
 function getTables() {
     $result = [];
-    
+
     $currentDb = Db()->query('SELECT DATABASE()')->fetchValue();
-    
+
     $result[$currentDb] = Db()->query('show tables')->fetchColumn();
 //     $result['anton-pribora' ] = Db()->query('show tables from "anton-pribora"')->fetchColumn();
-    
+
     return $result;
 }
 
@@ -207,22 +202,22 @@ function getFullClassName($tableName) {
         'site_' => 'Site',
         'wp_'   => 'Wordpress',
     ];
-    
+
     $result = [];
-    
+
     foreach ($namespaces as $prefix => $namespace) {
         if (substr_compare($tableName, $prefix, 0, strlen($prefix)) === 0) {
             $result[]  = $namespace;
             $tableName = substr($tableName, strlen($prefix));
         }
     }
-    
+
     if (empty($result)) {
         $result[] = 'Project';
     }
-    
+
     $result[] = join(array_map('ucfirst', explode('_', $tableName)));
-    
+
     return join('\\', $result);
 }
 

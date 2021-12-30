@@ -1,0 +1,13 @@
+<div class="toast-container position-absolute top-0 end-0 p-3" id="toastContainer">
+</div>
+
+<script type="text/html" id="toastTemplate">
+  <div class="toast align-items-center text-{{textColor}} bg-{{bgColor}} border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body">
+        {{text}}
+      </div>
+      <button type="button" class="btn-close btn-close-{{textColor}} me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</script>

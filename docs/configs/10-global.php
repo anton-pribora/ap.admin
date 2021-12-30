@@ -5,7 +5,7 @@ Config()->setup([
         'webroot'    => '@root/web_docroot',
         'webactions' => '@root/web_actions',
     ],
-    
+
     'db' => [
         'dsn'      => 'mysql:dbname=basesystem;host=localhost;charset=utf8',
         'login'    => 'test',
@@ -13,20 +13,17 @@ Config()->setup([
     ],
 
     'template' => [
-        'name'   => 'main-bs4',  // default template name
+        'name'   => 'public-bs5',  // default template name
         'layout' => [
             'main'  => 'main',
-            'login' => 'login',  // see module/auth/exec/login.php
-            'mail'  => 'mail',
-            'pdf'   => 'pdf',
-            'error' => 'error',
+            'error' => 'main',
         ],
         'login' => [
-            'template' => 'admin-bs3',
+            'template' => 'admin-bs5',
             'layout'   => 'login',
         ],
     ],
-    
+
     'console' => [
         '_SERVER' => [
             'HTTPS'       => 'on',
@@ -45,26 +42,13 @@ Config()->setup([
             ],
         ],
     ],
-    
-    'cdn' => [
-        'url' => '/cdn/cache/',
-    ],
-    
+
     'file' => [
         'uploads'    => ROOT_DIR . '/uploads/',
         'thumbnails' => ROOT_DIR . '/public/thumbnails/',
     ],
-    
-    'thumbnail' => [
-        'user' => [
-            'width'  => '192',
-            'height' => '192',
-            'url'    => 'https://ssl.gstatic.com/accounts/ui/avatar_2x.png',
-        ],
-        'product' => [
-            'width'  => '192',
-            'height' => '192',
-            'url'    => '/img/default.jpg',
-        ],
+
+    'js' => [
+        'ENV' => 'prod',  // Vue 3 extension (used by module misc vue3)
     ],
 ]);

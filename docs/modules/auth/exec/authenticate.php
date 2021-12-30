@@ -13,30 +13,13 @@ $auth     = false;
 
 if ($login && $password) {
     $identity = Identity();
-    
-    $row = LoginRepository::findOne(['login' => $login]);
-    
-    if ($row) {
-        switch ($row['type']) {
-            case 'consultant':
-                $consultant = Consultant::getInstance($row['id']);
-                $hash = $consultant->info()->password();
-                
-                if (password_verify($password, $hash)) {
-                    $identity->setEntry($consultant->type(), $consultant->id(), $consultant->name());
-                    $auth = true;
-                    
-                    if (password_needs_rehash($hash, PASSWORD_DEFAULT)) {
-                        $hash = password_hash($password, PASSWORD_DEFAULT);
-                        $consultant->info()->setPassword($hash);
-                        $consultant->meta()->save();
-                    }
-                }
-                
-                break;
-        }
+
+    // Тестовый логин и пароль
+    if ($login === 'test' && $password === '123') {
+        $identity->setEntry('consultant', 1, 'Test');
+        $auth = true;
     }
-    
+
     if ($auth) {
         Session()->start();
         $session = Auth()->activeSession();
