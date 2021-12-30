@@ -12,7 +12,7 @@ Layout()->prepend('head.title', 'About');
 <main class="container">
   <div class="my-4">
     <h2 class="text-center">Фишечки</h2>
-    <p class="text-center">Абсолютно новая архитектура движка и отсутсвие зависимостей позволяют</p>
+    <p class="text-center">Абсолютно новая архитектура движка и отсутствие зависимостей позволяют</p>
   </div>
   <div class="row">
     <div class="col-sm-4">
