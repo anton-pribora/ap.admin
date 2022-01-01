@@ -37,7 +37,9 @@ foreach (glob(__dir('assets/*.css')) as $css) {
       <div class="container"><?php echo Layout()->renderIfNotEmpty('body.alerts')?></div>
     <?php } ?>
 
-    <?php echo Layout()->render('body.content')?>
+    <div>
+      <?php echo Layout()->render('body.content')?>
+    </div>
 
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container">

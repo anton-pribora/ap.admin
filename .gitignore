@@ -11,3 +11,6 @@ nbproject/
 
 # JetBrains
 .idea/
+
+# composer
+vendor/
