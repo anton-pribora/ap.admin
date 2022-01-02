@@ -235,17 +235,17 @@ class Url implements \JsonSerializable
         return $this->toString(false);
     }
 
-    public function asUri()
+    public function asUri(): string
     {
         return $this->toString(true);
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->asUri();
     }
 
-    private function toString($asURI = false)
+    private function toString($asURI = false): string
     {
         $result = [];
 
@@ -307,7 +307,7 @@ class Url implements \JsonSerializable
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): string
     {
         return $this->asUri();
     }

@@ -14,14 +14,14 @@ class Thumbnail implements ThumbnailInterface, \JsonSerializable
     private $width;
     private $height;
     private $url;
-    
+
     public function __construct($url, $width = NULL, $height = NULL)
     {
         $this->url    = $url;
         $this->width  = $width;
         $this->height = $height;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Interfaces\Data\ThumbnailInterface::width()
@@ -48,12 +48,12 @@ class Thumbnail implements ThumbnailInterface, \JsonSerializable
     {
         return $this->url;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'url'    => $this->url(),

@@ -7,34 +7,23 @@
 
 namespace Auth;
 
-use ApCode\Session\Container;
-
-class Session
+class Session extends \ApCode\Session\Session
 {
-    private $id;
-    private $storage;
-    
-    public function __construct($id, Container $container)
-    {
-        $this->id      = $id;
-        $this->storage = $container;
-    }
-    
-    public function id()
-    {
-        return $this->id;
-    }
-    
     public function setIdentity(Identity $identity)
     {
-        $this->storage['identity'] = $identity;
+        $this->set('identity', $identity);
     }
-    
-    /**
-     * @return \Auth\Identity
-     */
-    public function identity()
+
+    public function hasIdentity()
     {
-        return $this->storage['identity'];
+        return $this->has('identity');
+    }
+
+    /**
+     * @return Identity
+     */
+    public function getIdentity()
+    {
+        return $this->get('identity');
     }
 }

@@ -244,26 +244,17 @@ function ExternalUrl($path, $params = [])
  * @return \Auth\Identity
  */
 function Identity() {
-    if (Auth()->activeSession()) {
-        if (Auth()->activeSession()->identity()) {
-            return Auth()->activeSession()->identity();
-        }
+    if (Session()->hasIdentity()) {
+        return Session()->getIdentity();
     }
 
-    return new Auth\Identity();
-}
+    static $identity;
 
-/**
- * @return \Auth\Manager
- */
-function Auth() {
-    static $auth;
-
-    if (empty($auth)) {
-        $auth = new \Auth\Manager(Session()->container('auth'));
+    if (is_null($identity)) {
+        $identity = new Auth\Identity();
     }
 
-    return $auth;
+    return $identity;
 }
 
 /**
@@ -315,14 +306,14 @@ function Timer($name = 'default') {
 }
 
 /**
- * @return \ApCode\Session\Session
+ * @return \Auth\Session
  */
 function Session()
 {
     static $session;
 
     if (empty($session)) {
-        $session = new ApCode\Session\Session();
+        $session = new \Auth\Session();
     }
 
     return $session;

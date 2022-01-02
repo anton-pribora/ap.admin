@@ -12,12 +12,12 @@ use Interfaces\Data\ThumbnailInterface;
 class DefaultThumbnail implements ThumbnailInterface, \JsonSerializable
 {
     private $size;
-    
+
     public function __construct($size = 'thumbnail')
     {
         $this->size = $size;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \Interfaces\Data\ThumbnailInterface::width()
@@ -44,12 +44,12 @@ class DefaultThumbnail implements ThumbnailInterface, \JsonSerializable
     {
         return Config()->get("thumbnail.user.url");
     }
-    
+
     /**
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
      */
-    public function jsonSerialize()
+    public function jsonSerialize(): array
     {
         return [
             'url'    => $this->url(),

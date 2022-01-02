@@ -22,8 +22,7 @@ if ($login && $password) {
 
     if ($auth) {
         Session()->start();
-        $session = Auth()->activeSession();
-        $session->setIdentity($identity);
+        Session()->setIdentity($identity);
     }
 }
 
