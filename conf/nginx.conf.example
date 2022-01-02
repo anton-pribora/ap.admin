@@ -25,6 +25,10 @@ server {
 
     location @run_script {
         include fastcgi_params;
+
+        ## Настройка окружения
+        fastcgi_param APPLICATION_ENV development;
+
         fastcgi_param PHP_VALUE $phpini;
         fastcgi_param SCRIPT_FILENAME $document_root/index.php;
         fastcgi_pass unix:/run/php/php7.4-fpm.sock;
