@@ -13,7 +13,13 @@ ob_start();
     <div class="col-md-8 content order-2 order-md-1">
 <?php
 if (!$parsedownExists) {
-    Alert('Please install Markdown parser by following command: <br /><code>composer require erusev/parsedown</code>', 'warning');
+    $src = ExpandPath('@root');
+    Alert(<<<HTML
+Please install Markdown parser by following commands: <br />
+<code>cd $src</code><br>
+<code>composer require erusev/parsedown</code>
+HTML
+      , 'warning');
 }
 ?>
       {!CONTENT}

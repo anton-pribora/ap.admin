@@ -2,7 +2,7 @@ server {
     listen *:80;
     server_name ap.admin;
 
-    root       /var/www/ap.admin/docs/web_docroot;
+    root       /var/www/ap.admin/src/web_docroot;
     access_log /var/www/ap.admin/logs/access.log;
     error_log  /var/www/ap.admin/logs/error.log;
 

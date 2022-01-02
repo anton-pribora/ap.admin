@@ -24,7 +24,7 @@ service nginx reload
 3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера
 
 ```
-chown www-data docs/uploads/ docs/web_docroot/thumbnails/ docs/web_docroot/asset/ docs/web_docroot/cdn/cache/ logs/ logs/site_common.log
+chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/cache/ logs/ logs/site_common.log
 ```
 
 4. Установка завершена!
@@ -42,7 +42,7 @@ git commit -m 'Начальный коммит'
 
 ## Composer
 
-Чтобы подключить composer к проекту, перейдите в папку `docs` и выполните:
+Чтобы подключить composer к проекту, перейдите в папку `src` и выполните:
 
 ```bash
 % composer init
