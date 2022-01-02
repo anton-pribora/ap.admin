@@ -5,38 +5,38 @@
 
 1. Клонируйте репозиторий в свою систему и перейдите в папку с репозиторием
 
-```bash
-cd /var/www
-git clone git@github.com:anton-pribora/ap.admin.git test.local
-cd test.local
-```
+   ```bash
+   cd /var/www
+   git clone git@github.com:anton-pribora/ap.admin.git test.local
+   cd test.local
+   ```
 
 2. Установите конфиг сайта
 
-Для NGINX:
-
-```bash
-sed -e 's/admin.pribora.info/test.local/g' conf/nginx.conf.example > conf/nginx.conf
-ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/test.local.conf
-service nginx reload
-```
+   Для NGINX:
+   
+   ```bash
+   sed -e 's/admin.pribora.info/test.local/g' conf/nginx.conf.example > conf/nginx.conf
+   ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/test.local.conf
+   service nginx reload
+   ```
 
 3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера
 
-```
-chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/cache/ logs/ logs/site_common.log
-```
+   ```
+   chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/cache/ logs/ logs/site_common.log
+   ```
 
 4. Установка завершена!
 
-Теперь можно удалить репозиторий ap.admin и инициализировать свой:
-
-```bash
-rm -rf .git LICENSE README.md
-git init
-git add .
-git commit -m 'Начальный коммит'
-```
+   Теперь можно удалить репозиторий ap.admin и инициализировать свой:
+   
+   ```bash
+   rm -rf .git LICENSE README.md
+   git init
+   git add .
+   git commit -m 'Начальный коммит'
+   ```
 
 Приятной работы :)
 
