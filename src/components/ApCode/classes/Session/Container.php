@@ -12,24 +12,24 @@ class Container implements \ArrayAccess
     private $name;
     private $prefix;
     private $session;
-    
+
     public function __construct($name, Session $session)
     {
         $this->name    = $name;
         $this->prefix  = rtrim($name, '.') .'.';
         $this->session = $session;
     }
-    
+
     public function toArray()
     {
         return $this->session->get($this->prefix);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see ArrayAccess::offsetExists()
      */
-    public function offsetExists($offset)
+    public function offsetExists($offset): bool
     {
         return $this->session->has($this->prefix . $offset);
     }
@@ -42,9 +42,9 @@ class Container implements \ArrayAccess
     {
         $result = null;
         $params = array_merge(explode('.', $this->name), [$offset]);
-        
+
         eval('$result = &$_SESSION["'. join('"]["', $params) .'"];');
-        
+
         return $result;
     }
 
@@ -52,20 +52,20 @@ class Container implements \ArrayAccess
      * {@inheritDoc}
      * @see ArrayAccess::offsetSet()
      */
-    public function offsetSet($offset, $value)
+    public function offsetSet($offset, $value): void
     {
-        return $this->session->set($this->prefix . $offset, $value);
+        $this->session->set($this->prefix . $offset, $value);
     }
 
     /**
      * {@inheritDoc}
      * @see ArrayAccess::offsetUnset()
      */
-    public function offsetUnset($offset)
+    public function offsetUnset($offset): void
     {
-        return $this->session->remove($this->prefix . $offset);
+        $this->session->remove($this->prefix . $offset);
     }
-    
+
     public function container($name)
     {
         return new Container($this->prefix . $name, $this->session);

@@ -11,7 +11,7 @@ if (IS_CONSOLE) {
     glob_include(__dir('init/web/*.php'));
 }
 
-function glob_include($pattern, $flags = NULL) {
+function glob_include($pattern, $flags = 0) {
     foreach (glob($pattern, $flags) as $file) {
         include $file;
     }

@@ -67,7 +67,7 @@ class Url implements \JsonSerializable
 
     private function decodeHost($host)
     {
-        return mb_strtolower($host);
+        return mb_strtolower((string) $host);
     }
 
     private function encodeHost($host)
@@ -302,7 +302,7 @@ class Url implements \JsonSerializable
     {
         return ['url' => (string) $this];
     }
-    
+
     /**
      * {@inheritDoc}
      * @see JsonSerializable::jsonSerialize()
