@@ -7,7 +7,7 @@
 
    ```bash
    cd /var/www
-   git clone git@github.com:anton-pribora/ap.admin.git test.local
+   git clone --depth 1 git@github.com:anton-pribora/ap.admin.git test.local
    cd test.local
    ```
 
@@ -107,7 +107,7 @@ Ap.admin не предполагает обновлений. Ваш проект
 Загружаемые файлы хранятся в недоступной для публичного доступа папке и отдаются клиентам средствами движка. Загрузить "eval"
 на сайт и выполнить его не получится.
 
-````text
+```text
 src/
 ├── uploads    <-- Загруженные файлы доступны только из PHP
 ├── web_actions
@@ -119,7 +119,7 @@ src/
 └── web_docroot
     ├── asset       <-- Публичный доступ
     └── index.php   <-- Публичный доступ
-````
+```
 
 Единственное, на что нужно обращать внимание, функция `Asset()` - она создаёт символичные ссылки, которые доступны всем 
 пользователям.
