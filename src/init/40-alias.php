@@ -36,6 +36,9 @@ UrlAlias()->set('@uploads', '@root/uploads');
 PathAlias()->set('@thumbnails', '@webroot/thumbnails');
 UrlAlias()->set('@thumbnails' , '@root/thumbnails');
 
+PathAlias()->set('@web_actions', Config()->get('server.webactions'));
+
+PathAlias()->set('@consultant', '@web_actions/consultant');
 UrlAlias()->set('@consultant', '@root/consultant');
 
 PathAlias()->set('@widgets', '@root/widgets');

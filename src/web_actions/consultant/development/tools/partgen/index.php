@@ -1,10 +1,24 @@
 <?php
 
+/* @var $this \ApCode\Executor\PhpFileExecutor */
+
 RequireLib('vue3');
 
 Layout()->setVar('title', 'Генератор разделов');
 
 Alert('Раздел в стадии разработки', 'warning');
+
+if (Request()->isPost()) {
+//    echo '<pre>', print_r($_POST, 1), '</pre>';
+    echo '<pre>';
+
+    foreach(glob(__dir('.generate/*.php')) as $file) {
+      $this->include($file);
+    }
+
+    echo '</pre>';
+    return true;
+}
 
 ?>
 
@@ -15,6 +29,14 @@ Alert('Раздел в стадии разработки', 'warning');
     <div class="col">
       <label class="" for="part[name]">Название</label>
       <input type="text" class="form-control" id="part[name]" name="part[name]" value="Слоны">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <div class="form-check">
+        <input type="checkbox" class="form-check-input" name="part[menu]" value="1" checked id="partMenu">
+        <label class="form-check-label" for="partMenu">Добавить раздел в левое меню</label>
+      </div>
     </div>
   </div>
   <div class="row mb-3">
@@ -38,18 +60,21 @@ Alert('Раздел в стадии разработки', 'warning');
   <div class="row mb-3">
     <div class="col">
       <label class="" for="part[path]">Путь раздела</label>
-      <input type="text" class="form-control" id="part[path]" name="part[path]" value="@consulant/elephant">
+      <input type="text" class="form-control" id="part[path]" name="part[path]" value="@consultant/elephant">
+    </div>
+  </div>
+
+  <h4>Widget</h4>
+  <div class="row mb-3">
+    <div class="col">
+      <label class="" for="widget[path]">Путь виджета</label>
+      <input type="text" class="form-control" id="widget[path]" name="widget[path]" value="@widgets/elephant">
     </div>
   </div>
   <div class="row mb-3">
     <div class="col">
-      <div class="form-check">
-        <input type="checkbox" class="form-check-input" name="part[menu]" value="1" checked id="partMenu">
-        <label class="form-check-label" for="partMenu">Добавить пункт меню</label>
-      </div>
-      <div class="">
-        <input type="text" class="form-control" name="menuTitle" value="Слоны">
-      </div>
+      <label class="" for="widget[name]">Название для виджета свойств</label>
+      <input type="text" class="form-control" id="widget[name]" name="widget[name]" value="information">
     </div>
   </div>
 
