@@ -12,16 +12,16 @@ use ApCode\Web\RequestInterface;
 class Http implements RequestInterface
 {
     private $action;
-    
+
     public function id()
     {
         if (empty($_SERVER['REQUEST_ID'])) {
             $_SERVER['REQUEST_ID'] = uniqid('req');
         }
-        
+
         return $_SERVER['REQUEST_ID'];
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Web\RequestInterface::setAction()
@@ -30,7 +30,7 @@ class Http implements RequestInterface
     {
         $this->action = $action;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Web\RequestInterface::matchAction()
@@ -39,7 +39,7 @@ class Http implements RequestInterface
     {
         return strncmp($this->action(), $path, strlen($path)) === 0;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Web\RequestInterface::action()
@@ -53,16 +53,16 @@ class Http implements RequestInterface
                 $this->action = $_SERVER['SCRIPT_NAME'];
             }
         }
-        
+
         $scriptName = $this->action;
-        
+
         if (!preg_match('~\.[^\./]+$~', $scriptName)) {
             $scriptName = rtrim($scriptName, '/') .'/index.php';
         }
-        
+
         return $scriptName;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Web\RequestInterface::method()
@@ -88,6 +88,11 @@ class Http implements RequestInterface
      */
     public function has($varname)
     {
+        if (strpos($varname, '.') > -1) {
+            $idx = strtr($varname, ['.' => "']['"]);
+            return eval("return isset(\$_REQUEST['$idx']);");
+        }
+
         return isset($_REQUEST[$varname]);
     }
 
@@ -97,18 +102,19 @@ class Http implements RequestInterface
      */
     public function get($varname, $default = null)
     {
-        if (isset($_REQUEST[$varname])) {
-            return $_REQUEST[$varname];
+        if (strpos($varname, '.') > -1) {
+            $idx = strtr($varname, ['.' => "']['"]);
+            return eval("return \$_REQUEST['$idx'] ?? \$default;");
         }
-        
-        return $default;
+
+        return $_REQUEST[$varname] ?? $default;
     }
-    
+
     public function getPostVariables()
     {
         return $_POST;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Web\RequestInterface::set()
@@ -118,31 +124,31 @@ class Http implements RequestInterface
         $_REQUEST[$varname] = $value;
         return $this;
     }
-    
+
     public function documentUri()
     {
         return $_SERVER['DOCUMENT_URI'];
     }
-    
+
     public function uri()
     {
         return $_SERVER['REQUEST_URI'];
     }
-    
-    public function ip() 
+
+    public function ip()
     {
         return $_SERVER['REMOTE_ADDR'];
     }
-    
+
     public function fullUri()
     {
         $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
         $port  = $_SERVER['SERVER_PORT'];
-        
+
         $uri[] = $https ? 'https' : 'http';
         $uri[] = '://';
         $uri[] = $_SERVER['SERVER_NAME'];
-        
+
         if ($https && $port == '443') {
             ;
         } elseif (!$https && $port = '80') {
@@ -151,11 +157,11 @@ class Http implements RequestInterface
             $uri[] = ':';
             $uri[] = $port;
         }
-        
+
         if ($_SERVER['REQUEST_URI'] != '/') {
             $uri[] = $_SERVER['REQUEST_URI'];
         }
-        
+
         return join($uri);
     }
 }

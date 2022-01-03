@@ -11,17 +11,17 @@ class PhpFileExecutor implements RuntimeInterface
 {
     protected $action;
     protected $baseDir;
-    
+
     private $args;
     private $params;
     private $scope;
-    
+
     public function __construct($baseDir = '')
     {
         $this->baseDir = $baseDir ? rtrim($baseDir, '/') .'/' : '';
         $this->scope   = [];
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\ExecutorInterface::canExecute()
@@ -31,7 +31,7 @@ class PhpFileExecutor implements RuntimeInterface
         $this->action = $action;
         return $this->actionExists();
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\ExecutorInterface::execute()
@@ -39,21 +39,21 @@ class PhpFileExecutor implements RuntimeInterface
     public function execute($action, ...$argsAndLastParams)
     {
         $this->action = $action;
-        
+
         if (!$this->actionExists()) {
             throw new Exception("Invalid action ". $this->getActionFile());
         }
-        
+
         $args   = $this->args;
         $params = $this->params;
-        
+
         $this->setArgsAndParams($argsAndLastParams);
-        
+
         $result = $this->doAction();
-        
+
         $this->args   = $args;
         $this->params = $params;
-        
+
         return $result;
     }
 
@@ -64,21 +64,21 @@ class PhpFileExecutor implements RuntimeInterface
     public function executeOnce($action, ...$argsAndLastParams)
     {
         $this->action = $action;
-        
+
         if (!$this->actionExists()) {
             throw new Exception("Invalid action ". $this->getActionFile());
         }
-        
+
         $args   = $this->args;
         $params = $this->params;
-        
+
         $this->setArgsAndParams($argsAndLastParams);
-        
+
         $result = $this->doActionOnce();
-        
+
         $this->args   = $args;
         $this->params = $params;
-        
+
         return $result;
     }
 
@@ -89,21 +89,21 @@ class PhpFileExecutor implements RuntimeInterface
     public function executeIfExists($action, ...$argsAndLastParams)
     {
         $this->action = $action;
-        
+
         if (!$this->actionExists()) {
             return null;
         }
-        
+
         $args   = $this->args;
         $params = $this->params;
-        
+
         $this->setArgsAndParams($argsAndLastParams);
-        
-        $result = ($this->doAction)();
-        
+
+        $result = $this->doAction();
+
         $this->args   = $args;
         $this->params = $params;
-        
+
         return $result;
     }
 
@@ -114,57 +114,61 @@ class PhpFileExecutor implements RuntimeInterface
     public function executeOnceIfExists($action, ...$argsAndLastParams)
     {
         $this->action = $action;
-        
+
         if (!$this->actionExists()) {
             return null;
         }
-        
+
         $args   = $this->args;
         $params = $this->params;
-        
+
         $this->setArgsAndParams($argsAndLastParams);
-        
-        $result = ($this->doActionOnce)();
-        
+
+        $result = $this->doActionOnce();
+
         $this->args   = $args;
         $this->params = $params;
-        
+
         return $result;
     }
-    
+
     protected function doAction()
     {
         return include $this->getActionFile();
     }
-    
+
     protected function doActionOnce()
     {
         return include_once $this->getActionFile();
     }
-    
+
     protected function actionExists()
     {
         return file_exists($this->getActionFile());
     }
-    
+
     protected function getActionFile()
     {
-        return $this->baseDir ? ($this->baseDir . ltrim($this->action, '/')) : $this->action;
+        if (substr($this->action, 0, 1) === '/') {
+            return $this->action;
+        }
+
+        return $this->baseDir ? ($this->baseDir . $this->action) : $this->action;
     }
-    
+
     protected function setArgsAndParams($argsAndParams)
     {
         $last = end($argsAndParams);
-        
+
         if (is_array($last)) {
             $this->params = $last;
         } else {
             $this->params = [];
         }
-        
+
         $this->args = $argsAndParams;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\RuntimeInterface::setScopeVar()
@@ -173,7 +177,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         return $this->args[$index] ?? $default;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\RuntimeInterface::param()
@@ -182,7 +186,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         return $this->params[$name] ?? $default;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\RuntimeInterface::scopeVar()
@@ -200,7 +204,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         $this->scope[$name] = $value;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\RuntimeInterface::hasArgument()
@@ -218,7 +222,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         return isset($this->params[$name]);
     }
-    
+
     public function setParam($name, $value)
     {
         $this->params[$name] = $value;
@@ -233,7 +237,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         return isset($this->scope[$name]);
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\RuntimeInterface::argumentList()
@@ -260,7 +264,7 @@ class PhpFileExecutor implements RuntimeInterface
     {
         return $this->scope;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\ExecutorInterface::include()
@@ -268,13 +272,13 @@ class PhpFileExecutor implements RuntimeInterface
     public function include($action)
     {
         $this->action = $action;
-        
+
         if (!$this->actionExists()) {
             throw new Exception("Invalid action ". $this->getActionFile());
         }
-        
+
         $result = $this->doAction();
-        
+
         return $result;
     }
 }
