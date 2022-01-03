@@ -44,7 +44,9 @@ return new class ($folder) extends PhpFileExecutor {
 
         $dir       = dirname($this->action);
         $path      = $this->baseDir;
-        $pathArray = array_merge([''], array_filter(explode('/', $dir)));
+        $pathArray = array_merge([''], array_filter(explode('/', $dir), function ($dir) {
+            return $dir !== '' && $dir !== '.';
+        }));
 
         foreach ($pathArray as $name) {
             $path .= $name;
