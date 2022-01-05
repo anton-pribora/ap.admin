@@ -8,4 +8,4 @@ store.state.planktonOffices.list = [
   {id: 2, name: 'Городское водохранилище', address: 'Озёрская, 78'},
 ];
 
-app.mount('#content');
+// app.mount('#content');
