@@ -9,7 +9,7 @@ $consultant = $this->argument();
 
 Layout()->append('body.js.code', file_get_contents(__dir('login_controller.js')));
 
-Layout()->startGrab('content.end.html');
+Layout()->startGrab('body.content.end');
 ?>
 <form name="form" ng-controller="consultantInformationLoginController">
 <div class="modal fade" role="dialog" id="consultantInformationLoginDialog">

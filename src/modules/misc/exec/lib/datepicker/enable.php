@@ -4,9 +4,9 @@
  * @var ApCode\Executor\RuntimeInterface $this
  */
 
-Layout()->appendOnce('head.css.links', ShortUrl('@cdn/vanillajs-datepicker/datepicker.min.css'));
-Layout()->appendOnce('body.js.links', ShortUrl('@cdn/vanillajs-datepicker/datepicker.min.js'));
-Layout()->appendOnce('body.js.links', ShortUrl('@cdn/vanillajs-datepicker/locales/ru.js'));
+Layout()->appendOnce('head.css.links', ExternalUrl('@cdn/vanillajs-datepicker/datepicker.min.css'));
+Layout()->appendOnce('body.js.links', ExternalUrl('@cdn/vanillajs-datepicker/datepicker.min.js'));
+Layout()->appendOnce('body.js.links', ExternalUrl('@cdn/vanillajs-datepicker/locales/ru.js'));
 
 Layout()->appendOnce('body.js.code', <<<'JS'
 app.component('date', {

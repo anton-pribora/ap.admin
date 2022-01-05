@@ -14,7 +14,7 @@ $(document).on('show.bs.modal', '.modal', function (event) {
 JS
 );
 
-Layout()->startGrab('content.end.html');
+Layout()->startGrab('body.content.end');
 ?>
 <!-- Modal -->
 <div class="modal fade" id="infoViewDialog" ng-controller="infoViewController">

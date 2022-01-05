@@ -17,7 +17,7 @@ PathAlias()->set('@layout', 'dashboard');
 
 Config()->set('template.layout.error', 'dashboard');
 
-PathAlias()->append('~/', basename(__DIR__) .'/');
+PathAlias()->append('~/', basename(__DIR__) . '/');
 
 Layout()->prepend('head.title', 'Панель управления');
 Layout()->append('breadcrumbs', new A(new UnescapedText('<i class="bi bi-house-door me-1"></i>Главная'), ShortUrl(__DIR__ .'/')));

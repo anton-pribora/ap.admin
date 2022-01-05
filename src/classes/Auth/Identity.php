@@ -43,11 +43,21 @@ class Identity
         return $this->activeEntryId ? "{$this->activeEntryType}:{$this->activeEntryId}" : '';
     }
 
+    public function getActiveEntry()
+    {
+        return $this->entries[$this->activeEntryType] ?? null;
+    }
+
     public function logout()
     {
         if ($this->activeEntryType) {
             unset($this->entries[$this->activeEntryType]);
         }
+    }
+
+    public function hasPermit($section, ...$params)
+    {
+        return Module('permissions')->execute("{$this->activeEntryType}.{$section}", $this->getActiveEntry(), ...$params);
     }
 
     public function valid()

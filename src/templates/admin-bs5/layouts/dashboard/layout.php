@@ -145,9 +145,13 @@ if (Layout()->hasVar('usermenu')) {
   </div>
 </div>
 
-<?php echo Layout()->renderIfNotEmpty('content.end.html') ?>
+<?php echo Layout()->renderIfNotEmpty('body.content.end') ?>
 <?php echo Layout()->renderIfNotEmpty('body.js.links') ?>
 <?php echo Layout()->renderIfNotEmpty('body.js.code') ?>
-
+<script>
+  if (typeof(app) !== 'undefined' && app.mount) {
+    app.mount('#content');
+  }
+</script>
 </body>
 </html>

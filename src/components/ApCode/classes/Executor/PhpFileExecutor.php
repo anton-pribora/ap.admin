@@ -22,13 +22,18 @@ class PhpFileExecutor implements RuntimeInterface
         $this->scope   = [];
     }
 
+    protected function prepareAction($action)
+    {
+        return $action;
+    }
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Executor\ExecutorInterface::canExecute()
      */
     public function canExecute($action, ...$argsAndLastParams)
     {
-        $this->action = $action;
+        $this->action = $this->prepareAction($action);
         return $this->actionExists();
     }
 
@@ -38,7 +43,7 @@ class PhpFileExecutor implements RuntimeInterface
      */
     public function execute($action, ...$argsAndLastParams)
     {
-        $this->action = $action;
+        $this->action = $this->prepareAction($action);
 
         if (!$this->actionExists()) {
             throw new Exception("Invalid action ". $this->getActionFile());
@@ -63,7 +68,7 @@ class PhpFileExecutor implements RuntimeInterface
      */
     public function executeOnce($action, ...$argsAndLastParams)
     {
-        $this->action = $action;
+        $this->action = $this->prepareAction($action);
 
         if (!$this->actionExists()) {
             throw new Exception("Invalid action ". $this->getActionFile());
@@ -88,7 +93,7 @@ class PhpFileExecutor implements RuntimeInterface
      */
     public function executeIfExists($action, ...$argsAndLastParams)
     {
-        $this->action = $action;
+        $this->action = $this->prepareAction($action);
 
         if (!$this->actionExists()) {
             return null;
@@ -113,7 +118,7 @@ class PhpFileExecutor implements RuntimeInterface
      */
     public function executeOnceIfExists($action, ...$argsAndLastParams)
     {
-        $this->action = $action;
+        $this->action = $this->prepareAction($action);
 
         if (!$this->actionExists()) {
             return null;
@@ -128,6 +133,23 @@ class PhpFileExecutor implements RuntimeInterface
 
         $this->args   = $args;
         $this->params = $params;
+
+        return $result;
+    }
+
+    /**
+     * {@inheritDoc}
+     * @see \ApCode\Executor\ExecutorInterface::include()
+     */
+    public function include($action)
+    {
+        $this->action = $this->prepareAction($action);
+
+        if (!$this->actionExists()) {
+            throw new Exception("Invalid action: " . $this->getActionFile());
+        }
+
+        $result = $this->doAction();
 
         return $result;
     }
@@ -263,22 +285,5 @@ class PhpFileExecutor implements RuntimeInterface
     public function scopeVarList()
     {
         return $this->scope;
-    }
-
-    /**
-     * {@inheritDoc}
-     * @see \ApCode\Executor\ExecutorInterface::include()
-     */
-    public function include($action)
-    {
-        $this->action = $action;
-
-        if (!$this->actionExists()) {
-            throw new Exception("Invalid action ". $this->getActionFile());
-        }
-
-        $result = $this->doAction();
-
-        return $result;
     }
 }

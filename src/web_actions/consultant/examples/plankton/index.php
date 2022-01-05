@@ -9,12 +9,12 @@ Layout()->append('body.js.code', file_get_contents(__dir('plankton.js')));
 Layout()->append('body.js.code', file_get_contents(__dir('inc/offices/store.js')));
 
 Layout()->append('body.js.code', file_get_contents(__dir('inc/users/store.js')));
-Layout()->append('content.end.html', file_get_contents(__dir('inc/users/viewForm.html')));
+Layout()->append('body.content.end', file_get_contents(__dir('inc/users/viewForm.html')));
 Layout()->append('body.js.code', file_get_contents(__dir('inc/users/viewFormController.js')));
-Layout()->append('content.end.html', file_get_contents(__dir('inc/users/editDialog.html')));
+Layout()->append('body.content.end', file_get_contents(__dir('inc/users/editDialog.html')));
 Layout()->append('body.js.code', file_get_contents(__dir('inc/users/editDialogController.js')));
 
-Layout()->append('content.end.html', file_get_contents(__dir('inc/json/viewForm.html')));
+Layout()->append('body.content.end', file_get_contents(__dir('inc/json/viewForm.html')));
 Layout()->append('body.js.code', file_get_contents(__dir('inc/json/viewFormController.js')));
 
 Layout()->append('body.js.code', file_get_contents(__dir('mount.js')));

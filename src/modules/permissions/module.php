@@ -2,4 +2,10 @@
 
 use ApCode\Executor\PhpFileExecutor;
 
-return new PhpFileExecutor(ROOT_DIR . '/permissions');
+return new class (ROOT_DIR . '/permissions') extends PhpFileExecutor {
+    protected function prepareAction($action)
+    {
+        $action = strtr(trim($action, '/'), ['.php' => '']);
+        return strtr($action, ['.' => '/']) . '.php';
+    }
+};

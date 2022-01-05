@@ -47,7 +47,7 @@ foreach (glob(__dir('assets/*.css')) as $css) {
       </div>
     </footer>
 
-<?php echo Layout()->renderIfNotEmpty('content.end.html')?>
+<?php echo Layout()->renderIfNotEmpty('body.content.end')?>
 <?php echo Layout()->renderIfNotEmpty('body.js.links')?>
 <?php echo Layout()->renderIfNotEmpty('body.js.code')?>
   </body>

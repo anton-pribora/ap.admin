@@ -6,8 +6,8 @@
 
 $ext = Config()->get('js.ENV');
 
-Layout()->appendOnce('body.js.links', ShortUrl("@cdn/vue3/vue.{$ext}.js"));
-Layout()->appendOnce('body.js.links', ShortUrl("@cdn/vue3/vuex.{$ext}.js"));
+Layout()->appendOnce('body.js.links', ExternalUrl("@cdn/vue3/vue.{$ext}.js"));
+Layout()->appendOnce('body.js.links', ExternalUrl("@cdn/vue3/vuex.{$ext}.js"));
 
 Layout()->appendOnce('body.js.code', <<<'JS'
 const store = Vuex.createStore();

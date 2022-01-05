@@ -9,7 +9,7 @@ $consultant = $this->argument();
 
 Layout()->append('body.js.code', file_get_contents(__dir('edit_controller.js')));
 
-Layout()->startGrab('content.end.html');
+Layout()->startGrab('body.content.end');
 ?>
 <form name="form" ng-controller="consultantInformationEditController">
 <div class="modal fade" role="dialog" id="consultantInformationEditDialog">
