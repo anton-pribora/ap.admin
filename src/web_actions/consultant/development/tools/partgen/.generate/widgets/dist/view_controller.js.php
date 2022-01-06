@@ -8,7 +8,9 @@ $this->param('printIndent')("{$fileName} ... ");
 $templateId = $this->param('widget.templateId.viewForm');
 $editDialogComponent = $this->param('widget.component.editDialog');
 $widgetStore = $this->param('widget.store');
+$widgetFullPath = $this->param('widget.fullPath');
 $viewForm = $this->param('widget.component.viewForm');
+$textConfirmRemove = $this->param('text.confirmRemove');
 
 $data = <<<'JS'
 app.component('{$viewForm}', {
@@ -20,20 +22,19 @@ app.component('{$viewForm}', {
   },
   methods: {
     async edit(e) {
-      const user = await this.$externalMethods.call('{$editDialogComponent}()', e);
+      const data = await this.$externalMethods.call('{$editDialogComponent}()', e);
 
-      if (user) {
-        this.$store.commit('planktonUsers/save', user);
-        this.$toast.success(`Пользователь ${e.name} был ${e.id ? 'обновлён' : 'добавлен'}`);
+      if (data) {
+        this.$store.commit('$widgetStore/save', data.item);
+        this.$toast.success(`Данные были обновлены`);
       }
     },
     async remove(e) {
-      if (await this.$confirm('jhjhbjhbjhb')) {
+      if (await this.$confirm('{$textConfirmRemove}')) {
         e.deleting = true;
 
-        if (await this.$do('jbjjjkn/remove', e)) {
-          this.$store.commit('planktonUsers/remove', e);
-          this.$toast.success(`Пользователь ${e.name} был удалён`);
+        if (await this.$do('{$widgetFullPath}::remove', e)) {
+          location.reload();
         } else {
           e.deleting = undefined;
         }
@@ -49,6 +50,8 @@ $data = strtr($data, [
     '{$widgetStore}' => $widgetStore,
     '{$templateId}' => $templateId,
     '$widgetStore' => $widgetStore,
+    '{$widgetFullPath}' => $widgetFullPath,
+    '{$textConfirmRemove}' => $textConfirmRemove
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

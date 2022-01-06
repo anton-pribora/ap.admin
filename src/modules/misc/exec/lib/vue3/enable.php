@@ -36,5 +36,42 @@ const externalMethods = new function () {
 
 app.use(externalMethods);
 
+app.use({
+  install(app) {
+    app.config.globalProperties.$do = function (action = '', data = {}) {
+      return fetch('', {
+        method: 'POST',
+        cache: 'no-cache',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          widget_action: action,
+          widget_data: data
+        })
+      })
+        // Ошибки уровня HTTP
+        .then(async response => {
+          if (!response.ok) {
+            const text = await response.text();
+            throw new Error(text || response.statusText);
+          }
+          return response;
+        })
+        // Парсим JSON
+        .then(response => response.json())
+        // Ошибки уровня пользователя
+        .then(data => {
+          if (data.error) {
+            throw new Error(`${data.error.code}: ${data.error.description}`);
+          }
+          return data;
+        })
+        .catch(error => {
+          app.config.globalProperties.$toast.danger(`Ошибка: ${error.message}`);
+        })
+    }
+  }
+});
 JS
 );

@@ -164,4 +164,19 @@ class Http implements RequestInterface
 
         return join($uri);
     }
+
+    public function contentType()
+    {
+        return $_SERVER['CONTENT_TYPE'] ?? '';
+    }
+
+    public function isJson()
+    {
+        return strtolower($this->contentType()) === 'application/json';
+    }
+
+    public function readJson()
+    {
+        return json_decode_array(file_get_contents('php://input'));
+    }
 }

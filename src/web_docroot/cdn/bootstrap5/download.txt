@@ -1,0 +1,5 @@
+curl -L https://unpkg.com/bootstrap@5/dist/js/bootstrap.bundle.min.js > bootstrap.bundle.min.js
+curl -L https://unpkg.com/bootstrap@5/dist/css/bootstrap.min.css > bootstrap.min.css
+curl -L https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.css > bootstrap-icons.css
+curl -L https://unpkg.com/bootstrap-icons@1/font/fonts/bootstrap-icons.woff > fonts/bootstrap-icons.woff
+curl -L https://unpkg.com/bootstrap-icons@1/font/fonts/bootstrap-icons.woff2 > fonts/bootstrap-icons.woff2

@@ -22,6 +22,9 @@ if (Request()->isPost()) {
     $this->setParam('part.repository', Request()->get('part.repository', 'Project\\UnknownRepository'));
     $this->setParam('part.recordIdKey', Request()->get('part.recordIdKey', 'record_id'));
 
+    $this->setParam('text.afterRemove', Request()->get('text.afterRemove', 'Запись «{$record->name()}» была удалена'));
+    $this->setParam('text.confirmRemove', Request()->get('text.confirmRemove', 'Вы действительно хотите удалить эту запись?'));
+
     $this->setParam('widget.path', Request()->get('widget.path', 'unknown'));
     $this->setParam('widget.name', Request()->get('widget.name', 'information'));
 
@@ -115,6 +118,21 @@ if (Request()->isPost()) {
       <input type="text" class="form-control" id="widget[name]" name="widget[name]" value="information">
     </div>
   </div>
+
+  <h4>Запросы и уведомления</h4>
+  <div class="row mb-3">
+    <div class="col">
+      <label class="" for="text[confirmRemove]">Подтверждение удаления</label>
+      <input type="text" class="form-control" id="text[confirmRemove]" name="text[confirmRemove]" value="Вы действительно хотите удалить этого слона?">
+    </div>
+  </div>
+  <div class="row mb-3">
+    <div class="col">
+      <label class="" for="text[afterRemove]">Уведомление после удаления</label>
+      <input type="text" class="form-control" id="text[afterRemove]" name="text[afterRemove]" value="Слон «{$record->name()}» был удалён">
+    </div>
+  </div>
+
 
   <h4>Поля записи</h4>
   <table class="table table-striped table-bordered">
