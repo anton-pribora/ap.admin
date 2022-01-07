@@ -2,6 +2,10 @@
 
 PathAlias()->set('@layout', Config()->get('template.layout.error'));
 
+if (Request()->isAcceptJson()) {
+  ReturnJsonError('Page ' . Request()->action() . ' not found', 'not_found');
+}
+
 http_response_code(404);
 
 Layout()->setVar('title', '404 Not found');

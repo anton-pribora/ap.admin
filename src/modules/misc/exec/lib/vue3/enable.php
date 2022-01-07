@@ -38,17 +38,11 @@ app.use(externalMethods);
 
 app.use({
   install(app) {
-    app.config.globalProperties.$do = function (action = '', data = {}) {
-      return fetch('', {
-        method: 'POST',
+    const q = ({url = '', method = 'GET', body = undefined, headers = {}}) => fetch(url, {
+        method,
         cache: 'no-cache',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-          widget_action: action,
-          widget_data: data
-        })
+        headers,
+        body
       })
         // Ошибки уровня HTTP
         .then(async response => {
@@ -69,8 +63,26 @@ app.use({
         })
         .catch(error => {
           app.config.globalProperties.$toast.danger(`Ошибка: ${error.message}`);
-        })
-    }
+        });
+  
+    app.config.globalProperties.$do = (action = '', data = {}) => q({
+      method: 'POST',
+      body: JSON.stringify({
+        widget_action: action,
+        widget_data: data
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Accept: 'application/json'
+      }
+    });
+    
+    app.config.globalProperties.$get = (url, params = null) => q({
+      url: params && `${url}?${new URLSearchParams(params).toString()}` || url,
+      headers: {
+        Accept: 'application/json'
+      }
+    });
   }
 });
 JS

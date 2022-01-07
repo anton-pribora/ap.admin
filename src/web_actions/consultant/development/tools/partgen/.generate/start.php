@@ -57,6 +57,12 @@ $makeDir = function ($fullPath) use ($print) {
 };
 
 $makeFile = function ($fullPath, $data) use ($makeDir, $print) {
+    $baseFolder = $this->param('baseFolder');
+
+    if ($baseFolder) {
+        $fullPath = substr_replace($fullPath, $baseFolder, 0, strlen(ROOT_DIR));
+    }
+
     if (file_exists($fullPath)) {
         if (!is_writable($fullPath)) {
             $print("ошибка (файл $fullPath не доступен для записи)\n");
@@ -90,7 +96,7 @@ $globInclude(__dir('permissions/*.php'));
 $endSection();
 
 $startSection("Генерируем виджеты:");
-$this->setParam('cwd', ExpandPath('@widgets/' . $this->param('widget.path') . '/' . $this->param('widget.name')));
+$this->setParam('cwd', ExpandPath('@widgets/' . strtr($this->param('widget.path'), ['.' => '/']) . '/' . $this->param('widget.name')));
 $globInclude(__dir('widgets/*.php'));
 $endSection();
 

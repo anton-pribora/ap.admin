@@ -4,6 +4,10 @@ use ApCode\Html\Element\A;
 use ApCode\Html\Element\UnescapedText;
 
 if (!Identity()->require('consultant')) {
+    if (Request()->isAcceptJson()) {
+        ReturnJsonError('Требуется аутентификация', 'invalid_auth');
+    }
+
     return Module('auth')->execute('login.php');
 }
 

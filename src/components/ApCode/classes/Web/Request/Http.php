@@ -179,4 +179,9 @@ class Http implements RequestInterface
     {
         return json_decode_array(file_get_contents('php://input'));
     }
+
+    public function isAcceptJson()
+    {
+        return (bool) preg_match('/json/ui', $_SERVER['HTTP_ACCEPT'] ?? '');
+    }
 }
