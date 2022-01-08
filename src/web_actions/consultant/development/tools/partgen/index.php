@@ -38,6 +38,13 @@ if (Request()->isPost() && ((!$disableZip && $action === 'download') || (!$disab
     $this->setParam('widget.path', Request()->get('widget.path', 'unknown'));
     $this->setParam('widget.name', Request()->get('widget.name', 'information'));
 
+    $this->setParam('permissions.path', Request()->get('permissions.path', 'consultant.unknown'));
+
+    $this->setParam('generate.classes', Request()->get('generate.classes', false));
+    $this->setParam('generate.permissions', Request()->get('generate.permissions', false));
+    $this->setParam('generate.widget', Request()->get('generate.widget', false));
+    $this->setParam('generate.section', Request()->get('generate.section', false));
+
     $fields = Request()->get('fields', []);
     array_walk($fields, function (&$item) {
         $item += ['view' => false, 'edit' => false, 'search' => false];

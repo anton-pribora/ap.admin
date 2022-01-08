@@ -17,135 +17,189 @@
     </div>
 
     <div v-if="showForm">
+
       <hr>
 
-      <h4>Свойства раздела</h4>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[name]">Название</label>
-          <input type="text" class="form-control" id="part[name]" name="part[name]" v-model="part.name">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[key]">Ключ записи</label>
-          <input type="text" class="form-control" id="part[key]" name="part[key]" v-model="part.key">
-        </div>
-      </div>
+      <h4>Генерировать</h4>
+
       <div class="row mb-3">
         <div class="col">
           <div class="form-check">
-            <input type="checkbox" class="form-check-input" name="part[menu]" value="1" checked id="partMenu">
-            <label class="form-check-label" for="partMenu">Добавить раздел в левое меню</label>
+            <input class="form-check-input" type="checkbox" value="1" id="generate[classes]" name="generate[classes]" v-model="generate.classes">
+            <label class="form-check-label" for="generate[classes]">
+              Классы
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="generate[permissions]" name="generate[permissions]" v-model="generate.permissions">
+            <label class="form-check-label" for="generate[permissions]">
+              Права доступа
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="generate[widget]" name="generate[widget]" v-model="generate.widget">
+            <label class="form-check-label" for="generate[widget]">
+              Widget
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="1" id="generate[section]" name="generate[section]" v-model="generate.section">
+            <label class="form-check-label" for="generate[section]">
+              Раздел пользователя
+            </label>
           </div>
         </div>
       </div>
       <div class="row mb-3">
         <div class="col">
-          <label class="" for="part[menuFile]">Путь к файлу с меню</label>
-          <input type="text" class="form-control" id="part[menuFile]" name="part[menuFile]" value="@consultant/folder.meta.php">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[billet]">Класс записи</label>
-          <input type="text" class="form-control" id="part[billet]" name="part[billet]" v-model="part.billet">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[repository]">Класс репозитория</label>
-          <input type="text" class="form-control" id="part[repository]" name="part[repository]" v-model="part.repository">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[path]">Путь раздела  <span class="text-muted small">(через слэш)</span></label>
-          <input type="text" class="form-control" id="part[path]" name="part[path]" v-model="part.path">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="part[recordIdKey]">GET-параметр</label>
-          <input type="text" class="form-control" id="part[recordIdKey]" name="part[recordIdKey]" v-model="part.recordIdKey">
+          <label class="" for="part[key]">Ключ записи <span class="text-muted small">(через точку)</span></label>
+          <input type="text" class="form-control" id="part[key]" name="part[key]" v-model="part.key">
         </div>
       </div>
 
-      <h4>Widget</h4>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="widget[path]">Путь виджета <span class="text-muted small">(через точку)</span></label>
-          <input type="text" class="form-control" id="widget[path]" name="widget[path]" v-model="widget.path">
+      <hr>
+
+      <div v-if="generate.classes">
+        <h4>Классы</h4>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[billet]">Класс записи</label>
+            <input type="text" class="form-control" id="part[billet]" name="part[billet]" v-model="part.billet">
+          </div>
         </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="widget[name]">Название для виджета свойств</label>
-          <input type="text" class="form-control" id="widget[name]" name="widget[name]" value="information">
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[repository]">Класс репозитория</label>
+            <input type="text" class="form-control" id="part[repository]" name="part[repository]" v-model="part.repository">
+          </div>
         </div>
       </div>
 
-      <h4>Запросы и уведомления</h4>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="text[confirmRemove]">Подтверждение удаления</label>
-          <input type="text" class="form-control" id="text[confirmRemove]" name="text[confirmRemove]" value="Вы действительно хотите удалить эту запись?">
-        </div>
-      </div>
-      <div class="row mb-3">
-        <div class="col">
-          <label class="" for="text[afterRemove]">Уведомление после удаления</label>
-          <input type="text" class="form-control" id="text[afterRemove]" name="text[afterRemove]" value="Запись «{$record->name()}» была удалена">
+      <div v-if="generate.permissions">
+        <h4>Права доступа</h4>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="permissions[path]">Путь папки с правами <span class="text-muted small">(через точку)</span></label>
+            <input type="text" class="form-control" id="permissions[path]" name="permissions[path]" v-model="permissions.path">
+          </div>
         </div>
       </div>
 
-      <h4>Поля записи</h4>
-      <table class="table table-striped table-bordered">
-        <tbody>
-        <tr>
-          <th title="Просмотр"><i class="bi bi-sunglasses"></i></th>
-          <th title="Редактирование"><i class="bi bi-pencil"></i></th>
-          <th title="Поиск"><i class="bi bi-search"></i></th>
-          <th>Поле</th>
-          <th>Название</th>
-          <th>Геттер</th>
-          <th>Сеттер</th>
-          <th>Формат</th>
-        </tr>
-        <tr v-if="!fieldsLoading" v-for="field in fields">
-          <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][view]'" value="1" v-model="field.view"></td>
-          <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][edit]'" value="1" v-model="field.edit"></td>
-          <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][search]'" value="1" v-model="field.search"></td>
-          <td><input class="form-control" :name="'fields[' + field.field + '][prop]'" v-model="field.prop"></td>
-          <td><input class="form-control" :name="'fields[' + field.field + '][title]'" v-model="field.title"></td>
-          <td><input class="form-control" :name="'fields[' + field.field + '][getter]'" v-model="field.getter"></td>
-          <td><input class="form-control" :name="'fields[' + field.field + '][setter]'" v-model="field.setter"></td>
-          <td><select class="form-select" :name="'fields[' + field.field + '][format]'" v-model="field.format">
-              <option value="">(Не указано)</option>
-              <option value="string">Строка</option>
-              <option value="text">Текст</option>
-              <option value="json">JSON</option>
-            </select></td>
-        </tr>
-        <tr v-if="!fields.length && !fieldsLoading">
-          <td colspan="8" class="text-center text-muted">(нет данных)</td>
-        </tr>
-        <tr v-if="fieldsLoading">
-          <td colspan="8" class="text-center text-muted">
-            <div class="spinner-border spinner-border-sm text-primary" role="status">
+      <div v-if="generate.widget">
+        <h4>Widget</h4>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="widget[path]">Путь виджета <span class="text-muted small">(через точку)</span></label>
+            <input type="text" class="form-control" id="widget[path]" name="widget[path]" v-model="widget.path">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="widget[name]">Название для виджета свойств</label>
+            <input type="text" class="form-control" id="widget[name]" name="widget[name]" value="information">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="text[confirmRemove]">Подтверждение удаления</label>
+            <input type="text" class="form-control" id="text[confirmRemove]" name="text[confirmRemove]" value="Вы действительно хотите удалить эту запись?">
+          </div>
+        </div>
+      </div>
+
+      <div v-if="generate.section">
+        <h4>Раздел пользователя</h4>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[name]">Название</label>
+            <input type="text" class="form-control" id="part[name]" name="part[name]" v-model="part.name">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <div class="form-check">
+              <input type="checkbox" class="form-check-input" name="part[menu]" value="1" checked id="partMenu">
+              <label class="form-check-label" for="partMenu">Добавить ссылку в левое меню</label>
             </div>
-            Загрузка...
-          </td>
-        </tr>
-        </tbody>
-      </table>
-
-      <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
-        <div class="btn-group me-2" role="group" aria-label="First group">
-          <button :disabled="disableZip || !fields.length" type="submit" name="action" value="download" class="btn btn-primary"><i class="bi bi-download me-1"></i>Скачать архивом</button>
+          </div>
         </div>
-        <div class="input-group">
-          <button :disabled="disableHdd || !fields.length" type="submit" name="action" value="generate" class="btn btn-default"><i class="bi bi-hdd me-1"></i>Записать на диск</button>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[menuFile]">Путь к файлу с меню</label>
+            <input type="text" class="form-control" id="part[menuFile]" name="part[menuFile]" value="@consultant/folder.meta.php">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[path]">Путь раздела  <span class="text-muted small">(через слэш)</span></label>
+            <input type="text" class="form-control" id="part[path]" name="part[path]" v-model="part.path">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="part[recordIdKey]">GET-параметр</label>
+            <input type="text" class="form-control" id="part[recordIdKey]" name="part[recordIdKey]" v-model="part.recordIdKey">
+          </div>
+        </div>
+        <div class="row mb-3">
+          <div class="col">
+            <label class="" for="text[afterRemove]">Уведомление после удаления</label>
+            <input type="text" class="form-control" id="text[afterRemove]" name="text[afterRemove]" value="Запись «{$record->name()}» была удалена">
+          </div>
+        </div>
+      </div>
+
+      <div v-if="generate.classes || generate.widget || generate.section">
+        <h4>Поля записи</h4>
+        <table class="table table-striped table-bordered">
+          <tbody>
+          <tr>
+            <th title="Просмотр"><i class="bi bi-sunglasses"></i></th>
+            <th title="Редактирование"><i class="bi bi-pencil"></i></th>
+            <th title="Поиск"><i class="bi bi-search"></i></th>
+            <th>Поле</th>
+            <th>Название</th>
+            <th>Геттер</th>
+            <th>Сеттер</th>
+            <th>Формат</th>
+          </tr>
+          <tr v-if="!fieldsLoading" v-for="field in fields">
+            <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][view]'" value="1" v-model="field.view"></td>
+            <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][edit]'" value="1" v-model="field.edit"></td>
+            <td><input type="checkbox" class="form-check" :name="'fields[' + field.field + '][search]'" value="1" v-model="field.search"></td>
+            <td><input class="form-control" :name="'fields[' + field.field + '][prop]'" v-model="field.prop"></td>
+            <td><input class="form-control" :name="'fields[' + field.field + '][title]'" v-model="field.title"></td>
+            <td><input class="form-control" :name="'fields[' + field.field + '][getter]'" v-model="field.getter"></td>
+            <td><input class="form-control" :name="'fields[' + field.field + '][setter]'" v-model="field.setter"></td>
+            <td><select class="form-select" :name="'fields[' + field.field + '][format]'" v-model="field.format">
+                <option value="">(Не указано)</option>
+                <option value="string">Строка</option>
+                <option value="text">Текст</option>
+                <option value="json">JSON</option>
+              </select></td>
+          </tr>
+          <tr v-if="!fields.length && !fieldsLoading">
+            <td colspan="8" class="text-center text-muted">(нет данных)</td>
+          </tr>
+          <tr v-if="fieldsLoading">
+            <td colspan="8" class="text-center text-muted">
+              <div class="spinner-border spinner-border-sm text-primary" role="status">
+              </div>
+              Загрузка...
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div v-if="generate.classes || generate.widget || generate.section || generate.permissions">
+        <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group me-2" role="group" aria-label="First group">
+            <button :disabled="disableZip || !fields.length" type="submit" name="action" value="download" class="btn btn-primary"><i class="bi bi-download me-1"></i>Скачать архивом</button>
+          </div>
+          <div class="input-group">
+            <button :disabled="disableHdd || !fields.length" type="submit" name="action" value="generate" class="btn btn-default"><i class="bi bi-hdd me-1"></i>Записать на диск</button>
+          </div>
         </div>
       </div>
 

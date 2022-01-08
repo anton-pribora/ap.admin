@@ -85,22 +85,30 @@ $this->setParam('print', $print);
 $this->setParam('printIndent', $printIndent);
 $this->setParam('printOk', $printOk);
 
-$startSection("Генерируем классы:");
-$this->setParam('cwd', ExpandPath('@root/classes'));
-$globInclude(__dir('classes/*.php'));
-$endSection();
+if ($this->param('generate.classes')) {
+    $startSection("Генерируем классы:");
+    $this->setParam('cwd', ExpandPath('@root/classes'));
+    $globInclude(__dir('classes/*.php'));
+    $endSection();
+}
 
-$startSection("Генерируем права доступа:");
-$this->setParam('cwd', ExpandPath('@root/permissions/consultant/' . $this->param('part.key')));
-$globInclude(__dir('permissions/*.php'));
-$endSection();
+if ($this->param('generate.permissions')) {
+    $startSection("Генерируем права доступа:");
+    $this->setParam('cwd', ExpandPath('@root/permissions/' . strtr($this->param('permissions.path'), ['.' => '/'])));
+    $globInclude(__dir('permissions/*.php'));
+    $endSection();
+}
 
-$startSection("Генерируем виджеты:");
-$this->setParam('cwd', ExpandPath('@widgets/' . strtr($this->param('widget.path'), ['.' => '/']) . '/' . $this->param('widget.name')));
-$globInclude(__dir('widgets/*.php'));
-$endSection();
+if ($this->param('generate.widget')) {
+    $startSection("Генерируем виджеты:");
+    $this->setParam('cwd', ExpandPath('@widgets/' . strtr($this->param('widget.path'), ['.' => '/']) . '/' . $this->param('widget.name')));
+    $globInclude(__dir('widgets/*.php'));
+    $endSection();
+}
 
-$startSection("Генерируем раздел пользователя:");
-$this->setParam('cwd', ExpandPath($this->param('part.path')));
-$globInclude(__dir('user/*.php'));
-$endSection();
+if ($this->param('generate.section')) {
+    $startSection("Генерируем раздел пользователя:");
+    $this->setParam('cwd', ExpandPath($this->param('part.path')));
+    $globInclude(__dir('user/*.php'));
+    $endSection();
+}
