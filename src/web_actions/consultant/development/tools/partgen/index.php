@@ -16,9 +16,9 @@ if (!extension_loaded('zip')) {
     Alert('Не установлено расширение <strong>zip</strong>. Скачивание архива недоступно.');
 }
 
-if (getenv('APPLICATION_ENV') === 'production') {
+if (getenv('APPLICATION_ENV') !== 'development') {
     $disableHdd = true;
-    Alert('Вы находитесь на окружении <strong>production</strong>. Запись на диск недоступна.');
+    Alert('Вы находитесь на окружении отличном от <strong>development</strong>. Запись на диск недоступна.');
 }
 
 if (Request()->isPost() && ((!$disableZip && $action === 'download') || (!$disableHdd && $action === 'generate'))) {
