@@ -7,6 +7,10 @@ RequireLib('confirm');
 Layout()->append('body.js.code', file_get_contents(__dir('plankton.js')));
 
 Layout()->append('body.js.code', file_get_contents(__dir('inc/offices/store.js')));
+Layout()->append('body.content.end', file_get_contents(__dir('inc/offices/viewForm.html')));
+Layout()->append('body.js.code', file_get_contents(__dir('inc/offices/viewFormController.js')));
+Layout()->append('body.content.end', file_get_contents(__dir('inc/offices/editDialog.html')));
+Layout()->append('body.js.code', file_get_contents(__dir('inc/offices/editDialogController.js')));
 
 Layout()->append('body.js.code', file_get_contents(__dir('inc/users/store.js')));
 Layout()->append('body.content.end', file_get_contents(__dir('inc/users/viewForm.html')));
@@ -40,15 +44,9 @@ Layout()->append('body.js.code', file_get_contents(__dir('mount.js')));
         <users-view></users-view>
       </div>
       <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-        <h2>Офисы</h2>
-        <div class="card">
-          <div class="card-body pt-0">
-            <!--#.include virtual="/plankton/offices/viewForm.html"-->
-          </div>
-        </div>
+        <offices-view></offices-view>
       </div>
       <div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
-        <h2>JSON</h2>
         <div class="card">
           <div class="card-body">
             <plankton-json></plankton-json>

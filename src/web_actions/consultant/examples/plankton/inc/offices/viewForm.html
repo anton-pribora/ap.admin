@@ -1,15 +1,15 @@
-<script type="text/html" id="usersViewForm">
+<script type="text/html" id="officesViewForm">
   <div class="d-block">
-    <button @click="edit({name: 'Новый сотрудник', officeId: ''})" class="btn btn-default">
+    <button @click="edit({name: 'Новый офис'})" class="btn btn-default">
       <i class="bi bi-plus-lg fw-bold me-1"></i>
       Добавить
     </button>
   </div>
-  <div v-for="e in planktons" :key="e.id" class="d-flex pt-3">
+  <div v-for="e in offices" :key="e.id" class="d-flex pt-3">
     <svg class="bd-placeholder-img flex-shrink-0 me-2 rounded" width="48" height="48"
          xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false">
       <title>Placeholder</title>
-      <rect width="100%" height="100%" fill="#007bff"></rect>
+      <rect width="100%" height="100%" fill="#ff7b00"></rect>
     </svg>
 
     <div class="pb-3 mb-0 lh-sm border-bottom w-100">
@@ -28,9 +28,8 @@
           Удаление...
         </div>
       </div>
-      <span class="d-block">Дата: {{e.date}}</span>
-      <span class="d-block">Офис: {{offices[e.officeId] || ('#' + e.officeId)}}</span>
+      <span class="d-block">Адрес: {{e.address}}</span>
     </div>
   </div>
-  <plankton-users-edit-dialog></plankton-users-edit-dialog>
+  <plankton-offices-edit-dialog></plankton-offices-edit-dialog>
 </script>
