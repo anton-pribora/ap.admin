@@ -30,4 +30,4 @@ app.component('examples-employee-information-view-form', {
       }
     }
   }
-})
+});

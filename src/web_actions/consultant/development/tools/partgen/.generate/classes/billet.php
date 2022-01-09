@@ -126,7 +126,7 @@ $fullBilletPath = $cwd . '/' . $fname . '.php';
 $fullMetaPath   = $cwd . '/' . $fname . '.meta.php';
 
 $this->param('printIndent')(basename($fullBilletPath) . ' ... ');
-if ($this->param('makeFile')($fullBilletPath, (string) $classFile)) {
+if ($this->param('makeFile')($fullBilletPath, $classFile . PHP_EOL)) {
     $this->param('printOk')();
 }
 

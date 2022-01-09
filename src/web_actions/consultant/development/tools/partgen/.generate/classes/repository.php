@@ -28,7 +28,7 @@ foreach ($fields as $dbField => ['prop' => $prop, 'format' => $format, 'search' 
     if ($search) {
         if ($format === 'text' || $format === 'string') {
             $where[] = <<<PHP
-        
+
         if (isset(\$params['{$prop}'])) {
             \$where[] = '{$quotedField} LIKE ' . Db()->quote('%' . \$params['{$prop}'] . '%');
             unset(\$params['{$prop}']);
@@ -37,7 +37,7 @@ foreach ($fields as $dbField => ['prop' => $prop, 'format' => $format, 'search' 
 PHP;
         } else {
             $where[] = <<<PHP
-        
+
         if (isset(\$params['{$prop}'])) {
             \$where[] = '{$quotedField} = ' . Db()->quote(\$params['{$prop}']);
             unset(\$params['{$prop}']);

@@ -1,10 +1,8 @@
 <?php
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $consultant */
 /* @var $record Project\Examples\Employee */
 
-$consultant = $this->argument(0);
-$record = $this->argument(1);
+$record = $this->argument();
 
-return true;
+ReturnJson(['data' => $this->include('encodeData.php')]);
