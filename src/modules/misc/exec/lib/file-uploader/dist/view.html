@@ -1,0 +1,32 @@
+<div id="uploadFilesDialog">
+  <form ref="form" class="d-none"><input type="file" :multiple="multiple" :accept="accept" @change="onChange" ref="picker"></form>
+  <div class="modal fade" ref="modal" tabindex="-1" data-bs-backdrop="static">
+    <div class="modal-dialog modal-lg">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Загрузка файлов</h5>
+          <button v-if="!activeUploads" type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <div class="my-2" v-for="e in list">
+            <div :class="{'text-danger': e.error, 'text-success': e.success}">
+              <div v-if="!e.done" class="spinner-border spinner-border-sm text-primary" role="status"></div>
+              {{e.name}} &mdash; {{e.error || (e.progress + '%')}}
+            </div>
+            <div class="progress" style="height: 1.5rem">
+              <div class="progress-bar progress-bar-striped fs-6"
+                   :style="{width: e.progress + '%'}"
+                   :class="{'progress-bar-animated': !e.done, 'bg-danger': e.error}"
+              ></div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer" v-if="!activeUploads && errors">
+          <button type="button" class="btn btn-default" data-bs-dismiss="modal" :disabled="activeUploads">
+            Закрыть
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

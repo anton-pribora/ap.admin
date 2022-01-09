@@ -1,186 +1,168 @@
-$(function(){
+const uploadFilesDialog = Vue.createApp({
+  data() {
+    return {
+      list: [],
+      errors: false,
+      activeUploads: 0,
+      multiple: true,
+      accept: '*/*',
+      after: undefined,
 
-    function Uploader() {
-        var $dialog = $('#fileUploadDialog');
-        var errors = [];
-        var activeUploads = 0;
-        var visible = false;
-        var onFinish = false;
-        var additionalData = {};
+      url: '',
+      params: {},
+    }
+  },
+  methods: {
+    reset() {
+      this.$refs.form.reset();
+      this.list = [];
+      this.errors = false;
+      this.activeUploads = 0;
+      this.after = undefined;
+    },
 
-        $dialog.on('shown.bs.modal', function(){
-            visible = true;
-        });
+    pickAndUploadFiles({
+      url = '',               // Адрес, куда отправлять файлы
+      action = undefined,  // Действие виджета
+      data = undefined,    // Дополнительнительные данные для виджета
+      after = undefined,   // Действие после загрузки файлов
+      postParams = {},           // Дополнительные POST-параметры
+      multiple = true,      // Признак множественного выбора файлов для загрузки
+      accept = '*/*'          // Тип выбираемых файлов
+    }) {
+      if (action) {
+        postParams['widget_action'] = action;
+      }
 
-        $dialog.on('hidden.bs.modal', function(){
-            visible = false;
+      if (data) {
+        postParams['widget_data'] = data;
+      }
 
-            if (onFinish) {
-                onFinish({
-                    errors: errors
-                });
+      this.url = url;
+      this.params = postParams;
+      this.multiple = multiple;
+      this.accept = accept;
+      this.after = after;
+
+      this.$nextTick(() => {
+        this.$refs.picker.click();
+      });
+    },
+
+    onChange(e) {
+      this.modal.show();
+
+      const params = JSON.parse(JSON.stringify(this.params));
+
+      for(const file of e.target.files) {
+        this.sendFile(file, this.url, params);
+      }
+    },
+
+    sendFile(file, url = '', additionalData = {}) {
+      function toFormData(obj, form, namespace) {
+        const fd = form || new FormData();
+        let formKey;
+
+        for(let property in obj) {
+          if (obj.hasOwnProperty(property) && obj[property] != null && obj[property] !== undefined) {
+            if (namespace) {
+              formKey = namespace + '[' + property + ']';
+            } else {
+              formKey = property;
             }
-        });
 
-        function progress(file) {
-            var html = '<div>' + file.name + '</div>' +
-                '<div class="progress">' +
-                    '<div class="progress-bar progress-bar-striped active" style="width: 0%;">' +
-                        '0%' +
-                    '</div>'
-                '</div>';
-            var $progress = $(html);
-
-            $dialog.find('.modal-body').append($progress);
-
-            return {
-                update: function(percent) {
-                    percent += '%';
-                    $progress.find('.progress-bar').css('width', percent).text(percent);
-                },
-                success: function() {
-                    $progress.find('.progress-bar').addClass('progress-bar-success').removeClass('active');
-                },
-                error: function(error) {
-                    $progress.find('.progress-bar').addClass('progress-bar-danger').removeClass('active').text(error);
-                },
+            // if the property is an object, but not a File, use recursive.
+            if (obj[property] instanceof Date) {
+              fd.append(formKey, obj[property].toISOString());
             }
+            else if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
+              toFormData(obj[property], fd, formKey);
+            } else { // if it's a string or a File object
+              fd.append(formKey, obj[property]);
+            }
+          }
         }
 
-        function reset() {
-            errors.length = 0;
-            activeUploads = 0;
-            visibe = false;
-            var additionalData = {};
-            $dialog.find('.modal-body').text('');
-            $dialog.find('.modal-footer').hide();
-        }
+        return fd;
+      }
 
-        function toFormData(obj, form, namespace) {
-          var fd = form || new FormData();
-          var formKey;
+      this.list.push({progress: 0, done: false, name: file.name, success: false, error: false});
 
-          for(var property in obj) {
-            if (obj.hasOwnProperty(property) && obj[property] != null && obj[property] !== undefined) {
-              if (namespace) {
-                formKey = namespace + '[' + property + ']';
-              } else {
-                formKey = property;
-              }
+      const i   = this.list.length - 1;
+      const xhr = new XMLHttpRequest();
+      const fd  = toFormData(additionalData);
 
-              // if the property is an object, but not a File, use recursivity.
-              if (obj[property] instanceof Date) {
-                fd.append(formKey, obj[property].toISOString());
-              }
-              else if (typeof obj[property] === 'object' && !(obj[property] instanceof File)) {
-                toFormData(obj[property], fd, formKey);
-              } else { // if it's a string or a File object
-                fd.append(formKey, obj[property]);
-              }
+      xhr.upload.addEventListener("progress", e => {
+          if (e.lengthComputable) {
+              this.list[i].progress = Math.round((e.loaded * 100) / e.total);
+          }
+      });
+
+      xhr.upload.addEventListener("load", e => {
+        this.list[i].progress = 100;
+      });
+
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+          const status = xhr.status;
+          this.activeUploads -= 1;
+          this.list[i].done = true;
+
+          try {
+            // Пробуем разобрать ответ как JSON
+            const json = JSON.parse(xhr.response);
+
+            if (json.error) {
+              this.list[i].error = `Ошибка: ${json.error.description || json.error}`;
+              this.errors = true;
+            } else {
+              this.list[i].success = true;
+            }
+          } catch (e) {
+            // Похоже ответ не JSON, работаем по схеме HTTP
+            if (status === 0 || (status >= 200 && status < 400)) {
+              this.list[i].success = true;
+            } else {
+              this.list[i].error = `${xhr.status} ${xhr.statusText}`;
+              this.errors = true;
             }
           }
 
-          return fd;
+          // Если активных загрузок нет и ошибок нет, автоматически закрываем диалог
+          if (this.activeUploads === 0 && !this.errors) {
+            setTimeout(() => this.modal.hide(), 600);
+          }
         }
+      };
 
-        function sendFile(file, $progress) {
-            var uri = "";
-            var xhr = new XMLHttpRequest();
-            var fd  = new FormData();
+      fd.append('file', file);
 
-            ++activeUploads;
+      xhr.open("POST", url, true);
+      xhr.send(fd);
 
-            xhr.upload.addEventListener("progress", function(e) {
-                if (e.lengthComputable) {
-                    var percentage = Math.round((e.loaded * 100) / e.total);
-                    $progress.update(percentage);
-                }
-            }, false);
-
-            xhr.upload.addEventListener("load", function(e){
-                $progress.update(100);
-            }, false);
-
-            xhr.open("POST", uri, true);
-            xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4) {
-                    if (xhr.status == 200) {
-                        $progress.success();
-                    } else {
-                        errors.push({
-                            file: file.name,
-                            status: xhr.status,
-                            statusText: xhr.statusText
-                        });
-
-                        $progress.error(xhr.status + ' ' + xhr.statusText);
-                    }
-                    --activeUploads;
-                }
-
-                if (activeUploads == 0) {
-                    if (errors.length) {
-                        $dialog.find('.modal-footer').show();
-                    } else {
-                        if (visible) {
-                            $dialog.modal('hide');
-                        } else {
-                            window.setTimeout(function() {
-                                $dialog.modal('hide');
-                            }, 700);
-                        }
-                    }
-                }
-            };
-
-            fd.append('file', file);
-
-            toFormData(additionalData, fd);
-
-            // Initiate a multipart/form-data upload
-            xhr.send(fd);
-        }
-
-        function uploadFiles(uri, filesArray, data, finishCallback) {
-            var progressList = [];
-
-            onFinish = finishCallback;
-            additionalData = data || {};
-
-            reset();
-
-            for (var i=0; i<filesArray.length; i++) {
-                progressList[i] = progress(filesArray[i]);
-            }
-
-            $dialog.modal();
-
-            for (var i=0; i<filesArray.length; i++) {
-                sendFile(filesArray[i], progressList[i]);
-            }
-        };
-
-        function pickFiles(pickCallback, attrs) {
-            $dialog.find('form')[0].reset();
-            var picker = $dialog.find('input[name="picker"]');
-
-            if (attrs !== undefined) {
-                picker.attr(attrs);
-            }
-
-            picker.on('change', function() {
-                picker.off('change');
-                pickCallback(this.files);
-            });
-
-            picker.click();
-        }
-
-        return {
-            uploadFiles: uploadFiles,
-            pickFiles: pickFiles
-        }
+      this.activeUploads += 1;
     }
+  },
+  mounted() {
+    this.modal = new bootstrap.Modal(this.$refs.modal);
 
-    window.fileUploader = Uploader();
+    this.$refs.modal.addEventListener('hide.bs.modal', e => {
+      if (this.after) {
+        this.after(this.errors);
+      }
+      this.reset();
+    });
+
+    this.$externalMethods.set('pickAndUploadFiles', this.pickAndUploadFiles);
+  },
+});
+
+uploadFilesDialog.use(externalMethods);
+uploadFilesDialog.mount('#uploadFilesDialog');
+
+app.use({
+  install: app => {
+    app.config.globalProperties.$pickAndUploadFiles = (options = {}) => externalMethods.call('pickAndUploadFiles', options);
+  }
 });
