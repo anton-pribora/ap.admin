@@ -88,13 +88,13 @@ $urlAssetFunction->createArgument('params')->setDefaultValueNull();
 $urlAssetFunction->addBodyLine(<<<PHP
 \$param = function(\$name, \$default = null) use(&\$params) { return isset(\$params[\$name]) ? \$params[\$name] : \$default; };
         \$scope = \$param('scope', Config()->get('urlAsset.scope', 'admin'));
-    
+
         switch ("\$scope:\$key") {
             case 'admin:url.view' : return ShortUrl('{$path}/one/', ['{$recordIdKey}' => \$this->id()]);
 
             case 'admin:link.view': return (new \ApCode\Html\Element\A(\$param('text', \$this->name() ?: '(без названия)'), \$this->urlAsset('url.view', \$params), \$param('title')));
         }
-    
+
         throw new \Exception(sprintf('Unknown url asset %s in scope %s', \$key, \$scope));
 PHP
 );
