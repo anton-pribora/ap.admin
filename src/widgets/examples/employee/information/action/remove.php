@@ -5,9 +5,7 @@
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', []);
-$item     = $data['item'] ?? [];
-$editable = $this->param('examples.employee.edit') || $this->param('examples.employee.{$widgetName}.edit');
+$editable = $this->param('examples.employee.edit') || $this->param('examples.employee.information.edit');
 
 if (!$editable) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');

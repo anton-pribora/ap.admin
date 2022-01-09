@@ -18,6 +18,7 @@ foreach ($list as $i => $item) {
         <h5 class="card-title"><?=$item->urlAsset('link.view')?> <small class="text-muted ms-3">#<?=$item->id()?></small></h5>
         <div><span class="text-muted">Должность:</span> <?=Html($item->post())?></div>
         <div><span class="text-muted">Обязанности:</span> <?=Html($item->responsibilities())?></div>
+
       </div>
     </div>
   </div>

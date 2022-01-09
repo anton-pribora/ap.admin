@@ -1,11 +1,11 @@
 app.component('examples-employee-information-edit-dialog', {
   template: '#examplesEmployeeInformationEditDialog',
-  data() {
-    return {
-      data: {},
-      loading: false
-    }
-  },
+  data: () => ({
+    widget: 'examples.employee.information',
+
+    data: {},
+    loading: false
+  }),
   methods: {
     show(e) {
       this.data = {...e}
@@ -20,7 +20,7 @@ app.component('examples-employee-information-edit-dialog', {
       this.modal._config.backdrop = 'static';
       this.loading = true;
 
-      this.result = await this.$do('examples.employee.information::save', {item: this.data});
+      this.result = await this.$do(`${this.widget}::save`, {data: this.data});
 
       this.loading = false;
       this.modal._config.backdrop = true;

@@ -5,19 +5,17 @@
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', []);
-$item     = $data['item'] ?? [];
+$data     = $this->param('widget_data', [])['data'] ?? [];
 $editable = $this->param('examples.employee.edit') || $this->param('examples.employee.information.edit');
 
 if (!$editable) {
     ReturnJsonError('У вас нет прав на редактирование этих данных', 'forbidden');
 }
 
-$record->setId($item['id'] ?? '');  // Идентификатор записи
-$record->setName($item['name'] ?? '');  // ФИО
-$record->setPost($item['post'] ?? '');  // Должность
-$record->setResponsibilities($item['responsibilities'] ?? '');  // Обязанности
+$record->setName($data['name'] ?? '');  // ФИО
+$record->setPost($data['post'] ?? '');  // Должность
+$record->setResponsibilities($data['responsibilities'] ?? '');  // Обязанности
 
 $record->save();
 
-ReturnJson(['item' => $this->include('encodeItem.php')]);
+$this->include('data.php');

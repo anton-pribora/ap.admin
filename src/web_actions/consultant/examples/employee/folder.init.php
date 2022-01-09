@@ -2,5 +2,5 @@
 
 use ApCode\Html\Element\A;
 
-Layout()->setVar('title', 'Сотрудники компании');
-Layout()->append('breadcrumbs', new A('Сотрудники компании', ShortUrl(__dir('/'))));
+Layout()->setVar('title', 'Employee');
+Layout()->append('breadcrumbs', new A('Employee', ShortUrl(__dir('/'))));

@@ -66,13 +66,13 @@ class Employee extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data
     {
         $param = function($name, $default = null) use(&$params) { return isset($params[$name]) ? $params[$name] : $default; };
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
-    
+
         switch ("$scope:$key") {
             case 'admin:url.view' : return ShortUrl('@consultant/examples/employee/one/', ['employee_id' => $this->id()]);
 
             case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без названия)'), $this->urlAsset('url.view', $params), $param('title')));
         }
-    
+
         throw new \Exception(sprintf('Unknown url asset %s in scope %s', $key, $scope));
     }
 }
