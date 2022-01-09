@@ -16,6 +16,7 @@ $data = <<<'PHP'
 $record = $this->argument();
 
 ReturnJson(['data' => $this->include('encodeData.php')]);
+
 PHP;
 
 $data = strtr($data, [

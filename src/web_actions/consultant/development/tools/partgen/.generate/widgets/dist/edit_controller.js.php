@@ -69,6 +69,7 @@ app.component('{$editDialogComponent}', {
     this.$externalMethods.set('{$editDialogComponent}()', this.show);
   }
 });
+
 JS;
 
 $data = strtr($data, [

@@ -18,6 +18,7 @@ $consultant = $this->argument(0);
 $record = $this->argument(1);
 
 return true;
+
 PHP;
 
 $data = strtr($data, [

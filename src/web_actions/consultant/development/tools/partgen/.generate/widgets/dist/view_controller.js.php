@@ -45,7 +45,8 @@ app.component('{$viewForm}', {
       }
     }
   }
-})
+});
+
 JS;
 
 $data = strtr($data, [

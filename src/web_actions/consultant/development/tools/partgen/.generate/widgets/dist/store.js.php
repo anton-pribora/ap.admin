@@ -19,6 +19,7 @@ store.registerModule('{$widgetStore}', {
     }
   }
 });
+
 JS;
 
 $data = strtr($data, [

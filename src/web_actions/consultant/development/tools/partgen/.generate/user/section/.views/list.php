@@ -49,6 +49,7 @@ foreach (\$list as \$i => \$item) {
 </div>
 <?php
 }
+
 PHP;
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

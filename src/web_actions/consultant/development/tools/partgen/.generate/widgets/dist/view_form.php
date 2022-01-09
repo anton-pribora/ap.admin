@@ -94,6 +94,7 @@ Layout()->startGrab('body.content.end');
 Layout()->endGrab();
 ?>
 <{$viewForm}></{$viewForm}>
+
 PHP;
 
 $data = strtr($data, [

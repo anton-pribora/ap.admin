@@ -35,6 +35,7 @@ $inputs
     <button type="submit" class="btn btn-default">Найти</button>
   </div>
 </form>
+
 PHP;
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";
