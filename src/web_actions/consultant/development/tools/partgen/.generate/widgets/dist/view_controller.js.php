@@ -15,17 +15,21 @@ $textConfirmRemove = $this->param('text.confirmRemove');
 $data = <<<'JS'
 app.component('{$viewForm}', {
   template: '#{$templateId}',
+  data: () => ({
+    store: '{$widgetStore}',
+    widget: '{$widgetFullPath}'
+  }),
   computed: {
     data() {
-      return this.$store.state.$widgetStore.data;
+      return this.$store.state[this.store].data;
     }
   },
   methods: {
     async edit(e) {
-      const data = await this.$externalMethods.call('{$editDialogComponent}()', e);
+      const result = await this.$externalMethods.call('{$editDialogComponent}()', e);
 
-      if (data) {
-        this.$store.commit('$widgetStore/save', data.item);
+      if (result) {
+        this.$store.commit(`${this.store}/save`, result.data);
         this.$toast.success(`Данные были обновлены`);
       }
     },
@@ -33,7 +37,7 @@ app.component('{$viewForm}', {
       if (await this.$confirm('{$textConfirmRemove}')) {
         e.deleting = true;
 
-        if (await this.$do('{$widgetFullPath}::remove', e)) {
+        if (await this.$do(`${this.widget}::remove`, e)) {
           location.reload();
         } else {
           e.deleting = undefined;
@@ -49,7 +53,6 @@ $data = strtr($data, [
     '{$editDialogComponent}' => $editDialogComponent,
     '{$widgetStore}' => $widgetStore,
     '{$templateId}' => $templateId,
-    '$widgetStore' => $widgetStore,
     '{$widgetFullPath}' => $widgetFullPath,
     '{$textConfirmRemove}' => $textConfirmRemove
 ]);

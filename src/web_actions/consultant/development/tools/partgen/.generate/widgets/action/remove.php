@@ -7,6 +7,7 @@ $this->param('printIndent')("{$fileName} ... ");
 
 $recordKey = $this->param('part.key');
 $billetClass = $this->param('part.billet');
+$widgetName = $this->param('widget.name');
 $repositoryClass = $this->param('part.repository');
 $textAfterRemove = $this->param('text.afterRemove');
 
@@ -18,8 +19,6 @@ $data = <<<'PHP'
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', []);
-$item     = $data['item'] ?? [];
 $editable = $this->param('{$recordKey}.edit') || $this->param('{$recordKey}.{$widgetName}.edit');
 
 if (!$editable) {
@@ -37,6 +36,7 @@ PHP;
 $data = strtr($data, [
     '{$recordKey}' => $recordKey,
     '{$billetClass}' => $billetClass,
+    '{$widgetName}' => $widgetName,
     '{$repositoryClass}' => $repositoryClass,
     '{$textAfterRemove}' => $textAfterRemove
 ]);

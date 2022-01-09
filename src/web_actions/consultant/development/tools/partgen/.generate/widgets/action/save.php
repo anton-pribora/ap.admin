@@ -17,8 +17,10 @@ $fields = $this->param('fields');
 
 $updates = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'setter' => $setter]) {
-    $updates[] = "\$record->{$setter}(\$item['{$prop}'] ?? '');  // $title";
+foreach ($fields as ['prop' => $prop, 'title' => $title, 'setter' => $setter, 'edit' => $edit]) {
+    if ($edit) {
+        $updates[] = "\$record->{$setter}(\$data['{$prop}'] ?? '');  // $title";
+    }
 }
 
 $data = <<<'PHP'
@@ -29,8 +31,7 @@ $data = <<<'PHP'
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', []);
-$item     = $data['item'] ?? [];
+$data     = $this->param('widget_data', [])['data'] ?? [];
 $editable = $this->param('{$recordKey}.edit') || $this->param('{$recordKey}.{$widgetName}.edit');
 
 if (!$editable) {
@@ -41,7 +42,7 @@ if (!$editable) {
 
 $record->save();
 
-ReturnJson(['item' => $this->include('encodeItem.php')]);
+$this->include('data.php');
 
 PHP;
 
