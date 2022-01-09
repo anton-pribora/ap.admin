@@ -4,6 +4,7 @@ return [
     'menu' => [
         ['text' => 'Примеры страниц', 'url' => ShortUrl('@consultant/examples/'), 'submenu' => [
             ['text' => 'Планктошки', 'url' => ShortUrl('@consultant/examples/plankton/')],
+            ['text' => 'Пример справочника', 'url' => ShortUrl('@consultant/examples/employee/')],
             ['text' => 'Пустая страница', 'url' => ShortUrl('@consultant/examples/blank.php')],
             ['text' => 'Страница с текстом', 'url' => ShortUrl('@consultant/examples/text.php')],
         ]],
