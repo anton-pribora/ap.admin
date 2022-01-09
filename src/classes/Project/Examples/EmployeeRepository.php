@@ -77,17 +77,17 @@ class EmployeeRepository
     private static function buildWhere(&$params)
     {
         $where = [];
-        
+
         if (isset($params['id'])) {
             $where[] = '`id` = ' . Db()->quote($params['id']);
             unset($params['id']);
         }
-        
+
         if (isset($params['name'])) {
             $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
             unset($params['name']);
         }
-        
+
         if (isset($params['post'])) {
             $where[] = '`post` LIKE ' . Db()->quote('%' . $params['post'] . '%');
             unset($params['post']);
