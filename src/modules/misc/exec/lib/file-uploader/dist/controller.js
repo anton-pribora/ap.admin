@@ -120,13 +120,14 @@ const uploadFilesDialog = Vue.createApp({
               this.list[i].success = true;
             }
           } catch (e) {
-            // Похоже ответ не JSON, работаем по схеме HTTP
+            // Похоже ответ не JSON, а нужен JSON!
             if (status === 0 || (status >= 200 && status < 400)) {
-              this.list[i].success = true;
+              this.list[i].error = e.message;
             } else {
               this.list[i].error = `${xhr.status} ${xhr.statusText}`;
-              this.errors = true;
             }
+
+            this.errors = true;
           }
 
           // Если активных загрузок нет и ошибок нет, автоматически закрываем диалог

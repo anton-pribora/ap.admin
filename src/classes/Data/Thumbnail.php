@@ -7,56 +7,38 @@
 
 namespace Data;
 
-use Interfaces\Data\ThumbnailInterface;
-
-class Thumbnail implements ThumbnailInterface, \JsonSerializable
+class Thumbnail implements \JsonSerializable
 {
     private $width;
     private $height;
-    private $url;
+    private $path;
 
-    public function __construct($url, $width = NULL, $height = NULL)
+    public function __construct($path, $width = NULL, $height = NULL)
     {
-        $this->url    = $url;
+        $this->path   = $path;
         $this->width  = $width;
         $this->height = $height;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Interfaces\Data\ThumbnailInterface::width()
-     */
     public function width()
     {
         return $this->width;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Interfaces\Data\ThumbnailInterface::height()
-     */
     public function height()
     {
         return $this->height;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see \Interfaces\Data\ThumbnailInterface::url()
-     */
-    public function url()
+    public function path()
     {
-        return $this->url;
+        return $this->path;
     }
 
-    /**
-     * {@inheritDoc}
-     * @see JsonSerializable::jsonSerialize()
-     */
     public function jsonSerialize(): array
     {
         return [
-            'url'    => $this->url(),
+            'path'   => $this->path(),
             'width'  => $this->width(),
             'height' => $this->height(),
         ];

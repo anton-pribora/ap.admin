@@ -77,27 +77,32 @@ class FileRepository
     private static function buildWhere(&$params)
     {
         $where = [];
-        
+
         if (isset($params['id'])) {
             $where[] = '`id` = ' . Db()->quote($params['id']);
             unset($params['id']);
         }
-        
-        if (isset($params['type'])) {
-            $where[] = '`type` = ' . Db()->quote($params['type']);
-            unset($params['type']);
+
+        if (isset($params['guid'])) {
+            $where[] = '`guid` = ' . Db()->quote($params['guid']);
+            unset($params['guid']);
         }
-        
+
+        if (isset($params['group'])) {
+            $where[] = '`group` = ' . Db()->quote($params['group']);
+            unset($params['group']);
+        }
+
         if (isset($params['name'])) {
             $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
             unset($params['name']);
         }
-        
+
         if (isset($params['parentType'])) {
             $where[] = '`parent_type` = ' . Db()->quote($params['parentType']);
             unset($params['parentType']);
         }
-        
+
         if (isset($params['parentId'])) {
             $where[] = '`parent_id` = ' . Db()->quote($params['parentId']);
             unset($params['parentId']);

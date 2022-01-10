@@ -2,8 +2,11 @@
 
 namespace Project;
 
+use ApCode\Html\Element\A;
+use Data\Thumbnail;
+
 /**
- * (Без названия)
+ * Файлы
  */
 class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\UrlAssetInterface
 {
@@ -18,14 +21,25 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
-    public function type()
+    public function guid()
     {
-        return $this->data['type'] ?? null;
+        return $this->data['guid'] ?? null;
     }
 
-    public function setType($value)
+    public function setGuid($value)
     {
-        $this->data['type'] = $value;
+        $this->data['guid'] = $value;
+        return $this;
+    }
+
+    public function group()
+    {
+        return $this->data['group'] ?? null;
+    }
+
+    public function setGroup($value)
+    {
+        $this->data['group'] = $value;
         return $this;
     }
 
@@ -95,6 +109,17 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
+    public function meta()
+    {
+        return $this->data['meta'] ?? null;
+    }
+
+    public function setMeta($value)
+    {
+        $this->data['meta'] = $value;
+        return $this;
+    }
+
     public function createdAt()
     {
         return $this->data['createdAt'] ?? null;
@@ -106,17 +131,83 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
-    public function urlAsset($key, $params = null)
+    public function getThumbnail($size)
+    {
+        if (isset($this->data['meta']['thumbnails'][$size])) {
+            return new Thumbnail(
+                $this->data['meta']['thumbnails'][$size]['path'],
+                $this->data['meta']['thumbnails'][$size]['width'],
+                $this->data['meta']['thumbnails'][$size]['height']
+            );
+        }
+
+        return null;
+    }
+
+    /**
+     * @return Thumbnail[]
+     */
+    function thumbnails()
+    {
+        $result = [];
+
+        foreach ($this->data['meta']['thumbnails'] ?? [] as $size => $item) {
+            $result[$size] = new Thumbnail(
+                $item['path'],
+                $item['width'],
+                $item['height']
+            );
+        }
+
+        return $result;
+    }
+
+    public function setThumbnail($size, Thumbnail $thumbnail)
+    {
+        $this->data['meta']['thumbnails'][$size] = [
+            'path'   => $thumbnail->path(),
+            'width'  => $thumbnail->width(),
+            'height' => $thumbnail->height(),
+        ];
+
+        return $this;
+    }
+
+    public function makeGuid()
+    {
+        $this->setGuid(substr(sha1(uniqid()), 4, 16));
+        return $this;
+    }
+
+    public function makePath()
+    {
+        if (empty($this->guid())) {
+            $this->makeGuid();
+        }
+
+        $guid = $this->guid();
+        $path = mb_substr($guid, 0, 2) . '/' . mb_substr($guid, 2);
+
+        $this->setPath("@uploads/$path");
+
+        return $this;
+    }
+
+    public function fullPath()
+    {
+        return ExpandPath($this->path());
+    }
+
+    public function urlAsset($key, $params = NULL)
     {
         $param = function($name, $default = null) use(&$params) { return isset($params[$name]) ? $params[$name] : $default; };
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
-    
-        switch ("$scope:$key") {
-            case 'admin:url.view' : return ShortUrl('@consultant/unknown/one/', ['record_id' => $this->id()]);
 
-            case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без названия)'), $this->urlAsset('url.view', $params), $param('title')));
+        switch ("$scope:$key") {
+            case 'admin:url.download' : return ShortUrl("@root/public/file/{$this->guid()}/{$this->name()}");
+            case 'admin:link.download': return (new A($param('text', $this->name() ?: '(без имени)'), $this->urlAsset('url.view', $params), $param('title')));
         }
-    
+
         throw new \Exception(sprintf('Unknown url asset %s in scope %s', $key, $scope));
     }
 }

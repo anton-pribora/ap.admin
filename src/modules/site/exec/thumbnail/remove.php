@@ -1,17 +1,26 @@
 <?php
 
-use Site\File;
-
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $parent Site\Item */
+/* @var $file Project\File */
 
-$parent = $this->argument();
+use Project\FileRepository;
 
-if ($parent->thumbnailId()) {
-    $thumbnail = File::getInstance($parent->thumbnailId());
-    
-    $this->execute('attachment/remove.php', $thumbnail);
-    
-    $parent->setThumbnailId(null);
-    $parent->meta()->save();
+$file = $this->argument();
+
+foreach ($file->thumbnails() as $thumbnail) {
+    $path = ExpandPath($thumbnail->path());
+
+    if (file_exists($path) || is_link($path)) {
+        unlink($path);
+    }
 }
+
+$path = $file->fullPath();
+
+if (file_exists($path)) {
+    unlink($path);
+}
+
+FileRepository::drop($file);
+
+return true;

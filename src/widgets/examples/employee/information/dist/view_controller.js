@@ -28,6 +28,44 @@ app.component('examples-employee-information-view-form', {
           e.deleting = undefined;
         }
       }
+    },
+    uploadAvatar(e) {
+      this.$pickAndUploadFiles({
+        multiple: false,
+        accept: 'image/*',
+        action: `${this.widget}::uploadAvatar`,
+        after: async (errors) => {
+          if (errors) {
+            setTimeout(() => {
+              this.$toast.warning('Не все данные были загружены');
+            }, 300);
+          } else {
+            this.$toast.success('Данные были обновлены');
+          }
+
+          const result = await this.$do(`${this.widget}::data`);
+
+          if (result) {
+            this.$store.commit(`${this.store}/save`, result.data);
+          }
+        }
+      });
+    },
+    async removeAvatar(e) {
+      if (await this.$confirm('Вы действительно хотите удалить фото?')) {
+        e.avatarDeleting = true;
+
+        const result = await this.$do('examples.employee.information::removeAvatar', e);
+
+        if (result) {
+          this.$store.commit('examplesEmployeeInformation/save', result.data);
+          this.$toast.success('Фото было удалено');
+        } else {
+          this.$toast.warning('Не удалось удалить фото');
+        }
+
+        e.avatarDeleting = undefined;
+      }
     }
   }
 });

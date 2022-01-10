@@ -2,6 +2,8 @@
 
 namespace Project\Examples;
 
+use Project\File;
+
 /**
  * Сотрудники компании
  */
@@ -60,6 +62,17 @@ class Employee extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data
     {
         $this->data['meta'] = $value;
         return $this;
+    }
+
+    public function setAvatar(File $file)
+    {
+        $this->data['meta']['avatar'] = $file->id();
+        return $this;
+    }
+
+    public function avatar()
+    {
+        return File::getInstance($this->data['meta']['avatar'] ?? null);
     }
 
     public function urlAsset($key, $params = null)

@@ -11,7 +11,11 @@ foreach ($list as $i => $item) {
 <div class="mb-3">
   <div class="d-flex align-items-stretch">
     <div style="min-width: 80px">
+<?php if ($item->avatar()->id()) { ?>
+      <img src="<?=ShortUrl($item->avatar()->getThumbnail('small')->path(), [], true)?>" alt="Avatar" class="img-fluid rounded" width="80" height="80">
+<?php } else { ?>
       <svg class="bd-placeholder-img img-fluid rounded" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect></svg>
+<?php } ?>
     </div>
     <div class="flex-fill">
       <div class="ms-3">

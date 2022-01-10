@@ -1,21 +1,17 @@
 <?php
 
-use Site\FileRepository;
-
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $file Site\File */
+/* @var $file Project\File */
+
+use Project\FileRepository;
 
 $file = $this->argument();
 
-foreach ($file->info()->thumbnails() as $size => $data) {
-    $path = $data['path'] ?? '';
-    
-    if ($path) {
-        $path = ExpandPath($path);
-        
-        if (file_exists($path) || is_link($path)) {
-            unlink($path);
-        }
+foreach ($file->thumbnails() as $thumbnail) {
+    $path = ExpandPath($thumbnail->path());
+
+    if (file_exists($path) || is_link($path)) {
+        unlink($path);
     }
 }
 
@@ -26,3 +22,5 @@ if (file_exists($path)) {
 }
 
 FileRepository::drop($file);
+
+return true;

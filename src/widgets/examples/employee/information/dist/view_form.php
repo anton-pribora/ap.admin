@@ -9,6 +9,7 @@ $enableEdit = $this->param('enableEdit');
 RequireLib('vue3');
 RequireLib('toast');
 RequireLib('confirm');
+RequireLib('file-uploader');
 
 if ($enableEdit) {
     $this->include(__dir('edit_dialog.php'));
@@ -40,23 +41,44 @@ Layout()->startGrab('body.content.end');
         Удаление...
       </div>
     </div>
-    <div class="card-body p-0">
-      <table class="table mb-0 table-sm">
-        <tbody>
-          <tr>
-            <td class="px-3 col-md-4 col-lg-3">ФИО</td>
-            <td class="px-3">{{data.name}}</td>
-          </tr>
-          <tr>
-            <td class="px-3 col-md-4 col-lg-3">Должность</td>
-            <td class="px-3">{{data.post}}</td>
-          </tr>
-          <tr>
-            <td class="px-3 col-md-4 col-lg-3">Обязанности</td>
-            <td class="px-3 text-break">{{data.responsibilities}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-body px-0 py-2 pb-3">
+      <div class="row">
+        <div class="col-3 text-center">
+
+          <img v-if="data.avatar" :src="data.avatar" class="m-2 img-fluid rounded" width="100" alt="Avatar">
+          <svg v-if="!data.avatar" class="bd-placeholder-img m-2 img-fluid rounded" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect></svg>
+
+          <div class="mt-1">
+            <div class="btn-group" role="group">
+              <button :disabled="data.avatarDeleting" class="btn btn-default btn-sm py-1" @click="uploadAvatar(data)" title="Загрузить фото"><i class="bi bi-upload me-1"></i>Загрузить</button>
+              <button :disabled="data.avatarDeleting" type="button" class="btn btn-default btn-sm py-1 px-2 text-muted" data-bs-toggle="dropdown">
+                <i class="bi bi-caret-down-fill small"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#" @click.prevent="removeAvatar(data)"><i class="bi bi-trash me-1"></i>Удалить</a></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col">
+          <table class="table mb-0 table-sm">
+            <tbody>
+              <tr>
+                <td class="px-3 col-md-4 col-lg-3">ФИО</td>
+                <td class="px-3">{{data.name}}</td>
+              </tr>
+              <tr>
+                <td class="px-3 col-md-4 col-lg-3">Должность</td>
+                <td class="px-3">{{data.post}}</td>
+              </tr>
+              <tr>
+                <td class="px-3 col-md-4 col-lg-3">Обязанности</td>
+                <td class="px-3 text-break">{{data.responsibilities}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 <?php if ($enableEdit) { ?>

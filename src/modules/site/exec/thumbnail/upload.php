@@ -1,22 +1,22 @@
 <?php
 
 use ApCode\File\Image;
-use Site\File;
+use Project\File;
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $parent Site\Item */
-/* @var $file Site\File */
+/* @var $file Project\File */
 
-$parent = $this->param('parent');
-$source = $this->param('path');
-$name   = $this->param('name');
-$mime   = $this->param('mime');
-$group  = $this->param('group', 'thumbnail');
+$parentType = $this->param('parentType');
+$parentId   = $this->param('parentId');
+$source     = $this->param('path');
+$name       = $this->param('name');
+$mime       = $this->param('mime');
+$group      = $this->param('group', 'thumbnail');
 
 $image = new Image($source);
 
 if (!$image->isValidImage()) {
-    return false;
+    return [false, 'Файл не является изображением'];
 }
 
 if (empty($mime)) {
@@ -24,10 +24,11 @@ if (empty($mime)) {
 }
 
 $file = new File();
-$file->info()->setName($name);
-$file->info()->setMimeType($mime);
-$file->info()->setGroup($group);
-$file->setParentItemId($parent->id());
+$file->setName($name);
+$file->setMime($mime);
+$file->setGroup($group);
+$file->setParentType($parentType);
+$file->setParentId($parentId);
 
 $file->makePath();
 
@@ -36,13 +37,15 @@ $folder = dirname($dest);
 
 if (!file_exists($folder)) {
     if (!mkdir($folder, 0755, true)) {
-        return false;
+        return [false, 'Не удалось создать папку ' . $folder];
     }
 }
 
 if (!copy($source, $dest)) {
-    return false;
+    return [false, 'Не удалось скопировать файл из ' . $source];
 }
+
+$file->setSize(filesize($file->fullPath()));
 
 chmod($dest, 0644);
 
@@ -54,70 +57,68 @@ $sizes = [
 ];
 
 $image = new Image($file->fullPath());
-$info  = $file->info();
-$guid  = $info->guid();
+$guid  = $file->guid();
 
-$fileName = mb_substr($guid, 0, 2) .'/'. mb_substr($guid, 2);
+$fileName = mb_substr($guid, 0, 2) . '/' . mb_substr($guid, 2);
 $fileExtension = $image->imageExtention();
 
 $relative = function ($source, $target) {
     $pos = 0;
     $eq  = 0;
-    
+
     while (($pos = strpos($source, '/', $pos + 1)) !== false) {
         if (substr_compare($source, $target, 0, $pos) === 0) {
             $eq = $pos + 1;
         }
     }
-    
+
     $source = substr($source, $eq);
     $target = substr($target, $eq);
-    
+
     return preg_replace('~[^/]+/~', '../', dirname($target) . "/") . $source;
 };
 
-foreach ($sizes as $sizeName => list($size, $crop)) {
+foreach ($sizes as $sizeName => [$size, $crop]) {
     $thumbnail = "@thumbnails/{$fileName}-{$sizeName}{$fileExtension}";
     $fullPath  = ExpandPath($thumbnail);
     $folder    = dirname($fullPath);
-    
-    if (!file_exists($folder)) {
-        mkdir($folder, 0755, true);
+
+    try {
+        if (!file_exists($folder)) {
+            mkdir($folder, 0755, true);
+        }
+
+        if ($crop) {
+            $newImg = $image->resizeAndCrop($size, $size, $fullPath);
+
+            $width  = $newImg->width();
+            $height = $newImg->height();
+        } elseif ($image->width() > $size || $image->height() > $size) {
+            $newImg = $image->inscribe($size, $size, $fullPath);
+
+            $width  = $newImg->width();
+            $height = $newImg->height();
+        } else {
+            // Create symlink to the original
+            if (!file_exists($fullPath)) {
+                if (!symlink($relative($file->fullPath(), $fullPath), $fullPath)) {
+                    // ... or copy
+                    copy($file->fullPath(), $fullPath);
+                }
+            }
+
+            $width  = $image->width();
+            $height = $image->height();
+        }
+    } catch (Exception | Error $exception) {
+        return [false, $exception->getMessage()];
     }
 
-    if ($crop) {
-        $newImg = $image->resizeAndCrop($size, $size, $fullPath);
-        
-        $width  = $newImg->width();
-        $height = $newImg->height();
-    } elseif ($image->width() > $size || $image->height() > $size) {
-        $newImg = $image->inscribe($size, $size, $fullPath);
-        
-        $width  = $newImg->width();
-        $height = $newImg->height();
-    } else {
-        // Create a symlink to original
-        if (!file_exists($fullPath)) {
-            if (symlink($relative($file->fullPath(), $fullPath), $fullPath)) {
-                // good!
-            } else {
-                copy($file->fullPath(), $fullPath);
-            }
-        }
-        
-        $width  = $image->width();
-        $height = $image->height();
-    }
-    
-    $info->setThumbnail($sizeName, $thumbnail, $width, $height);
+    $file->setThumbnail($sizeName, new \Data\Thumbnail($thumbnail, $width, $height));
 }
 
 $image->close();
 
 $file->save();
-$file->meta()->save();
 
-$parent->setThumbnailId($file->id());
-$parent->meta()->save();
-
-return $file;
+return [$file, null];
