@@ -64,15 +64,15 @@ Layout()->startGrab('body.content.end');
           <table class="table mb-0 table-sm">
             <tbody>
               <tr>
-                <td class="px-3 col-md-4 col-lg-3">ФИО</td>
+                <td class="pe-3 col-md-4 col-lg-3">ФИО</td>
                 <td class="px-3">{{data.name}}</td>
               </tr>
               <tr>
-                <td class="px-3 col-md-4 col-lg-3">Должность</td>
+                <td class="pe-3 col-md-4 col-lg-3">Должность</td>
                 <td class="px-3">{{data.post}}</td>
               </tr>
               <tr>
-                <td class="px-3 col-md-4 col-lg-3">Обязанности</td>
+                <td class="pe-3 col-md-4 col-lg-3">Обязанности</td>
                 <td class="px-3 text-break">{{data.responsibilities}}</td>
               </tr>
             </tbody>
