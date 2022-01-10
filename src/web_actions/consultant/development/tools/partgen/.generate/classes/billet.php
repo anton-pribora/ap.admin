@@ -131,6 +131,6 @@ if ($this->param('makeFile')($fullBilletPath, $classFile . PHP_EOL)) {
 }
 
 $this->param('printIndent')(basename($fullMetaPath) . ' ... ');
-if ($this->param('makeFile')($fullMetaPath, (string) $metaFile)) {
+if ($this->param('makeFile')($fullMetaPath, $metaFile . PHP_EOL)) {
     $this->param('printOk')();
 };
