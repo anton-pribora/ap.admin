@@ -62,7 +62,7 @@ app.component('partgen', {
     this.loadTables();
 
     const ucfirst = s => s.replace(/^[a-z]/, m => m.toUpperCase());
-    const lcfirst = s => s.replace(/^[a-z]/, m => m.toLowerCase());
+    const lcfirst = s => s.replace(/^[A-Z]/, m => m.toLowerCase());
     const UpperCamelCase = s => ucfirst(s).replace(/[_-](\w)/g, (_, a) => a.toUpperCase());
     const LowerCamelCase = s => lcfirst(s).replace(/[_-](\w)/g, (_, a) => a.toUpperCase());
     const CamelCaseSplit  = s => s.replace(/([a-z])([A-Z])/g, (_, a, b) => a + ' ' + b);

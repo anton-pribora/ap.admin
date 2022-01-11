@@ -13,7 +13,7 @@ $prefix = preg_replace_callback('/\.(\w)/', function ($matches) {
 
 $componentNamePrefix = preg_replace_callback('/[A-Z]/', function ($matches) {
     return '-' . lcfirst($matches[0]);
-}, $prefix);
+}, lcfirst($prefix));
 
 $this->setParam('widget.store', $prefix);
 $this->setParam('widget.fullPath', $fullPath);
