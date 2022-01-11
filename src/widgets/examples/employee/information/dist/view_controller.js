@@ -29,6 +29,9 @@ app.component('examples-employee-information-view-form', {
         }
       }
     },
+    viewAvatar(avatar) {
+      this.$info('thumbnail', {id: avatar.id});
+    },
     uploadAvatar(e) {
       this.$pickAndUploadFiles({
         multiple: false,

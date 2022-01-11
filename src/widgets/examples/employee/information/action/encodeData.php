@@ -6,7 +6,10 @@
 $record = $this->argument();
 
 if ($record->avatar()->id()) {
-    $avatar = ShortUrl($record->avatar()->getThumbnail('small')->path(), [], true);
+    $avatar = [
+        'id'  => $record->avatar()->id(),
+        'url' => ShortUrl($record->avatar()->getThumbnail('small')->path(), [], true),
+    ];
 } else {
     $avatar = false;
 }

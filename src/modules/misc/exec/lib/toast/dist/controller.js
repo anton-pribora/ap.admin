@@ -1,4 +1,4 @@
-app.use(function () {
+const toasts = function () {
   const container = document.getElementById('toastContainer');
   const toastTemplate = document.getElementById('toastTemplate').innerText;
 
@@ -34,4 +34,6 @@ app.use(function () {
       app.config.globalProperties.$toast = funcs
     }
   }
-}());
+}();
+
+app.use(toasts);

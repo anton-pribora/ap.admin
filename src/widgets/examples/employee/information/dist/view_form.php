@@ -11,6 +11,8 @@ RequireLib('toast');
 RequireLib('confirm');
 RequireLib('file-uploader');
 
+Widget('info::enable');
+
 if ($enableEdit) {
     $this->include(__dir('edit_dialog.php'));
 }
@@ -45,7 +47,9 @@ Layout()->startGrab('body.content.end');
       <div class="row">
         <div class="col-3 text-center">
 
-          <img v-if="data.avatar" :src="data.avatar" class="m-2 img-fluid rounded" width="100" alt="Avatar">
+          <a v-if="data.avatar" href="" @click.prevent="viewAvatar(data.avatar)" class="">
+            <img :src="data.avatar.url" class="m-2 img-fluid rounded" width="100" alt="Avatar">
+          </a>
           <svg v-if="!data.avatar" class="bd-placeholder-img m-2 img-fluid rounded" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect></svg>
 
           <div class="mt-1">

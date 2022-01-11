@@ -208,7 +208,7 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
 
         switch ("$scope:$key") {
-            case 'admin:url.download' : return ShortUrl("@root/public/file/{$this->guid()}/{$this->name()}");
+            case 'admin:url.download' : return ShortUrl("@root/public/file/{$this->guid()}/{$this->name()}", [], true);
             case 'admin:link.download': return (new A($param('text', $this->name() ?: '(без имени)'), $this->urlAsset('url.view', $params), $param('title')));
         }
 

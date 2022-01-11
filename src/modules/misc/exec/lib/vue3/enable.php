@@ -36,7 +36,7 @@ const externalMethods = new function () {
 
 app.use(externalMethods);
 
-app.use({
+const ajaxLoader = {
   install(app) {
     const q = ({url = '', method = 'GET', body = undefined, headers = {}}) => fetch(url, {
         method,
@@ -84,6 +84,10 @@ app.use({
       }
     });
   }
-});
+};
+
+app.use(ajaxLoader);
 JS
 );
+
+RequireLib('toast');
