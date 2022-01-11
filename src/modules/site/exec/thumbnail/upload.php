@@ -59,7 +59,11 @@ $sizes = [
 $image = new Image($file->fullPath());
 $guid  = $file->guid();
 
-$fileName = mb_substr($guid, 0, 2) . '/' . mb_substr($guid, 2);
+$fileName = join('/', [
+    mb_substr($guid, 0, 2),
+    mb_substr($guid, 2, 2),
+    mb_substr($guid, 4)
+]);
 $fileExtension = $image->imageExtention();
 
 $relative = function ($source, $target) {

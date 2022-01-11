@@ -186,7 +186,11 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         }
 
         $guid = $this->guid();
-        $path = mb_substr($guid, 0, 2) . '/' . mb_substr($guid, 2);
+        $path = join('/', [
+            mb_substr($guid, 0, 2),
+            mb_substr($guid, 2, 2),
+            mb_substr($guid, 4)
+        ]);
 
         $this->setPath("@uploads/$path");
 
