@@ -51,6 +51,16 @@ foreach ($res->fetchAllRows() as $row)
             break;
     }
 
+    if (preg_match('/^(creation|created_?at)$/ui', $prop)) {
+        $format = 'createdAt';
+        $edit   = false;
+    } elseif ($prop === 'meta' && preg_match('/(text|blob)/ui', $type)) {
+        $format = 'json';
+        $edit   = false;
+        $view   = false;
+        $search = false;
+    }
+
     if (strtolower($prop) === 'id') {
         $prop   = 'id';
         $getter = 'id';

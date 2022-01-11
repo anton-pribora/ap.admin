@@ -6,6 +6,7 @@ use ApCode\Codebuilder\PhpFile;
 use ApCode\Codebuilder\PhpInterface;
 use ApCode\Codebuilder\PhpNamespace;
 use ApCode\Codebuilder\PhpValueArray;
+use ApCode\Codebuilder\PhpValueRawCode;
 
 $cwd         = $this->param('cwd');
 $name        = $this->param('part.name');
@@ -49,19 +50,26 @@ foreach ($fields as $dbField => $field) {
 
     $encoder = null;
     $decoder = null;
+    $default = null;
 
     switch ($field['format']) {
+        case 'createdAt':
+            $default = new PhpValueRawCode('function() { return date(DATE_ATOM); }');
+            break;
+
         case 'json':
             $encoder = 'json_encode_array';
             $decoder = 'json_decode_array';
+            $default = new PhpValueRawCode('[]');
             break;
     }
 
     $fieldsMap[ $propertyName ] = [
-        'field'  => $dbField,
-        'title'  => $field['title'],
-        'encode' => $encoder,
-        'decode' => $decoder,
+        'field'   => $dbField,
+        'title'   => $field['title'],
+        'encode'  => $encoder,
+        'decode'  => $decoder,
+        'default' => $default,
     ];
 
     // Getter
@@ -113,7 +121,8 @@ $metaFile->addContents(<<<EOL
 //   'field'    - Обязательное поле, соответствует столбцу в базе данных
 //   'title'    - Необязательное поле, содержит "человеческое" название поля
 //   'encode'   - Необязательное поле, функция для кодирования значения поля при сохранении в базу
-//   'decode'   - Необязательное поле, функция для декодирования значения поля при загрузке из базы 
+//   'decode'   - Необязательное поле, функция для декодирования значения поля при загрузке из базы
+//   'default'  - Значение по-умолчанию, если установлена функция, то будет использован результат её работы
 EOL
 );
 $metaFile->addContents("\nreturn ". $metaArray->render('    ') .';');
