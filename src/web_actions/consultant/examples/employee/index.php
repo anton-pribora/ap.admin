@@ -14,7 +14,7 @@ try {
     $items = Project\Examples\EmployeeRepository::findMany($searchParams, $pagination);
 } catch (Exception $exception) {
     Alert('Ошибка: ' . $exception->getMessage(), 'danger');
-    Alert('Возможно отсутствуют настройки для базы данных или не применены миграции', 'info');
+    Alert('Скорее всего отсутствуют настройки для базы данных или не применены миграции', 'info');
     return;
 }
 

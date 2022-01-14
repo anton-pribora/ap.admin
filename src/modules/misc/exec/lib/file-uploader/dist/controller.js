@@ -233,10 +233,8 @@ app.component('file-dropzone', {
       this.counter = 0;
       this.classes = '';
 
-      console.log(e.dataTransfer.files);
-
       if (e.dataTransfer.files.length) {
-        // this.$emit('drop', e.dataTransfer.files);
+        this.$emit('drop', e.dataTransfer.files);
       }
     }
   }
