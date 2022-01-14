@@ -6,9 +6,9 @@
 1. Клонируйте репозиторий в свою систему и перейдите в папку с репозиторием
 
    ```bash
-   cd /var/www
-   git clone --depth 1 git@github.com:anton-pribora/ap.admin.git test.local
-   cd test.local
+   mkdir /var/www/ВАШ_ДОМЕН
+   cd /var/www/ВАШ_ДОМЕН
+   git clone --depth 1 https://github.com/anton-pribora/ap.admin.git .
    ```
 
 2. Установите конфиг сайта
@@ -16,15 +16,15 @@
    Для NGINX:
    
    ```bash
-   sed -e 's/admin.pribora.info/test.local/g' conf/nginx.conf.example > conf/nginx.conf
-   ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/test.local.conf
+   sed -e "s/ap.admin/$(basename $PWD)/g" conf/nginx.conf.example > conf/nginx.conf
+   ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/$(basename $PWD).conf
    service nginx reload
    ```
 
 3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера
 
    ```
-   chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/cache/ logs/ logs/site_common.log
+   chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/
    ```
 
 4. Установка завершена!
@@ -39,6 +39,37 @@
    ```
 
 Приятной работы :)
+
+### Вход в систему
+
+По умолчанию войти в систему под логином `test` с паролем `123`. При этом подключение к базе данных не требуется.
+
+### Настройка базы данных и применение миграций
+
+Создайте файл с локальными настройками `src/configs/10-local.php`:
+
+```php
+<?php
+
+Config()->setup([
+    // Настройки базы данных
+    'db' => [
+        'dsn'      => 'mysql:dbname=test;host=localhost;charset=utf8',
+        'login'    => 'test',
+        'password' => '123',
+    ],
+
+    // Настройки для модулей
+    'js' => [
+        // 'ENV' => 'dev',  // Vue 3 расширение для режима разработки (требует дополнительной загрузки библиотек)
+    ],
+]);
+```
+Примените миграции:
+
+```bash
+$ php src/migrations/apply.php
+```
 
 ## Composer
 
