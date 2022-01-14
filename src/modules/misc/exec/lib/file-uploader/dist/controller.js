@@ -2,8 +2,9 @@ const uploadFilesDialog = Vue.createApp({
   data() {
     return {
       list: [],
-      errors: false,
       activeUploads: 0,
+      successUploads: 0,
+      errorUploads: 0,
       multiple: true,
       accept: '*/*',
       after: undefined,
@@ -16,7 +17,8 @@ const uploadFilesDialog = Vue.createApp({
     reset() {
       this.$refs.form.reset();
       this.list = [];
-      this.errors = false;
+      this.successUploads = 0;
+      this.errorUploads = 0;
       this.activeUploads = 0;
       this.after = undefined;
     },
@@ -46,6 +48,35 @@ const uploadFilesDialog = Vue.createApp({
 
       this.$nextTick(() => {
         this.$refs.picker.click();
+      });
+    },
+
+    uploadFiles(files, {
+      url = '',               // Адрес, куда отправлять файлы
+      action = undefined,  // Действие виджета
+      data = undefined,    // Дополнительнительные данные для виджета
+      after = undefined,   // Действие после загрузки файлов
+      postParams = {},           // Дополнительные POST-параметры
+    }) {
+      if (action) {
+        postParams['widget_action'] = action;
+      }
+
+      if (data) {
+        postParams['widget_data'] = data;
+      }
+
+      this.reset();
+      this.after = after;
+
+      this.$nextTick(() => {
+        this.modal.show();
+
+        const params = JSON.parse(JSON.stringify(postParams));
+
+        for(const file of files) {
+          this.sendFile(file, url, params);
+        }
       });
     },
 
@@ -115,9 +146,10 @@ const uploadFilesDialog = Vue.createApp({
 
             if (json.error) {
               this.list[i].error = `Ошибка: ${json.error.description || json.error}`;
-              this.errors = true;
+              this.errorUploads += 1;
             } else {
               this.list[i].success = true;
+              this.successUploads += 1;
             }
           } catch (e) {
             // Похоже ответ не JSON, а нужен JSON!
@@ -127,11 +159,11 @@ const uploadFilesDialog = Vue.createApp({
               this.list[i].error = `${xhr.status} ${xhr.statusText}`;
             }
 
-            this.errors = true;
+            this.errorUploads += 1;
           }
 
           // Если активных загрузок нет и ошибок нет, автоматически закрываем диалог
-          if (this.activeUploads === 0 && !this.errors) {
+          if (this.activeUploads === 0 && this.errorUploads === 0) {
             setTimeout(() => this.modal.hide(), 600);
           }
         }
@@ -150,12 +182,13 @@ const uploadFilesDialog = Vue.createApp({
 
     this.$refs.modal.addEventListener('hide.bs.modal', e => {
       if (this.after) {
-        this.after(this.errors);
+        this.after(this.successUploads > 0, this.errorUploads > 0);
       }
       this.reset();
     });
 
     this.$externalMethods.set('pickAndUploadFiles', this.pickAndUploadFiles);
+    this.$externalMethods.set('uploadFiles', this.uploadFiles);
   },
 });
 
@@ -165,5 +198,46 @@ uploadFilesDialog.mount('#uploadFilesDialog');
 app.use({
   install: app => {
     app.config.globalProperties.$pickAndUploadFiles = (options = {}) => externalMethods.call('pickAndUploadFiles', options);
+    app.config.globalProperties.$uploadFiles = (files, options = {}) => externalMethods.call('uploadFiles', files, options);
+  }
+});
+
+app.component('file-dropzone', {
+  template: '<div :class="[className, classes]" @dragover.stop.prevent="" @dragenter.prevent="enter" @dragleave="leave" @drop.stop.prevent="drop"><slot></slot></div>',
+  data() {
+    return {
+      classes: '',
+      counter: 0,
+    };
+  },
+  props: ['className'],
+  emits: ['drop'],
+  methods: {
+    enter(e) {
+      this.counter += 1;
+
+      if (this.counter === 1) {
+        this.classes = 'bg-light';
+      }
+    },
+    leave(e) {
+      if (this.counter > 0) {
+        this.counter -= 1;
+      }
+
+      if (this.counter === 0) {
+        this.classes = '';
+      }
+    },
+    drop(e) {
+      this.counter = 0;
+      this.classes = '';
+
+      console.log(e.dataTransfer.files);
+
+      if (e.dataTransfer.files.length) {
+        // this.$emit('drop', e.dataTransfer.files);
+      }
+    }
   }
 });

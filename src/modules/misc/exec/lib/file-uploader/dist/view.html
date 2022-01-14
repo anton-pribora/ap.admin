@@ -21,7 +21,7 @@
             </div>
           </div>
         </div>
-        <div class="modal-footer" v-if="!activeUploads && errors">
+        <div class="modal-footer" v-if="!activeUploads && errorUploads > 0">
           <button type="button" class="btn btn-default" data-bs-dismiss="modal" :disabled="activeUploads">
             Закрыть
           </button>

@@ -3,6 +3,7 @@
 namespace Project\Examples;
 
 use Project\File;
+use Project\FileRepository;
 
 /**
  * Сотрудники компании
@@ -73,6 +74,15 @@ class Employee extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data
     public function avatar()
     {
         return File::getInstance($this->data['meta']['avatar'] ?? null);
+    }
+
+    public function attachments()
+    {
+        return FileRepository::findMany([
+            'parentType' => $this::tableName(),
+            'parentId'   => $this->id() ?: -1,
+            'group'      => 'attachment',
+        ]);
     }
 
     public function urlAsset($key, $params = null)

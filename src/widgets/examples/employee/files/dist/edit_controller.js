@@ -1,7 +1,7 @@
-app.component('examples-employee-information-edit-dialog', {
-  template: '#examplesEmployeeInformationEditDialog',
+app.component('examples-employee-files-edit-dialog', {
+  template: '#examplesEmployeeFilesEditDialog',
   data: () => ({
-    widget: 'examples.employee.information',
+    widget: 'examples.employee.files',
 
     data: {},
     loading: false
@@ -20,7 +20,7 @@ app.component('examples-employee-information-edit-dialog', {
       this.modal._config.backdrop = 'static';
       this.loading = true;
 
-      this.result = await this.$do(`${this.widget}::save`, {data: this.data});
+      this.result = await this.$do(`${this.widget}::updateFile`, {data: this.data});
 
       this.loading = false;
       this.modal._config.backdrop = true;
@@ -54,6 +54,6 @@ app.component('examples-employee-information-edit-dialog', {
       }
     });
 
-    this.$externalMethods.set('examples-employee-information-edit-dialog()', this.show);
+    this.$externalMethods.set('examples-employee-files-edit-dialog()', this.show);
   }
 });

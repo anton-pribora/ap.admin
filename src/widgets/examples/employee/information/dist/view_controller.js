@@ -37,13 +37,17 @@ app.component('examples-employee-information-view-form', {
         multiple: false,
         accept: 'image/*',
         action: `${this.widget}::uploadAvatar`,
-        after: async (errors) => {
-          if (errors) {
+        after: async (success, errors) => {
+          if (success && errors) {
             setTimeout(() => {
               this.$toast.warning('Не все данные были загружены');
             }, 300);
+          } else if (errors) {
+            setTimeout(() => {
+              this.$toast.warning('Файлы не были загружены');
+            }, 300);
           } else {
-            this.$toast.success('Данные были обновлены');
+            this.$toast.success('Файлы успешно загружены');
           }
 
           const result = await this.$do(`${this.widget}::data`);
