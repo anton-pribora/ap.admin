@@ -1,7 +1,7 @@
 <?php
 
 Icons()->set('search'     , '<i class="bi bi-search me-1"></i>');
-Icons()->set('add'        , '<i class="bi bi-plus me-1"></i>');
+Icons()->set('add'        , '<i class="bi bi-plus-lg me-1"></i>');
 Icons()->set('edit'       , '<i class="bi bi-pencil me-1"></i>');
 Icons()->set('remove'     , '<i class="bi bi-trash me-1"></i>');
 Icons()->set('history'    , '<i class="bi bi-clock-history me-1"></i>');
