@@ -5,14 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-$repositoryClass = $this->param('part.repository');
-$recordKey = $this->param('part.key');
-
-$widgetPath = $this->param('widget.path');
-$widgetName = $this->param('widget.name');
-$widgetStore = $this->param('widget.store');
-
 $fields = $this->param('fields');
 
 $updates = [];
@@ -47,11 +39,11 @@ $this->include('data.php');
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}' => $recordKey,
-    '{$billetClass}' => $billetClass,
-    '{$widgetName}' => $widgetName,
-    '{$widgetStore}' => $widgetStore,
-    '{$updates}' => join("\n", $updates),
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$recordKey}'   => $this->param('part.key'),
+    '{$widgetName}'  => $this->param('widget.name'),
+    '{$widgetStore}' => $this->param('widget.store'),
+    '{$updates}'     => join("\n", $updates),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

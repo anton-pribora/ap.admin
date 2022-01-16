@@ -20,9 +20,11 @@ try {
 
 $params = [];
 
-$menu = [
-    new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/'))),
-];
+$menu = [];
+
+if (Identity()->hasPermit('examples.employee.add')) {
+    $menu[] = new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/')));
+}
 
 Template()->render('@extra/list-inline.php', $menu);
 Template()->render(__dir('.views/search_form.php'), $searchParams);

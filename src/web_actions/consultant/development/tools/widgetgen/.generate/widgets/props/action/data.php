@@ -5,8 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-
 $data = <<<'PHP'
 <?php
 
@@ -20,7 +18,7 @@ ReturnJson(['data' => $this->include('encodeData.php')]);
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
+    '{$billetClass}' => $this->param('part.billet'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

@@ -24,6 +24,7 @@ Layout()->startGrab('body.content.end');
   <div class="card">
     <div class="card-header py-1 d-flex justify-content-between align-middle">
       <div><i class="bi bi-info-circle me-1"></i>Свойства</div>
+<?php if ($enableEdit) { ?>
       <div v-if="!data.deleting" class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
         <button type="button" class="btn btn-default btn-sm py-0 px-1 text-muted" data-bs-toggle="dropdown">
@@ -38,6 +39,7 @@ Layout()->startGrab('body.content.end');
         </div>
         Удаление...
       </div>
+<?php } ?>
     </div>
     <div class="card-body px-0 py-2 pb-3">
       <div class="row">
@@ -47,7 +49,7 @@ Layout()->startGrab('body.content.end');
             <img :src="data.avatar.url" class="m-2 img-fluid rounded" width="100" alt="Avatar">
           </a>
           <svg v-if="!data.avatar" class="bd-placeholder-img m-2 img-fluid rounded" width="100" height="100" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect></svg>
-
+<?php if ($enableEdit) { ?>
           <div class="mt-1">
             <div class="btn-group" role="group">
               <button :disabled="data.avatarDeleting" class="btn btn-default btn-sm py-1" @click="uploadAvatar(data)" title="Загрузить фото"><i class="bi bi-upload me-1"></i>Загрузить</button>
@@ -59,6 +61,7 @@ Layout()->startGrab('body.content.end');
               </ul>
             </div>
           </div>
+<?php } ?>
         </div>
         <div class="col">
           <table class="table mb-0 table-sm">

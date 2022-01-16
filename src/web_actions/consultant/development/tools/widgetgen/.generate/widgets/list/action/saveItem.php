@@ -5,16 +5,9 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-$recordKey   = $this->param('part.key');
-$widgetName  = $this->param('widget.name');
-$widgetStore = $this->param('widget.store');
-
-$fields = $this->param('fields');
-
 $updates = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'setter' => $setter, 'edit' => $edit]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'title' => $title, 'setter' => $setter, 'edit' => $edit]) {
     if ($edit) {
         $updates[] = "\$item->{$setter}(\$data['{$prop}'] ?? '');  // $title";
     }
@@ -35,11 +28,7 @@ if (!$editable) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');
 }
 
-$itemId = $data['id'];
-
-if (empty($fileId)) {
-    ReturnJsonError('Не указан идентификатор элемента', 'null_id');
-}
+$itemId = $data['id'] ?? '';
 
 /*
 $item = $record->items()->getById($itemId);
@@ -53,14 +42,14 @@ if (!$item) {
 $item->save();
 */
 
-ReturnJson(['data' => /*$this->execute('encodeData.php', $item)*/ $data]);
+ReturnJson(['data' => /*$this->execute('encodeData.php', $item)*/ $data + ['id' => time()]]);
 
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}'   => $recordKey,
-    '{$billetClass}' => $billetClass,
-    '{$widgetName}'  => $widgetName,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$recordKey}'   => $this->param('part.key'),
+    '{$widgetName}'  => $this->param('widget.name'),
     '{$updates}'     => join("\n", $updates),
 ]);
 

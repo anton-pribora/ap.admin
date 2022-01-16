@@ -8,10 +8,6 @@ use ApCode\Codebuilder\PhpValueRawCode;
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$name = $this->param('part.name');
-$path = $this->param('part.path');
-$repo = $this->param('part.repository');
-
 $searchParams = [];
 
 foreach ($this->param('fields') as ['prop' => $prop, 'search' => $search, 'view' => $view]) {
@@ -34,9 +30,11 @@ $items = Project\Repository::findMany($searchParams, $pagination);
 
 $params = [];
 
-$menu = [
-    new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/'))),
-];
+$menu = [];
+
+if (Identity()->hasPermit('{$recordKey}.add')) {
+    $menu[] = new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/')));
+}
 
 Template()->render('@extra/list-inline.php', $menu);
 Template()->render(__dir('.views/search_form.php'), $searchParams);
@@ -49,7 +47,8 @@ PHP;
 
 $data = strtr($data, [
     "['searchParams']"   => (new PhpValueArray($searchParams))->render('    '),
-    'Project\Repository' => $repo,
+    'Project\Repository' => $this->param('part.repository'),
+    '{$recordKey}'       => $this->param('part.key'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

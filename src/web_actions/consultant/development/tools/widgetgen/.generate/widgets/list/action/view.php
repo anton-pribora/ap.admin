@@ -5,12 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-$recordKey = $this->param('part.key');
-
-$widgetName = $this->param('widget.name');
-$widgetStore = $this->param('widget.store');
-
 $data = <<<'PHP'
 <?php
 
@@ -29,10 +23,10 @@ Layout()->append('body.js.code', "store.state.{$widgetStore}.list = " . json_enc
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}'   => $recordKey,
-    '{$billetClass}' => $billetClass,
-    '{$widgetName}'  => $widgetName,
-    '{$widgetStore}' => $widgetStore,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$recordKey}'   => $this->param('part.key'),
+    '{$widgetName}'  => $this->param('widget.name'),
+    '{$widgetStore}' => $this->param('widget.store'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

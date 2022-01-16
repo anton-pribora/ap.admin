@@ -5,10 +5,6 @@
 $fileName = strtr(basename(__FILE__), ['.php' => '']);
 $this->param('printIndent')("{$fileName} ... ");
 
-$editDialogTemplate = $this->param('widget.templateId.editDialog');
-$editDialogComponent = $this->param('widget.component.editDialog');
-$widgetFullPath = $this->param('widget.fullPath');
-
 $data = <<<'JS'
 app.component('{$editDialogComponent}', {
   template: '#{$editDialogTemplate}',
@@ -73,9 +69,9 @@ app.component('{$editDialogComponent}', {
 JS;
 
 $data = strtr($data, [
-    '{$editDialogComponent}' => $editDialogComponent,
-    '{$editDialogTemplate}' => $editDialogTemplate,
-    '{$widgetFullPath}' => $widgetFullPath,
+    '{$editDialogComponent}' => $this->param('widget.component.editDialog'),
+    '{$editDialogTemplate}'  => $this->param('widget.templateId.editDialog'),
+    '{$widgetFullPath}'      => $this->param('widget.fullPath'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

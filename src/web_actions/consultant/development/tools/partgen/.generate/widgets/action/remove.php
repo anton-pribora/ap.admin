@@ -5,12 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$recordKey = $this->param('part.key');
-$billetClass = $this->param('part.billet');
-$widgetName = $this->param('widget.name');
-$repositoryClass = $this->param('part.repository');
-$textAfterRemove = $this->param('text.afterRemove');
-
 $data = <<<'PHP'
 <?php
 
@@ -34,11 +28,11 @@ ReturnJson(true);
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}' => $recordKey,
-    '{$billetClass}' => $billetClass,
-    '{$widgetName}' => $widgetName,
-    '{$repositoryClass}' => $repositoryClass,
-    '{$textAfterRemove}' => $textAfterRemove
+    '{$billetClass}'     => $this->param('part.billet'),
+    '{$repositoryClass}' => $this->param('part.repository'),
+    '{$recordKey}'       => $this->param('part.key'),
+    '{$widgetName}'      => $this->param('widget.name'),
+    '{$textAfterRemove}' => $this->param('text.afterRemove')
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

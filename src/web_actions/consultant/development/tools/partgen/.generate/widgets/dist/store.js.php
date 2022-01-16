@@ -5,8 +5,6 @@
 $fileName = strtr(basename(__FILE__), ['.php' => '']);
 $this->param('printIndent')("{$fileName} ... ");
 
-$widgetStore = $this->param('widget.store');
-
 $data = <<<'JS'
 store.registerModule('{$widgetStore}', {
   namespaced: true,
@@ -23,7 +21,7 @@ store.registerModule('{$widgetStore}', {
 JS;
 
 $data = strtr($data, [
-    '{$widgetStore}' => $widgetStore
+    '{$widgetStore}' => $this->param('widget.store')
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

@@ -8,12 +8,9 @@ use ApCode\Codebuilder\PhpValueRawCode;
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-$fields = $this->param('fields');
-
 $props = [];
 
-foreach ($fields as ['prop' => $prop, 'getter' => $getter, 'view' => $view]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'getter' => $getter, 'view' => $view]) {
     if ($view || $prop === 'id') {
         $props[$prop] = new PhpValueRawCode("\$record->{$getter}()");
     }
@@ -32,7 +29,7 @@ return {$props};
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
+    '{$billetClass}' => $this->param('part.billet'),
     '{$props}'       => (new PhpValueArray($props))->render('    '),
 ]);
 

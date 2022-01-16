@@ -5,16 +5,9 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-
-$editDialogTemplate = $this->param('widget.templateId.editDialog');
-$editDialogComponent = $this->param('widget.component.editDialog');
-
-$fields = $this->param('fields');
-
 $rows = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
     if ($view) {
         if ($format === 'text') {
             $rows[] = <<<PHP
@@ -88,8 +81,8 @@ Layout()->endGrab();
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}'        => $billetClass,
-    '{$editDialogTemplate}' => $editDialogTemplate,
+    '{$billetClass}'        => $this->param('part.billet'),
+    '{$editDialogTemplate}' => $this->param('widget.templateId.editDialog'),
     '{$rows}'               => ltrim(join("\n", $rows)),
 ]);
 

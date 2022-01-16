@@ -5,17 +5,9 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-
-$templateId = $this->param('widget.templateId.viewForm');
-$editDialog = $this->param('widget.component.editDialog');
-$viewForm = $this->param('widget.component.viewForm');
-
-$fields = $this->param('fields');
-
 $rows = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
     if ($view) {
         if ($format === 'text') {
             $rows[] = <<<PHP
@@ -61,6 +53,7 @@ Layout()->startGrab('body.content.end');
   <div class="card">
     <div class="card-header py-1 d-flex justify-content-between align-middle">
       <div><i class="bi bi-info-circle me-1"></i>Свойства</div>
+<?php if ($enableEdit) { ?>
       <div v-if="!data.deleting" class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
         <div class="btn-group" role="group">
@@ -77,6 +70,7 @@ Layout()->startGrab('body.content.end');
         </div>
         Удаление...
       </div>
+<?php } ?>
     </div>
     <div class="card-body p-0">
       <table class="table mb-0 table-sm">
@@ -98,10 +92,10 @@ Layout()->endGrab();
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
-    '{$templateId}'  => $templateId,
-    '{$editDialog}'  => $editDialog,
-    '{$viewForm}'    => $viewForm,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$templateId}'  => $this->param('widget.templateId.viewForm'),
+    '{$editDialog}'  => $this->param('widget.component.editDialog'),
+    '{$viewForm}'    => $this->param('widget.component.viewForm'),
     '{$rows}'        => ltrim(join("\n", $rows)),
 ]);
 

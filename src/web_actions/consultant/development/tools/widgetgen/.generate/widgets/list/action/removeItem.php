@@ -5,10 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$recordKey   = $this->param('part.key');
-$billetClass = $this->param('part.billet');
-$widgetName  = $this->param('widget.name');
-
 $data = <<<'PHP'
 <?php
 
@@ -24,9 +20,9 @@ if (!$editable) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');
 }
 
-$itemId = $data['id'];
+$itemId = $data['id'] ?? '';
 
-if (empty($fileId)) {
+if (empty($itemId)) {
     ReturnJsonError('Не указан идентификатор элемента', 'null_id');
 }
 
@@ -45,9 +41,9 @@ ReturnJson(true);
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}'   => $recordKey,
-    '{$billetClass}' => $billetClass,
-    '{$widgetName}'  => $widgetName,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$recordKey}'   => $this->param('part.key'),
+    '{$widgetName}'  => $this->param('widget.name'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

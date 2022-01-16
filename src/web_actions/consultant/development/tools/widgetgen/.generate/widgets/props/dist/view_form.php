@@ -5,17 +5,9 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-
-$templateId = $this->param('widget.templateId.viewForm');
-$editDialog = $this->param('widget.component.editDialog');
-$viewForm = $this->param('widget.component.viewForm');
-
-$fields = $this->param('fields');
-
 $rows = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
     if ($view) {
         if ($format === 'text') {
             $rows[] = <<<PHP
@@ -61,22 +53,11 @@ Layout()->startGrab('body.content.end');
   <div class="card">
     <div class="card-header py-1 d-flex justify-content-between align-middle">
       <div><i class="bi bi-info-circle me-1"></i>Свойства</div>
-      <div v-if="!data.deleting" class="btn-group" role="group">
+<?php if ($enableEdit) { ?>
+      <div class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
-        <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default btn-sm py-0 px-1 text-muted" data-bs-toggle="dropdown">
-            <i class="bi bi-caret-down-fill small"></i>
-          </button>
-          <ul class="dropdown-menu dropdown-menu-end">
-            <li><a class="dropdown-item" href="#" @click.prevent="remove(data)"><i class="bi bi-trash me-1"></i>Удалить</a></li>
-          </ul>
-        </div>
       </div>
-      <div v-if="data.deleting">
-        <div class="spinner-border spinner-border-sm text-primary" role="status">
-        </div>
-        Удаление...
-      </div>
+<?php } ?>
     </div>
     <div class="card-body p-0">
       <table class="table mb-0 table-sm">
@@ -98,10 +79,10 @@ Layout()->endGrab();
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
-    '{$templateId}'  => $templateId,
-    '{$editDialog}'  => $editDialog,
-    '{$viewForm}'    => $viewForm,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$templateId}'  => $this->param('widget.templateId.viewForm'),
+    '{$editDialog}'  => $this->param('widget.component.editDialog'),
+    '{$viewForm}'    => $this->param('widget.component.viewForm'),
     '{$rows}'        => ltrim(join("\n", $rows)),
 ]);
 

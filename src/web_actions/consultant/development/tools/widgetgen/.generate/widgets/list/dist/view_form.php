@@ -5,18 +5,10 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-
-$templateId = $this->param('widget.templateId.viewForm');
-$editDialog = $this->param('widget.component.editDialog');
-$viewForm = $this->param('widget.component.viewForm');
-
-$fields = $this->param('fields');
-
 $th = [];
 $td = [];
 
-foreach ($fields as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
+foreach ($this->param('fields') as ['prop' => $prop, 'title' => $title, 'view' => $view, 'format' => $format]) {
     if ($view) {
         $th[] = <<<HTML
         <th>{$title}</th>
@@ -55,13 +47,13 @@ Layout()->startGrab('body.content.end');
   <div class="card">
     <div class="card-header py-1 d-flex justify-content-between align-middle">
       <div>
-        <i class="bi bi-files me-1"></i>Файлы
+        <i class="bi bi-files me-1"></i>Элементы
         <div v-if="loading" class="spinner-border spinner-border-sm text-primary" role="status">
           <span class="visually-hidden">Загрузка...</span>
         </div>
       </div>
 <?php if ($enableEdit) { ?>
-      <button class="btn btn-default btn-sm py-0" @click="pickAndUpload"><i class="bi bi-upload me-1"></i>Загрузить</button>
+      <button class="btn btn-default btn-sm py-0" @click="edit({})"><i class="bi bi-plus-lg me-1"></i>Добавить</button>
 <?php } ?>
     </div>
     <table class="table table-hover mb-0" style="">
@@ -119,10 +111,10 @@ Layout()->endGrab();
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
-    '{$templateId}'  => $templateId,
-    '{$editDialog}'  => $editDialog,
-    '{$viewForm}'    => $viewForm,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$templateId}'  => $this->param('widget.templateId.viewForm'),
+    '{$editDialog}'  => $this->param('widget.component.editDialog'),
+    '{$viewForm}'    => $this->param('widget.component.viewForm'),
     '{$th}'          => ltrim(join("\n", $th)),
     '{$td}'          => ltrim(join("\n", $td)),
 ]);

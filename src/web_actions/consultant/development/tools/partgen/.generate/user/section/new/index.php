@@ -5,7 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billet = $this->param('part.billet');
 $fields = $this->param('fields');
 
 $setters = [];
@@ -21,6 +20,11 @@ $data = <<<'PHP'
 
 /* @var $this ApCode\Executor\RuntimeInterface */
 /* @var $record {billet} */
+
+if (!Identity()->hasPermit('{$recordKey}.add')) {
+    Alert('У вас нет прав, чтобы добавлять новые записи', 'warning');
+    return;
+}
 
 $data = Request()->getPostVariables();
 
@@ -43,8 +47,9 @@ Template()->render(__dir('.views/new_record_form.php'), $data, $params);
 PHP;
 
 $data = strtr($data, [
-    '{billet}'  => $billet,
-    '{setters}' => join("\n    ", $setters)
+    '{billet}'     => $this->param('part.billet'),
+    '{$recordKey}' => $this->param('part.key'),
+    '{setters}'    => join("\n    ", $setters),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

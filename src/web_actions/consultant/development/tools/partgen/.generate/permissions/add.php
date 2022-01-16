@@ -10,18 +10,12 @@ $data = <<<'PHP'
 
 /* @var $this ApCode\Executor\RuntimeInterface */
 /* @var $consultant */
-/* @var $record {$billetClass} */
 
 $consultant = $this->argument(0);
-$record = $this->argument(1);
 
 return true;
 
 PHP;
-
-$data = strtr($data, [
-    '{$billetClass}' => $this->param('part.billet'),
-]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";
 

@@ -5,9 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$recordKey = $this->param('part.key');
-$billetClass = $this->param('part.billet');
-
 $data = <<<'PHP'
 <?php
 
@@ -31,8 +28,8 @@ Template()->render(__dir('.views/view.php'), $record, $params);
 PHP;
 
 $data = strtr($data, [
-    '{$recordKey}'   => $recordKey,
-    '{$billetClass}' => $billetClass,
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$recordKey}'   => $this->param('part.key'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

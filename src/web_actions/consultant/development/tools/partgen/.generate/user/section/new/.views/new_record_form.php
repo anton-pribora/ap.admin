@@ -5,7 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billet = $this->param('part.billet');
 $fields = $this->param('fields');
 
 $rows = [];

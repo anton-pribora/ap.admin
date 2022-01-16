@@ -5,8 +5,6 @@
 $fileName = strtr(basename(__FILE__), ['.php' => '']);
 $this->param('printIndent')("{$fileName} ... ");
 
-$widgetStore = $this->param('widget.store');
-
 $data = <<<'JS'
 store.registerModule('{$widgetStore}', {
   namespaced: true,
@@ -17,11 +15,13 @@ store.registerModule('{$widgetStore}', {
     saveList(state, newList) {
       state.list = newList;
     },
-    updateItem(state, item) {
+    saveItem(state, item) {
       const idx = state.list.findIndex(e => e.id === item.id);
 
       if (idx >= 0) {
         state.list.splice(idx, 1, item);
+      } else {
+        state.list.unshift(item);
       }
     },
     removeItem(state, item) {
@@ -37,7 +37,7 @@ store.registerModule('{$widgetStore}', {
 JS;
 
 $data = strtr($data, [
-    '{$widgetStore}' => $widgetStore
+    '{$widgetStore}' => $this->param('widget.store')
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";

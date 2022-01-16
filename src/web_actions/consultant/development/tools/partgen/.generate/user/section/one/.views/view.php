@@ -5,10 +5,6 @@
 $fileName = basename(__FILE__);
 $this->param('printIndent')("{$fileName} ... ");
 
-$billetClass = $this->param('part.billet');
-$widgetPath = $this->param('widget.path');
-$widgetName = $this->param('widget.name');
-
 $data = <<<'PHP'
 <?php
 
@@ -27,9 +23,9 @@ $record = $this->argument(0);
 PHP;
 
 $data = strtr($data, [
-    '{$billetClass}' => $billetClass,
-    '{$widgetPath}'  => $widgetPath,
-    '{$widgetName}'  => $widgetName
+    '{$billetClass}' => $this->param('part.billet'),
+    '{$widgetPath}'  => $this->param('widget.path'),
+    '{$widgetName}'  => $this->param('widget.name')
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";
