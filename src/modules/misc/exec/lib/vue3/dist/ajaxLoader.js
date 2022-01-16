@@ -45,6 +45,14 @@ const ajaxLoader = {
         Accept: 'application/json'
       }
     });
+
+    app.config.globalProperties.$postFormData = (url, formData) => q({
+      method: 'POST',
+      body: formData,
+      headers: {
+        Accept: 'application/json'
+      }
+    });
   }
 };
 

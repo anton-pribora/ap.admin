@@ -11,6 +11,7 @@ return [
         ['text' => 'Инструменты', 'url' => ShortUrl('@consultant/tools/'), 'submenu' => [
             ['text' => 'Тест почты', 'url' => ShortUrl(__dir('development/tools/mailtest/')),],
             ['text' => 'Генератор разделов', 'url' => ShortUrl(__dir('development/tools/partgen/'))],
+            ['text' => 'Генератор виджетов', 'url' => ShortUrl(__dir('development/tools/widgetgen/'))],
             ['text' => 'phpinfo()', 'url' => ShortUrl(__dir('development/tools/phpinfo.php'))],
             ['text' => 'Свободное место', 'url' => ShortUrl(__dir('development/tools/df.php'))],
         ]]
@@ -25,6 +26,7 @@ return [
     'additionalmenu' => [
         ['text' => 'Тест почты', 'url' => ShortUrl(__dir('development/tools/mailtest/')),],
         ['text' => 'Генератор разделов', 'url' => ShortUrl(__dir('development/tools/partgen/'))],
+        ['text' => 'Генератор виджетов', 'url' => ShortUrl(__dir('development/tools/widgetgen/'))],
         ['text' => 'phpinfo()', 'url' => ShortUrl(__dir('development/tools/phpinfo.php'))],
         ['text' => 'Свободное место', 'url' => ShortUrl(__dir('development/tools/df.php'))],
     ],

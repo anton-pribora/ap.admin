@@ -1,6 +1,6 @@
-<script type="text/html" id="partgemForm">
+<script type="text/html" id="partgenForm">
 
-  <form method="post" action="">
+  <form method="post" action="" ref="form">
     <h4>Базовая таблица</h4>
     <div class="row mb-3">
       <div class="col">
@@ -196,15 +196,21 @@
       <div v-if="generate.classes || generate.widget || generate.section || generate.permissions">
         <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
           <div class="btn-group me-2" role="group" aria-label="First group">
-            <button :disabled="disableZip || !fields.length" type="submit" name="action" value="download" class="btn btn-primary"><i class="bi bi-download me-1"></i>Скачать архивом</button>
+            <button :disabled="disableZip || !fields.length || resultIsLoading" type="submit" name="action" value="download" class="btn btn-primary"><i class="bi bi-download me-1"></i>Скачать архивом</button>
           </div>
           <div class="input-group">
-            <button :disabled="disableHdd || !fields.length" type="submit" name="action" value="generate" class="btn btn-default"><i class="bi bi-hdd me-1"></i>Записать на диск</button>
+            <button :disabled="disableHdd || !fields.length || resultIsLoading" type="submit" @click.prevent="generateFiles" name="action" value="generate" class="btn btn-default"><i class="bi bi-hdd me-1"></i>Записать на диск</button>
           </div>
         </div>
       </div>
 
     </div>
   </form>
+
+  <pre v-text="result" v-if="!resultIsLoading"></pre>
+  <div v-if="resultIsLoading">
+    <div class="spinner-border spinner-border-sm text-primary"></div>
+    Обработка данных...
+  </div>
 
 </script>

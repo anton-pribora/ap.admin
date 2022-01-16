@@ -1,0 +1,66 @@
+<script type="text/html" id="widgetgenForm">
+
+  <form method="post" action="" ref="form">
+    <div>
+      <h4>Запись</h4>
+      <div class="col">
+        <label class="" for="part[key]">Ключ записи <span class="text-muted small">(через точку)</span></label>
+        <input type="text" class="form-control" id="part[key]" name="part[key]" v-model="part.key">
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="" for="part[billet]">Класс записи</label>
+          <input type="text" class="form-control" id="part[billet]" name="part[billet]" v-model="part.billet">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="" for="part[repository]">Класс репозитория</label>
+          <input type="text" class="form-control" id="part[repository]" name="part[repository]" v-model="part.repository">
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <h4>Widget</h4>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="" for="widget[template]">Шаблон виджета</label>
+          <select class="form-select" name="widget[template]" id="widget[template]" v-model="widget.template">
+            <option value="">(Выберите шаблон)</option>
+            <option value="props">props - Редактирование свойств</option>
+            <option value="list">list - Редактирование списка</option>
+          </select>
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="" for="widget[path]">Путь виджета <span class="text-muted small">(через точку)</span></label>
+          <input type="text" class="form-control" id="widget[path]" name="widget[path]" v-model="widget.path">
+        </div>
+      </div>
+      <div class="row mb-3">
+        <div class="col">
+          <label class="" for="widget[name]">Название виджета</label>
+          <input type="text" class="form-control" id="widget[name]" name="widget[name]" v-model="widget.name">
+        </div>
+      </div>
+    </div>
+
+    <div class="btn-toolbar justify-content-end" role="toolbar" aria-label="Toolbar with button groups">
+      <div class="btn-group me-2" role="group" aria-label="First group">
+        <button :disabled="disableZip || formIsInvalid || resultIsLoading" type="submit" name="action" value="download" class="btn btn-primary"><i class="bi bi-download me-1"></i>Скачать архивом</button>
+      </div>
+      <div class="input-group">
+        <button :disabled="disableHdd || formIsInvalid || resultIsLoading" type="submit" @click.prevent="generateFiles" name="action" value="generate" class="btn btn-default"><i class="bi bi-hdd me-1"></i>Записать на диск</button>
+      </div>
+    </div>
+  </form>
+
+  <pre v-text="result" v-if="!resultIsLoading"></pre>
+  <div v-if="resultIsLoading">
+    <div class="spinner-border spinner-border-sm text-primary"></div>
+    Обработка данных...
+  </div>
+
+</script>

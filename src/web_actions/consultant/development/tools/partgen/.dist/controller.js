@@ -1,5 +1,5 @@
 app.component('partgen', {
-  template: '#partgemForm',
+  template: '#partgenForm',
   props: {
     disableZip: Boolean,
     disableHdd: Boolean,
@@ -32,6 +32,8 @@ app.component('partgen', {
       fields: [],
       fieldsLoading: false,
       showForm: false,
+      result: '',
+      resultIsLoading: false,
     }
   },
   methods: {
@@ -56,6 +58,20 @@ app.component('partgen', {
       } else {
         this.fields = [];
       }
+    },
+    async generateFiles() {
+      const fd = new FormData(this.$refs.form);
+      fd.append('action', 'generate');
+
+      this.resultIsLoading = true;
+
+      const [result] = await Promise.all([
+        this.$postFormData('', fd),
+        new Promise(resolve => setTimeout(resolve, 600)),
+      ]);
+
+      this.resultIsLoading = false;
+      this.result = result ? result.result : '';
     }
   },
   mounted() {

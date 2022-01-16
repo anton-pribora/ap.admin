@@ -5,8 +5,7 @@ app.component('examples-employee-files-view-form', {
     widget: 'examples.employee.files',
     pager: {
       page : 0,
-      limit : 50,
-      pages : [0]
+      limit : 50
     },
     loading: false,
   }),
