@@ -55,32 +55,6 @@ function Asset($path) {
 }
 
 /**
- * @return \Gotcha\DbIndex
- */
-function Gotcha() {
-    static $index;
-
-    if (empty($index)) {
-        $index = new Gotcha\DbIndex(Db());
-    }
-
-    return $index;
-}
-
-/**
- * @return \Replica\ReplicaExporter
- */
-function Replica() {
-    static $replica;
-
-    if (empty($replica)) {
-        $replica = new Replica\ReplicaExporter(Db());
-    }
-
-    return $replica;
-}
-
-/**
  * @param string $name
  * @return \ApCode\Executor\ExecutorInterface
  */
@@ -207,7 +181,7 @@ function Url() {
 /**
  * @param string $path
  * @param array $params
- * @return \Data\Url
+ * @return \ApCode\Web\Url
  */
 function ShortUrl($path, $params = [], $replaceParams = FALSE)
 {
@@ -217,7 +191,7 @@ function ShortUrl($path, $params = [], $replaceParams = FALSE)
 /**
  * @param string $path
  * @param array $params
- * @return \Data\Url
+ * @return \ApCode\Web\Url
  */
 function FullUrl($path, $params = [], $replaceParams = FALSE)
 {
