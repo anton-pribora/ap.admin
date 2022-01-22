@@ -60,7 +60,7 @@ foreach ($fields as $dbField => $field) {
 
     $encoder = null;
     $decoder = null;
-    $default = null;
+    $default = isset($field['default']) ? json_decode($field['default'], true) : null;
 
     switch ($field['format']) {
         case 'createdAt':

@@ -27,6 +27,7 @@ foreach ($res->fetchAllRows() as $row)
     $field   = $row['Field'];
     $type    = $row['Type'];
     $comment = $row['Comment'];
+    $default = $row['Default'];
 
     $prop   = $normalizeId($lowerCamelCase($field));
     $title  = trim($comment) ?: $field;
@@ -55,10 +56,11 @@ foreach ($res->fetchAllRows() as $row)
         $format = 'createdAt';
         $edit   = false;
     } elseif ($prop === 'meta' && preg_match('/(text|blob)/ui', $type)) {
-        $format = 'json';
-        $edit   = false;
-        $view   = false;
-        $search = false;
+        $format  = 'json';
+        $edit    = false;
+        $view    = false;
+        $search  = false;
+        $default = trim($default, "'");
     }
 
     if (strtolower($prop) === 'id') {
@@ -77,15 +79,16 @@ foreach ($res->fetchAllRows() as $row)
     }
 
     $result[] = [
-        'field'  => $field,
-        'prop'   => $prop,
-        'getter' => $getter,
-        'setter' => $setter,
-        'title'  => $title,
-        'view'   => $view,
-        'edit'   => $edit,
-        'search' => $search,
-        'format' => $format,
+        'field'   => $field,
+        'prop'    => $prop,
+        'getter'  => $getter,
+        'setter'  => $setter,
+        'title'   => $title,
+        'view'    => $view,
+        'edit'    => $edit,
+        'search'  => $search,
+        'format'  => $format,
+        'default' => json_encode_array($default),
     ];
 }
 

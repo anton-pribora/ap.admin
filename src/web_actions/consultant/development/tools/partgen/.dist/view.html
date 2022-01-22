@@ -171,13 +171,16 @@
             <td><input class="form-control" :name="'fields[' + field.field + '][title]'" v-model="field.title"></td>
             <td><input class="form-control" :name="'fields[' + field.field + '][getter]'" v-model="field.getter"></td>
             <td><input class="form-control" :name="'fields[' + field.field + '][setter]'" v-model="field.setter"></td>
-            <td><select class="form-select" :name="'fields[' + field.field + '][format]'" v-model="field.format">
+            <td>
+              <select class="form-select" :name="'fields[' + field.field + '][format]'" v-model="field.format">
                 <option value="">(Не указано)</option>
                 <option value="string">Строка</option>
                 <option value="text">Текст</option>
                 <option value="json">JSON</option>
                 <option value="createdAt">Дата создания</option>
-              </select></td>
+              </select>
+              <input v-if="field.default !== null" type="hidden" :name="'fields[' + field.field + '][default]'" v-model="field.default">
+            </td>
           </tr>
           <tr v-if="!fields.length && !fieldsLoading">
             <td colspan="8" class="text-center text-muted">(нет данных)</td>
