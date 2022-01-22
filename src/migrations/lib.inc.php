@@ -23,6 +23,20 @@ function remove_db()
     Db()->query($sql);
 }
 
+function remove_migrations($limit = 1)
+{
+    $sql = 'SELECT name FROM _migrations ORDER BY date DESC LIMIT ' . intval($limit);
+    $res = Db()->query($sql);
+
+    $result = $res->fetchColumn();
+
+    foreach ($result as $name) {
+        Db()->query('DELETE FROM _migrations WHERE name = ?', [$name]);
+    }
+
+    return $result;
+}
+
 function save_migration($name)
 {
     $sql = 'INSERT INTO _migrations (name) VALUES (?)';
