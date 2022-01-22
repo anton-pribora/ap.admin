@@ -56,7 +56,7 @@ $makeDir = function ($fullPath) use ($print) {
     return true;
 };
 
-$makeFile = function ($fullPath, $data) use ($makeDir, $print) {
+$makeFile = function ($fullPath, $data, $replace = false) use ($makeDir, $print) {
     $baseFolder = $this->param('baseFolder');
 
     if ($baseFolder) {
@@ -64,8 +64,13 @@ $makeFile = function ($fullPath, $data) use ($makeDir, $print) {
     }
 
     if (file_exists($fullPath)) {
-        if (!is_writable($fullPath)) {
-            $print("ошибка (файл $fullPath не доступен для записи)\n");
+        if ($replace) {
+            if (!is_writable($fullPath)) {
+                $print("ошибка (файл $fullPath не доступен для записи)\n");
+                return false;
+            }
+        } else {
+            $print("пропущен (уже существует)\n");
             return false;
         }
     }

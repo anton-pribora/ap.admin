@@ -21,6 +21,9 @@ $fname = strtr($qname, '\\', '/');              // Полное имя файл�
 $cname = basename($fname);                      // Имя класса без пространства имён
 $nname = strtr(dirname($fname), '/', '\\');     // Пространство имён
 
+$fullBilletPath = $cwd . '/' . $fname . '.php';
+$fullMetaPath   = $cwd . '/' . $fname . '.meta.php';
+
 $billetNamspace = new PhpNamespace('ApCode\\Billet');
 $billetAbstract = $billetNamspace->createClass('AbstractBillet');
 
@@ -39,6 +42,9 @@ $firstColumn   = null;
 
 $classFunctions = [];
 
+$classExists = file_exists($fullBilletPath);
+$existingMap = file_exists($fullMetaPath) ? (include($fullMetaPath))['db.map'] : [];
+
 foreach ($fields as $dbField => $field) {
     if ( is_null($firstColumn) ) {
         $firstColumn  = $dbField;
@@ -46,6 +52,10 @@ foreach ($fields as $dbField => $field) {
     }
     else {
         $propertyName = $field['prop'];
+    }
+
+    if (isset($existingMap[$propertyName])) {
+        continue;
     }
 
     $encoder = null;
@@ -85,15 +95,47 @@ foreach ($fields as $dbField => $field) {
         ->createArgument('value');
 }
 
-// Класс всегда должен содержать метод name()
-if (!isset($classFunctions['name'])) {
-    $primaryClass->createFunction('name')->addBodyLine('return self::class . \'#\' . $this->id();');
-}
+$forceRewrite = false;
 
-$urlAssetFunction = $primaryClass->createFunction('urlAsset');
-$urlAssetFunction->createArgument('key');
-$urlAssetFunction->createArgument('params')->setDefaultValueNull();
-$urlAssetFunction->addBodyLine(<<<PHP
+if ($classExists) {
+    // Для существующего класса вносим изменения, отталкиваясь от существующих файлов
+    $classFile = file_get_contents($fullBilletPath);
+    $metaFile  = file_get_contents($fullMetaPath);
+
+    if (!empty($fieldsMap)) {
+        $forceRewrite = true;
+
+        // Добавляем для класса недостающие геттеры и сеттеры
+        $text = [];
+
+        foreach ($primaryClass->getFunctions() as $function) {
+            $text[] = $primaryClass->style()->render($function);
+        }
+
+        // Заменяем строго последнюю закрывающую фигурную скобку на геттеры и сеттеры
+        $classFile = preg_replace('~}$~', "\n" . join("\n\n", $text), rtrim($classFile)) . "\n}\n";
+
+        // Добавляем новые свойства в мету
+        $metaArray = (new PhpValueArray([
+            'db.map' => $fieldsMap,
+        ]))->render('    ');
+
+        preg_match('/ {8}[\s\S]* {8}],/', $metaArray, $matches);
+
+        $metaFile = preg_replace('/^\s+],[\s.]*];/m', $matches[0] . "\n\$0", $metaFile);
+    }
+} else {
+    // Класс ещё не создан, создаём его
+
+    // Класс всегда должен содержать метод name()
+    if (!isset($classFunctions['name'])) {
+        $primaryClass->createFunction('name')->addBodyLine('return self::class . \'#\' . $this->id();');
+    }
+
+    $urlAssetFunction = $primaryClass->createFunction('urlAsset');
+    $urlAssetFunction->createArgument('key');
+    $urlAssetFunction->createArgument('params')->setDefaultValueNull();
+    $urlAssetFunction->addBodyLine(<<<PHP
 \$param = function(\$name, \$default = null) use(&\$params) { return isset(\$params[\$name]) ? \$params[\$name] : \$default; };
         \$scope = \$param('scope', Config()->get('urlAsset.scope', 'admin'));
 
@@ -105,16 +147,16 @@ $urlAssetFunction->addBodyLine(<<<PHP
 
         throw new \Exception(sprintf('Unknown url asset %s in scope %s', \$key, \$scope));
 PHP
-);
+    );
 
-$metaArray = new PhpValueArray([
-    'db.table'   => $table,
-    'db.idfield' => $firstColumn,
-    'db.map'     => $fieldsMap,
-]);
+    $metaArray = new PhpValueArray([
+        'db.table'   => $table,
+        'db.idfield' => $firstColumn,
+        'db.map'     => $fieldsMap,
+    ]);
 
-$metaFile = new PhpFile();
-$metaFile->addContents(<<<EOL
+    $metaFile = new PhpFile();
+    $metaFile->addContents(<<<EOL
 // 'db.table'   - Обязательное поле, название таблицы
 // 'db.idfield' - Обязательное поле, первичный ключ таблицы
 // 'db.map'     - Карта сопоставления свойств объекта полям таблицы
@@ -125,21 +167,23 @@ $metaFile->addContents(<<<EOL
 //   'default'  - Значение по-умолчанию, если установлена функция, то будет использован результат её работы
 EOL
 );
-$metaFile->addContents("\nreturn ". $metaArray->render('    ') .';');
+    $metaFile->addContents("\nreturn ". $metaArray->render('    ') .';');
 
-$classFile = new PhpFile();
-$classFile->addContentLine('');
-$classFile->addContents($primaryClass);
+    $classFile = new PhpFile();
+    $classFile->addContentLine('');
+    $classFile->addContents($primaryClass);
 
-$fullBilletPath = $cwd . '/' . $fname . '.php';
-$fullMetaPath   = $cwd . '/' . $fname . '.meta.php';
+    $classFile .= PHP_EOL;
+    $metaFile  .= PHP_EOL;
+}
 
 $this->param('printIndent')(basename($fullBilletPath) . ' ... ');
-if ($this->param('makeFile')($fullBilletPath, $classFile . PHP_EOL)) {
+if ($this->param('makeFile')($fullBilletPath, $classFile, $forceRewrite)) {
     $this->param('printOk')();
 }
 
 $this->param('printIndent')(basename($fullMetaPath) . ' ... ');
-if ($this->param('makeFile')($fullMetaPath, $metaFile . PHP_EOL)) {
+if ($this->param('makeFile')($fullMetaPath, $metaFile, $forceRewrite)) {
     $this->param('printOk')();
 };
+

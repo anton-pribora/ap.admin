@@ -59,6 +59,7 @@ if (Request()->isPost() && ((!$disableZip && $action === 'download') || (!$disab
 
     if ($action === 'download') {
         $this->setParam('baseFolder', $tmpDir);
+        $this->setParam('download', true);
     }
 
     ob_start();

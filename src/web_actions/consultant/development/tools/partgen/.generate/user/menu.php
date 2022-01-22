@@ -41,6 +41,6 @@ if ($count <= 0) {
     return;
 }
 
-if ($this->param('makeFile')($metaFile, (string) $newMeta)) {
+if ($this->param('makeFile')($metaFile, (string) $newMeta, true)) {
     $this->param('print')("добавлен\n");
 };
