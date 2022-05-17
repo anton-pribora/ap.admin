@@ -35,7 +35,35 @@ namespace migrations;
 
 require_once(__DIR__ . '/../lib.inc.php');
 
-// my awesome migration
-Db()->query('create table test (data varchar(255))');
+if (defined('APPLY')) goto APPLY;
+if (defined('ROLLBACK')) goto ROLLBACK;
+
+goto END;
+
+APPLY:
+
+// foo bar
+Db()->query(<<<'SQL'
+CREATE TABLE IF NOT EXISTS `foo_bar` (
+  `id` INT UNSIGNED NOT NULL AUTO_INCREMENT COMMENT 'Идентификатор записи',
+  -- other columns
+  PRIMARY KEY (`id`)
+) COMMENT 'foo bar';
+SQL
+);
+
+goto END;
+
+ROLLBACK:
+
+// Rollback foo bar
+Db()->query(<<<'SQL'
+DROP TABLE IF EXISTS `foo_bar`;
+SQL
+);
+
+goto END;
+
+END:
 
 ```

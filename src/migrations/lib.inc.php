@@ -6,6 +6,10 @@ ini_set('display_errors', true);
 
 require_once __DIR__ . '/../bootstrap.php';
 
+function __include($file) {
+    return include $file;
+}
+
 function install_db()
 {
     $sql = '
@@ -23,18 +27,9 @@ function remove_db()
     Db()->query($sql);
 }
 
-function remove_migrations($limit = 1)
+function remove_migration($name)
 {
-    $sql = 'SELECT name FROM _migrations ORDER BY date DESC LIMIT ' . intval($limit);
-    $res = Db()->query($sql);
-
-    $result = $res->fetchColumn();
-
-    foreach ($result as $name) {
-        Db()->query('DELETE FROM _migrations WHERE name = ?', [$name]);
-    }
-
-    return $result;
+    return Db()->query('DELETE FROM _migrations WHERE name = ?', [$name])->affected();
 }
 
 function save_migration($name)
@@ -43,23 +38,33 @@ function save_migration($name)
     Db()->query($sql, [$name]);
 }
 
-function migrations_from_db()
+function migrations_from_db($limit = null)
 {
     $sql = 'SELECT * FROM _migrations ORDER BY date';
+
+    if ($limit) {
+        $sql .= ' LIMIT ' . $limit;
+    }
+
     return Db()->query($sql)->fetchAllRows();
 }
 
 function migrations_from_disk()
 {
-    return glob(__DIR__ . '/dist/*.php');
+    $files = [];
+
+    foreach (glob(__DIR__ . '/dist/*.php') as $path) {
+        $files[basename($path)] = $path;
+    }
+
+    return $files;
 }
 
 function migrations_all()
 {
     $result = [];
 
-    foreach (migrations_from_disk() as $file) {
-        $key = basename($file);
+    foreach (migrations_from_disk() as $key => $file) {
         $result[$key] = [
             'applied' => null,
             'file'    => $file,

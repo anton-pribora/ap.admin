@@ -4,6 +4,13 @@ namespace migrations;
 
 require_once(__DIR__ . '/../lib.inc.php');
 
+if (defined('APPLY')) goto APPLY;
+if (defined('ROLLBACK')) goto ROLLBACK;
+
+goto END;
+
+APPLY:
+
 // Информация о сотрудниках
 Db()->query(<<<'SQL'
 CREATE TABLE IF NOT EXISTS `employee` (
@@ -37,3 +44,18 @@ CREATE TABLE IF NOT EXISTS `file` (
 ) COMMENT = 'Файлы';
 SQL
 );
+
+goto END;
+
+ROLLBACK:
+
+// Удаляем таблицы
+Db()->query(<<<'SQL'
+DROP TABLE IF EXISTS `employee`;
+DROP TABLE IF EXISTS `file`;
+SQL
+);
+
+goto END;
+
+END:
