@@ -43,7 +43,7 @@ function migrations_from_db($limit = null)
     $sql = 'SELECT * FROM _migrations ORDER BY date';
 
     if ($limit) {
-        $sql .= ' LIMIT ' . $limit;
+        $sql .= ' DESC LIMIT ' . $limit;
     }
 
     return Db()->query($sql)->fetchAllRows();
