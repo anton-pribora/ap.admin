@@ -33,7 +33,7 @@ if (Request()->isPost()) {
     $logData = $widgetData;
 
     array_walk_recursive($logData, function (&$item){
-        $item = mb_strimwidth($item, 0, 40, '…');
+        $item = mb_strimwidth((string) $item, 0, 40, '…');
     });
 
     Logger()->log('widget', $widgetAction .'('. json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).')');
