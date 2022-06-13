@@ -50,7 +50,7 @@ class Identity
         }
     }
 
-    public function hasPermit($section, ...$params)
+    public function getPermit($section, ...$params)
     {
         return Module('permissions')->execute("{$this->activeEntryType}.{$section}", $this->getActiveEntry(), ...$params);
     }

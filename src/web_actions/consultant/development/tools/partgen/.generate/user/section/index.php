@@ -32,7 +32,7 @@ $params = [];
 
 $menu = [];
 
-if (Identity()->hasPermit('{$recordKey}.add')) {
+if (Identity()->getPermit('{$recordKey}.add')) {
     $menu[] = new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/')));
 }
 

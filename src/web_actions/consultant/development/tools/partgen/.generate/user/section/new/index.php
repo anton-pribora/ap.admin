@@ -21,7 +21,7 @@ $data = <<<'PHP'
 /* @var $this ApCode\Executor\RuntimeInterface */
 /* @var $record {billet} */
 
-if (!Identity()->hasPermit('{$recordKey}.add')) {
+if (!Identity()->getPermit('{$recordKey}.add')) {
     Alert('У вас нет прав, чтобы добавлять новые записи', 'warning');
     return;
 }

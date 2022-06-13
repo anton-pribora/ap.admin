@@ -3,7 +3,7 @@
 /* @var $this ApCode\Executor\RuntimeInterface */
 /* @var $record Project\Examples\Employee */
 
-if (!Identity()->hasPermit('examples.employee.add')) {
+if (!Identity()->getPermit('examples.employee.add')) {
     Alert('У вас нет прав, чтобы добавлять новые записи', 'warning');
     return;
 }

@@ -22,7 +22,7 @@ $params = [];
 
 $menu = [];
 
-if (Identity()->hasPermit('examples.employee.add')) {
+if (Identity()->getPermit('examples.employee.add')) {
     $menu[] = new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/')));
 }
 

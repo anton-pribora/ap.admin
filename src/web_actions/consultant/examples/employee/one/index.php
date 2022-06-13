@@ -6,7 +6,7 @@
 $record = $this->param('record');
 
 $params = [
-    'examples.employee.edit' => Identity()->hasPermit('examples.employee.edit', $record),
+    'examples.employee.edit' => Identity()->getPermit('examples.employee.edit', $record),
 ];
 
 Module('widgets')->execute('handle.php', $record, $params);
