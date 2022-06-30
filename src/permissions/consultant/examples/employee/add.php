@@ -5,4 +5,4 @@
 
 $consultant = $this->argument(0);
 
-return false;
+return true;

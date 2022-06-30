@@ -91,4 +91,9 @@ Layout()->startGrab('body.content.end');
 <?php
 Layout()->endGrab();
 ?>
-<examples-employee-information-view-form></examples-employee-information-view-form>
+<examples-employee-information-view-form>
+  <div class="text-center text-muted">
+    <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+    Загрузка...
+  </div>
+</examples-employee-information-view-form>

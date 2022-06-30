@@ -74,7 +74,12 @@ Layout()->startGrab('body.content.end');
 <?php
 Layout()->endGrab();
 ?>
-<{$viewForm}></{$viewForm}>
+<{$viewForm}>
+  <div class="text-center text-muted">
+    <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
+    Загрузка...
+  </div>
+</{$viewForm}>
 
 PHP;
 
