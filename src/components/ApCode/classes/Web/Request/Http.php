@@ -151,7 +151,7 @@ class Http implements RequestInterface
 
         if ($https && $port == '443') {
             ;
-        } elseif (!$https && $port = '80') {
+        } elseif (!$https && $port == '80') {
             ;
         } else {
             $uri[] = ':';
