@@ -23,13 +23,10 @@ Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
 
 <div id="brandLink" class="d-none d-md-block border-bottom">
   <a href="/" class="d-flex align-items-center px-4 pt-3 pb-2 mb-3 link-dark text-decoration-none">
-  <span class="fs-5 fw-lighter">
-    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-         stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open"><path
-      d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path
-      d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-    Office Documents
-  </span>
+    <span class="fs-5 fw-semibold">
+      <i class="bi bi-tools" style="font-size: 1.2rem"></i>
+      Ap.admin
+    </span>
   </a>
 </div>
 
@@ -43,12 +40,9 @@ Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
       </button>
 
       <a href="/" class="d-md-none d-flex align-items-center mx-auto link-dark text-muted text-decoration-none">
-        <span class="fs-5 fw-lighter">
-          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-book-open"><path
-            d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"></path><path
-            d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"></path></svg>
-          Office Documents
+        <span class="fs-5 fw-semibold">
+          <i class="bi bi-tools" style="font-size: 1.2rem"></i>
+          Ap.admin
         </span>
       </a>
 
