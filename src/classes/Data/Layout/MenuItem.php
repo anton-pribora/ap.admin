@@ -9,6 +9,8 @@ class MenuItem
     public $text        = null;
     public $active      = null;
     public $isSeparator = null;
+    public $icon        = null;
+    public $visible     = null;
 
     /**
      * @var \Data\Layout\Menu
@@ -43,6 +45,6 @@ class MenuItem
 
     public function hasActiveItems()
     {
-        return $this->subMenu && $this->subMenu->hasActiveItems();
+        return $this->active || ($this->subMenu && $this->subMenu->hasActiveItems());
     }
 }

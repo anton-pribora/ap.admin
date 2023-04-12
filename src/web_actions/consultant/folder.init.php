@@ -23,7 +23,6 @@ Config()->set('template.layout.error', 'dashboard');
 
 PathAlias()->append('~/', basename(__DIR__) . '/');
 
-Layout()->prepend('head.title', 'Панель управления');
 Layout()->append('breadcrumbs', new A(new UnescapedText('<i class="bi bi-house-door me-1"></i>Главная'), ShortUrl(__DIR__ .'/')));
 
 $meta = Meta(__DIR__);
@@ -46,6 +45,8 @@ $createMenu = function ($items, Data\Layout\Menu $menu = NULL) use (&$createMenu
 
           if (isset($item['match'])) {
               $active = preg_match($item['match'], Url()->shortUrl("")->getPath());
+          } elseif (isset($item['active'])) {
+              $active = $item['active'];
           } else {
               $active = Url()->matchPath($item['url']);
           }
@@ -55,6 +56,7 @@ $createMenu = function ($items, Data\Layout\Menu $menu = NULL) use (&$createMenu
               'href'     => $item['url'],
               'active'   => $active,
               'priority' => $i * 10,
+              'visible'  => $item['visible'] ?? true,
           ]);
 
           if (!empty($item['submenu'])) {
