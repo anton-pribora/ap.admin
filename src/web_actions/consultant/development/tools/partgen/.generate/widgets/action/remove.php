@@ -19,7 +19,12 @@ if (!$editable) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');
 }
 
-{$repositoryClass}::drop($record);
+// {$repositoryClass}::drop($record);
+
+$record->setDel(1);
+$record->save();
+
+$record->addHistory('Запись <b>' . $record->name() . '</b> была удалёна');
 
 AddSessionAlert("{$textAfterRemove}");
 

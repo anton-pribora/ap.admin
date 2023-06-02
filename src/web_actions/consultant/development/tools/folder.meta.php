@@ -2,7 +2,6 @@
 
 return [
     'nav' => [
-        ['title' => 'Тест почты', 'href' => ShortUrl(__DIR__ . '/mailtest/'), 'active' => Request()->matchAction(ExpandUrl(__dir('mailtest/')))],
         ['title' => 'Генератор разделов', 'href' => ShortUrl(__DIR__ . '/partgen/'), 'active' => Request()->matchAction(ExpandUrl(__dir('partgen/')))],
         ['title' => 'Генератор виджетов', 'href' => ShortUrl(__DIR__ . '/widgetgen/'), 'active' => Request()->matchAction(ExpandUrl(__dir('widgetgen/')))],
         ['title' => 'phpinfo()', 'href' => ShortUrl(__DIR__ . '/phpinfo.php'), 'active' => Request()->action() == ExpandUrl(__dir('phpinfo.php'))],

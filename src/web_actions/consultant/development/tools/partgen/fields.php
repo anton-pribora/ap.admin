@@ -54,8 +54,20 @@ foreach ($res->fetchAllRows() as $row)
 
     if (preg_match('/^(creation|created_?at)$/ui', $prop)) {
         $format = 'createdAt';
-        $edit   = false;
-    } elseif ($prop === 'meta' && preg_match('/(text|blob)/ui', $type)) {
+        $edit     = false;
+    } elseif ($prop === 'meta') {
+        $format  = 'meta';
+        $edit    = false;
+        $view    = false;
+        $search  = false;
+        $default = trim($default, "'");
+    } elseif ($prop === 'del') {
+        $format  = 'del';
+        $edit    = false;
+        $view    = false;
+        $search  = true;
+        $default = trim($default, "'");
+    } elseif (preg_match('/(text|blob)/ui', $type)) {
         $format  = 'json';
         $edit    = false;
         $view    = false;

@@ -1,40 +1,35 @@
-<?php
-
-Layout()->prepend('head.title', 'About');
-
-?>
 <div class="container-fluid p-5 bg-primary text-white text-center">
   <h1>Свершилось!</h1>
-  <p>Я делал-делал и наконец доделал! Абсолютно новый движок, сделанный по принципу "проще -лучше", теперь доступен для
+  <p>Я делал-делал и наконец доделал! Классный движок, сделанный по принципу "чем проще, тем лучше", теперь доступен для
     каждого.</p>
 </div>
 
 <main class="container">
   <div class="my-4">
     <h2 class="text-center">Фишечки</h2>
-    <p class="text-center">Абсолютно новая архитектура движка и отсутствие зависимостей позволяют</p>
+    <p class="text-center">Идеальная архитектура движка и отсутствие внешних зависимостей позволяют реализовать любой функционал быстро и качественно</p>
   </div>
   <div class="row">
     <div class="col-sm-4">
-      <h3>Поддержка PHP 7.2+</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <h3>Поддержка PHP 8.0+</h3>
+      <p>При желании можно и на PHP 7.2, но в новом PHP есть пара удобных штук.</p>
 
       <h3>Простой в установке</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <p>Одна команда, пара настроек и готово!</p>
     </div>
     <div class="col-sm-4">
       <h3>Не требует композера</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Движок самодостаточен. Это особенно актуально в условиях, когда непонятно, кто друг, а кто не очень.</p>
 
       <h3>Супербыстрый</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <p>Здесь нет кэширования. И так всё "летает"!</p>
     </div>
     <div class="col-sm-4">
       <h3>Простой в расширении</h3>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit...</p>
+      <p>Десятки справочников, разнородные права, внешние сервисы? Влезет всё!</p>
 
       <h3>Поддержка шаблонов</h3>
-      <p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris...</p>
+      <p>Простая и эффективная система шаблонов сбережёт ваши нервы.</p>
     </div>
   </div>
 </main>

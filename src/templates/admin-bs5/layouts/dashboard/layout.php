@@ -22,10 +22,10 @@ Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
 <?php echo Layout()->renderIfNotEmpty('body.js.begin') ?>
 
 <div id="brandLink" class="d-none d-md-block border-bottom">
-  <a href="/" class="d-flex align-items-center px-4 pt-3 pb-2 mb-3 link-dark text-decoration-none">
+  <a href="<?=ExternalUrl('@consultant/')?>" class="d-flex align-items-center px-4 pt-3 pb-2 mb-3 link-dark text-decoration-none">
     <span class="fs-5 fw-semibold">
-      <i class="bi bi-tools" style="font-size: 1.2rem"></i>
-      Ap.admin
+      <?=Config()->get('project.logo')?>
+      <?=Config()->get('project.name')?>
     </span>
   </a>
 </div>
@@ -41,8 +41,8 @@ Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
 
       <a href="/" class="d-md-none d-flex align-items-center mx-auto link-dark text-muted text-decoration-none">
         <span class="fs-5 fw-semibold">
-          <i class="bi bi-tools" style="font-size: 1.2rem"></i>
-          Ap.admin
+          <?=Config()->get('project.logo')?>
+          <?=Config()->get('project.name')?>
         </span>
       </a>
 
@@ -82,7 +82,7 @@ if (Layout()->hasVar('additionalmenu') && Layout()->getVar('additionalmenu')->it
 
           <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
             <li class="nav">
-              <a href="mailto:help@example.com?<?=strtr(http_build_query(['subject' => '[Проект] Проблема', 'body' => "Привет,\nУ меня возникли проблемы с [описание проблемы]"]), ['+' => '%20'])?>" class="nav-link"><i class="bi bi-bug me-1"></i>Сообщить о проблеме</a>
+              <a href="mailto:<?=Html(Config()->get('project.help'))?>?<?=strtr(http_build_query(['subject' => '[' . Config()->get('project.name') . '] Проблема', 'body' => "Привет,\nУ меня возникли проблемы с [описание проблемы]"]), ['+' => '%20'])?>" class="nav-link"><i class="bi bi-bug me-1"></i>Сообщить о проблеме</a>
             </li>
 <?php
 if (Layout()->hasVar('usermenu')) {

@@ -94,6 +94,15 @@ class MySql implements DatabaseInterface
         return $this->pdo->quote($data);
     }
 
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function quoteArray($data)
+    {
+        return array_map([$this, 'quote'], (array) $data);
+    }
+
     private function quoteNameAnsi($data)
     {
         return '"' . strtr($data, ['"' => '""', '.' => '"."']) . '"';
@@ -134,5 +143,21 @@ class MySql implements DatabaseInterface
     public function totalTime()
     {
         return $this->totalTime;
+    }
+
+    public function tableExists($tableName)
+    {
+        if (strpos('.', $tableName)) {
+            [$db, $tableName] = explode('.', $tableName, 2);
+            $sql = 'SHOW TABLES FROM ' . $this->quoteName($db) . ' LIKE ' . $this->quote($tableName);
+        } else {
+            $sql = 'SHOW TABLES LIKE ' . $this->quote($tableName);
+        }
+
+        $res = $this->query($sql);
+        $aff = $res->affected();
+        $res->free();
+
+        return boolval($aff);
     }
 }

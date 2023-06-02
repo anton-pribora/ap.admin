@@ -1,10 +1,6 @@
 <?php
 
-use Site\Consultant;
-use Site\LoginRepository;
-
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $consultant Site\Consultant */
 /* @var $password string */
 
 $login    = $this->argument(0);
@@ -14,10 +10,20 @@ $auth     = false;
 if ($login && $password) {
     $identity = Identity();
 
-    // Тестовый логин и пароль
-    if ($login === 'test' && $password === '123') {
-        $identity->setEntry('consultant', 1, 'Test');
-        $auth = true;
+    // Логин по креденшилам
+    foreach (\Project\ProfileCredentialRepository::findMany(['login' => $login]) as $credential) {
+        if ($credential->verifyPassword($password)) {
+            $profile = $credential->profile();
+
+            if ($profile->id() && !$profile->del()) {
+                $credential->setLastLoginTime(date('Y-m-d H:i:s'));
+                $credential->save();
+
+                Identity()->setEntry($profile->type(), $profile->id(), $profile->name());
+                $auth = true;
+                break;
+            }
+        }
     }
 
     if ($auth) {

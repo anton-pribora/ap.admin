@@ -2,13 +2,15 @@
 
 UrlAlias()->set('@root' , '/');
 UrlAlias()->set('@root/', '/');
+UrlAlias()->set('@webroot', '@root');
 
 PathAlias()->set('@root'   , ROOT_DIR);
 PathAlias()->set('@webroot', Config()->get('server.webroot'));
 
-UrlAlias()->set('@cdn'  , '@root/cdn');
-UrlAlias()->set('@asseturl'  , '@root/asset');
-PathAlias()->set('@assetpath', '@webroot/asset');
+UrlAlias()->set('@cdn'         , '@root/cdn');
+UrlAlias()->set('@asseturl'    , '@root/asset');
+PathAlias()->set('@assetpath'  , '@webroot/asset');
+PathAlias()->set('@permissions', '@root/permissions');
 
 PathAlias()->set('@modules'  , '@root/modules');
 PathAlias()->set('@templates', '@root/templates');
@@ -30,8 +32,7 @@ PathAlias()->set('@pagination', '@extra/pagination.php');
 PathAlias()->set('@code'      , '@extra/code.php');
 PathAlias()->set('@totalFound', '@extra/totalFound.php');
 
-PathAlias()->set('@uploads', '@root/uploads');
-UrlAlias()->set('@uploads', '@root/uploads');
+PathAlias()->set('@files', '@root/files');
 
 PathAlias()->set('@thumbnails', '@webroot/thumbnails');
 UrlAlias()->set('@thumbnails' , '@root/thumbnails');

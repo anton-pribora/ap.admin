@@ -2,14 +2,20 @@
 
 /* @var $this ApCode\Executor\RuntimeInterface */
 
-$login    = trim(Request()->get('login'));
-$password = Request()->get('password');
+// Авторизация для тех, кто использует апи
+if (($_SERVER["HTTP_ACCEPT"] ?? false) && preg_match('/json/i', $_SERVER['HTTP_ACCEPT'])) {
+    ReturnJsonError('Требуется авторизация', 'unauthorized');
+}
+
+$login    = trim(Request()->get('login', ''));
+$password = Request()->get('password', '');
 
 if ($login && $password) {
     if ($this->execute('authenticate.php', $login, $password)) {
         Redirect(FullUrl(Request()->uri(), ['forcelogin' => null]));
     } else {
-        Layout()->append('body.alerts', '<b>Error</b>: Wrong login or password', 'danger');
+        Layout()->append('body.alerts', 'Ошибка: Указан неверный логин или пароль', 'danger');
+        sleep(2);
     }
 }
 
@@ -18,7 +24,7 @@ if (Request()->has('widget_action')) {
 }
 
 Layout()->remove('head.title');
-Layout()->append('head.title', 'Login please');
+Layout()->append('head.title', 'Необходима аутентификация');
 
 Layout()->setVar('login'   , $login);
 Layout()->setVar('password', $password);

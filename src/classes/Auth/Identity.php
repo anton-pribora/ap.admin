@@ -2,11 +2,14 @@
 
 namespace Auth;
 
+use Project\ProfileRepository;
+
 class Identity
 {
     private $activeEntryId;
     private $activeEntryName;
     private $activeEntryType;
+    private $activeEntryObject;
 
     private $entries = [];
 
@@ -15,17 +18,36 @@ class Identity
         $this->entries[$type] = [$id, $name];
     }
 
-    public function require($type)
+    public function getEntry($type)
     {
-        if (isset($this->entries[$type])) {
-            $this->activeEntryType = $type;
-            [$this->activeEntryId, $this->activeEntryName] = $this->entries[$type];
-            $this->{$type .'Id'} = $this->activeEntryId;
+        return $this->entries[$type] ?? null;
+    }
 
-            return true;
+    public function require($types)
+    {
+        $this->activeEntryId     = null;
+        $this->activeEntryType   = null;
+        $this->activeEntryName   = null;
+        $this->activeEntryObject = null;
+
+        foreach ((array) $types as $type) {
+            if (isset($this->entries[$type])) {
+                // Подгружаем объекты в зависимости от типа
+                $this->activeEntryObject = match ($type) {
+                    'consultant' => ProfileRepository::findOne(['id' => $this->entries[$type][0] ?: PHP_INT_MIN]),
+                    'console'    => ConsoleBot::getInstance(),
+                };
+
+                if ($this->activeEntryObject) {
+                    $this->activeEntryType = $type;
+                    $this->activeEntryId   = $this->entries[$type][0];
+                    $this->activeEntryName = $this->entries[$type][1];
+                    break;
+                }
+            }
         }
 
-        return false;
+        return (bool) $this->activeEntryObject;
     }
 
     public function getName()
@@ -40,7 +62,7 @@ class Identity
 
     public function getActiveEntry()
     {
-        return $this->entries[$this->activeEntryType] ?? null;
+        return $this->activeEntryObject;
     }
 
     public function logout()
@@ -52,7 +74,13 @@ class Identity
 
     public function getPermit($section, ...$params)
     {
-        return Module('permissions')->execute("{$this->activeEntryType}.{$section}", $this->getActiveEntry(), ...$params);
+        $action = "{$this->activeEntryType}.{$section}";
+
+        if (Module('permissions')->canExecute($action)) {
+            return Module('permissions')->execute($action, $this->getActiveEntry(), ...$params);
+        }
+
+        return null;
     }
 
     public function valid()

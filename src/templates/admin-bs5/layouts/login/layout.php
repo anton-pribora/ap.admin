@@ -2,57 +2,98 @@
 
 $public = Asset('@layout/public/');
 
+Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<?php echo Layout()->renderIfNotEmpty('head.title')?>
-<?php echo Layout()->renderIfNotEmpty('head.metas')?>
-<?php echo Layout()->renderIfNotEmpty('head.html')?>
-<?php echo Layout()->renderIfNotEmpty('head.css.links')?>
-<?php echo Layout()->renderIfNotEmpty('head.js.links')?>
-<?php echo Layout()->renderIfNotEmpty('head.css.code')?>
-<?php echo Layout()->renderIfNotEmpty('head.js.code')?>
+  <?php echo Layout()->renderIfNotEmpty('head.title') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.metas') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.html') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.css.links') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.js.links') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.css.code') ?>
+  <?php echo Layout()->renderIfNotEmpty('head.js.code') ?>
 </head>
 
-<body class="bg-secondary" style="background-image: url('<?=$public?>/img/login-bg.webp')">
-<?php echo Layout()->renderIfNotEmpty('body.css.code')?>
+<body class="bg-light" style="background-image: url('<?= $public ?>/img/login-bg.webp')">
+<?php echo Layout()->renderIfNotEmpty('body.css.code') ?>
 
-  <div class="modal-dialog modal-lg shadow-lg" role="document">
-    <div class="modal-content rounded-6 shadow">
-      <div class="modal-header border-bottom-0">
-        <h4 class="modal-title">Sign in please</h4>
-      </div>
-      <div class="modal-body pt-0 pb-4">
-        <div class="d-flex flex-row">
-          <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
-               class="bi bi-shield-lock text-secondary" viewBox="0 0 16 16">
-            <path
-              d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
-            <path
-              d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z"/>
-          </svg>
-          <div class="w-100 px-3">
-            <form action="" method="post">
-              <?php echo Layout()->renderIfNotEmpty('body.alerts')?>
-              <div class="mb-3">
-                <label for="inputLogin" class="form-label">Login</label>
-                <input type="text" name="login" class="form-control" id="inputLogin" value="<?php echo Html(Layout()->getVar('login'))?>">
+<div class="modal position-static d-block mt-2 mt-sm-0">
+<div class="modal-dialog shadow-lg" role="document" id="content">
+  <div class="modal-content rounded-6 shadow">
+    <div class="modal-header border-bottom-0">
+      <h4 class="modal-title">Необходима аутентификация</h4>
+    </div>
+    <div class="modal-body pt-0 pb-4">
+      <div class="d-flex flex-row">
+        <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
+             class="bi bi-shield-lock d-none d-sm-block text-secondary" viewBox="0 0 16 16">
+          <path
+            d="M5.338 1.59a61.44 61.44 0 0 0-2.837.856.481.481 0 0 0-.328.39c-.554 4.157.726 7.19 2.253 9.188a10.725 10.725 0 0 0 2.287 2.233c.346.244.652.42.893.533.12.057.218.095.293.118a.55.55 0 0 0 .101.025.615.615 0 0 0 .1-.025c.076-.023.174-.061.294-.118.24-.113.547-.29.893-.533a10.726 10.726 0 0 0 2.287-2.233c1.527-1.997 2.807-5.031 2.253-9.188a.48.48 0 0 0-.328-.39c-.651-.213-1.75-.56-2.837-.855C9.552 1.29 8.531 1.067 8 1.067c-.53 0-1.552.223-2.662.524zM5.072.56C6.157.265 7.31 0 8 0s1.843.265 2.928.56c1.11.3 2.229.655 2.887.87a1.54 1.54 0 0 1 1.044 1.262c.596 4.477-.787 7.795-2.465 9.99a11.775 11.775 0 0 1-2.517 2.453 7.159 7.159 0 0 1-1.048.625c-.28.132-.581.24-.829.24s-.548-.108-.829-.24a7.158 7.158 0 0 1-1.048-.625 11.777 11.777 0 0 1-2.517-2.453C1.928 10.487.545 7.169 1.141 2.692A1.54 1.54 0 0 1 2.185 1.43 62.456 62.456 0 0 1 5.072.56z"/>
+          <path
+            d="M9.5 6.5a1.5 1.5 0 0 1-1 1.415l.385 1.99a.5.5 0 0 1-.491.595h-.788a.5.5 0 0 1-.49-.595l.384-1.99a1.5 1.5 0 1 1 2-1.415z"/>
+        </svg>
+        <div class="w-100 px-3">
+          <?php echo Layout()->renderIfNotEmpty('body.alerts') ?>
+
+          <div class="card">
+            <div class="card-body">
+
+          <form action="" method="post" class="mt-3">
+            <div class="mb-3 row">
+              <label for="inputLogin" class="form-label col-sm-3">Логин</label>
+              <div class="col-sm-9">
+                <input type="text" name="login" class="form-control col" id="inputLogin"
+                       value="<?php echo Html(Layout()->getVar('login')) ?>">
               </div>
-              <div class="mb-3">
-                <label for="inputPassword" class="form-label">Password</label>
-                <input type="password" name="password" class="form-control" id="inputPassword">
+            </div>
+            <div class="mb-3 row">
+              <label for="inputPassword" class="form-label col-sm-3">Пароль</label>
+              <div class="col-sm-9">
+                <input type="password" name="password" class="form-control" id="inputPassword" autocomplete="current-password">
               </div>
-              <button type="submit" class="btn btn-lg btn-primary w-100">Submit</button>
-            </form>
+            </div>
+            <div class="mb-2 row">
+              <div class="col-sm-3"></div>
+              <div class="col-sm-9">
+                <button type="submit" class="btn btn-primary w-100" onclick="addLoader(this, 'light', 'sm')">
+                  <i class="bi bi-box-arrow-in-right"></i>
+                  Войти
+                </button>
+              </div>
+            </div>
+          </form>
+
+            </div>
           </div>
+
         </div>
       </div>
     </div>
   </div>
+</div>
+</div>
 
-<?php echo Layout()->renderIfNotEmpty('body.js.links')?>
-<?php echo Layout()->renderIfNotEmpty('body.js.code')?>
+<script>
+  function addLoader(e, color, size) {
+    if (!e.dataset.loading) {
+      e.dataset.loading = true;
+      const div = document.createElement('div');
+      div.className = `spinner-border ms-1 text-${color || 'primary'} spinner-border-${size || 'sm'}`;
+      e.appendChild(div);
+    }
+  }
+</script>
 
+<?php echo Layout()->renderIfNotEmpty('body.content.end') ?>
+<?php echo Layout()->renderIfNotEmpty('body.js.links') ?>
+<?php echo Layout()->renderIfNotEmpty('body.js.code') ?>
+<script>
+  if (typeof(app) !== 'undefined' && app.mount) {
+    app.mount('#content');
+  }
+</script>
 </body>
 </html>

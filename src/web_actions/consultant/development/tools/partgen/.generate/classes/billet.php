@@ -34,6 +34,7 @@ $namespace = new PhpNamespace($nname);
 $primaryClass = $namespace->createClass($cname);
 $primaryClass->addExtension($billetAbstract);
 $primaryClass->addImplementation($urlAssetInterface);
+$primaryClass->addTrait('History');
 $primaryClass->style()->setOption('function.phpdoc', false);
 
 $primaryClass->addDescription($name);
@@ -67,6 +68,7 @@ foreach ($fields as $dbField => $field) {
             $default = new PhpValueRawCode('function() { return date(DATE_ATOM); }');
             break;
 
+        case 'meta':
         case 'json':
             $encoder = 'json_encode_array';
             $decoder = 'json_decode_array';
@@ -81,6 +83,10 @@ foreach ($fields as $dbField => $field) {
         'decode'  => $decoder,
         'default' => $default,
     ];
+
+    if ($field['format']) {
+        $primaryClass->addTrait('Meta');
+    }
 
     // Getter
     $primaryClass->createFunction($field['getter'])

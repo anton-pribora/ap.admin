@@ -32,6 +32,10 @@ $params = [];
 
 $menu = [];
 
+$menu = [
+    Module('project')->execute('history/button.php', ['section' => {billet}::historySection(), 'viewAll' => true]),
+];
+
 if (Identity()->getPermit('{$recordKey}.add')) {
     $menu[] = new A(new UnescapedText(Icons()->get('add') . 'Добавить запись'), ShortUrl(__dir('new/')));
 }
@@ -46,6 +50,7 @@ Template()->render('@pagination', $pagination);
 PHP;
 
 $data = strtr($data, [
+    '{billet}'           => $this->param('part.billet'),
     "['searchParams']"   => (new PhpValueArray($searchParams))->render('    '),
     'Project\Repository' => $this->param('part.repository'),
     '{$recordKey}'       => $this->param('part.key'),

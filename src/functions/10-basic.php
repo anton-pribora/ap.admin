@@ -20,6 +20,77 @@ function json_decode_array($data) {
     return json_decode($data, true);
 }
 
+function set_request_extra_info($text) {
+    $_SERVER['REQUEST_URI'] .= '#' . (is_string($text) ? $text : json_encode_array($text));
+}
+
+function ssl_encode($data) {
+    if (Config()->get('project.salt')) {
+        trigger_error('Необходимо задать настройку project.salt случайной строкой', E_USER_WARNING);
+        Config()->set('project.salt', md5(date('Ymd')));
+    }
+
+    $key        = Config()->get('project.salt');
+    $plainText  = json_encode_array($data);
+    $ivlen      = openssl_cipher_iv_length($cipher = "AES-128-CBC");
+    $iv         = openssl_random_pseudo_bytes($ivlen);
+    $cipherText = openssl_encrypt($plainText, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    $hmac       = hash_hmac('sha256', $cipherText, $key, true);
+
+    return base64_encode( $iv . $hmac . $cipherText );
+}
+
+function ssl_decode($base64) {
+    if (Config()->get('project.salt')) {
+        trigger_error('Необходимо задать настройку project.salt случайной строкой', E_USER_WARNING);
+        Config()->set('project.salt', md5(date('Ymd')));
+    }
+
+    $key        = Config()->get('project.salt');
+    $c          = base64_decode($base64);
+    $ivlen      = openssl_cipher_iv_length($cipher = "AES-128-CBC");
+    $iv         = substr($c, 0, $ivlen);
+    $hmac       = substr($c, $ivlen, $sha2len=32);
+    $cipherText = substr($c, $ivlen + $sha2len);
+    $plainText  = openssl_decrypt($cipherText, $cipher, $key, OPENSSL_RAW_DATA, $iv);
+    $calcmac    = hash_hmac('sha256', $cipherText, $key, true);
+
+    if (hash_equals($hmac, $calcmac)) {
+        return json_decode_array($plainText);
+    }
+
+    return null;
+}
+
+/**
+ * Форматирование даты в локальной локали
+ *
+ * @link https://www.php.net/manual/en/intldateformatter.create.php
+ * @link https://unicode-org.github.io/icu/userguide/format_parse/datetime/
+ *
+ * @param $format
+ * @param $time
+ * @param $timezone
+ * @return string
+ */
+function intl_date($format, $time = null, $timezone = null, $locale = null)
+{
+    $fmt = datefmt_create(
+        $locale ?? 'ru_RU',
+        IntlDateFormatter::FULL,
+        IntlDateFormatter::FULL,
+        $timezone ?? date_default_timezone_get(),
+        IntlDateFormatter::GREGORIAN,
+        $format
+    );
+
+    if (is_int($time)) {
+        $time = date('c', $time);
+    }
+
+    return $fmt->format($time instanceof DateTime ? $time : new DateTime(strtr($time ?? 'now', ['0000' => date('Y')])));
+}
+
 function activateUrls($text, $maxLen = 40) {
     $re = [
         '(https?://[^\s)]+)',

@@ -1,13 +1,19 @@
 <?php
 
 Config()->setup([
+    'project' => [
+        'name' => 'Ap.admin2',
+        'logo' => '<i class="bi bi-tools" style="font-size: 1.3rem;"></i>',
+        'help' => 'help@example.com',
+    ],
+
     'server' => [
         'webroot'    => '@root/web_docroot',
         'webactions' => '@root/web_actions',
     ],
 
     'db' => [
-        'dsn'      => 'mysql:dbname=basesystem;host=localhost;charset=utf8',
+        'dsn'      => 'mysql:dbname=ap_admin2;host=localhost;charset=utf8',
         'login'    => 'test',
         'password' => 'test',
     ],
@@ -28,7 +34,7 @@ Config()->setup([
         '_SERVER' => [
             'HTTPS'       => 'on',
             'SERVER_PORT' => '443',
-            'SERVER_NAME' => 'admin.pribora.info',
+            'SERVER_NAME' => 'ap.admin2',
             'REQUEST_URI' => '/',
         ],
     ],
