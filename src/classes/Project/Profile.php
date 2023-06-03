@@ -26,7 +26,7 @@ class Profile extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
 
         switch ("$scope:$key") {
-            case 'admin:url.view' : return ShortUrl('@consultant/profiles/one/', ['profile_id' => $this->id()]);
+            case 'admin:url.view' : return ShortUrl('@consultant/administration/profiles/one/', ['profile_id' => $this->id()]);
 
             case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без имени)'), $this->urlAsset('url.view', $params), $param('title')));
         }
@@ -46,5 +46,16 @@ class Profile extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\
             'post'         => $this->post(),
             'del'          => $this->del()
         ];
+    }
+
+    public function name()
+    {
+        return $this->data['name'] ?? null;
+    }
+
+    public function setName($value)
+    {
+        $this->data['name'] = $value;
+        return $this;
     }
 }

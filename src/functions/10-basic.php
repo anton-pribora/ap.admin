@@ -25,7 +25,7 @@ function set_request_extra_info($text) {
 }
 
 function ssl_encode($data) {
-    if (Config()->get('project.salt')) {
+    if (!Config()->get('project.salt')) {
         trigger_error('Необходимо задать настройку project.salt случайной строкой', E_USER_WARNING);
         Config()->set('project.salt', md5(date('Ymd')));
     }
@@ -41,7 +41,7 @@ function ssl_encode($data) {
 }
 
 function ssl_decode($base64) {
-    if (Config()->get('project.salt')) {
+    if (!Config()->get('project.salt')) {
         trigger_error('Необходимо задать настройку project.salt случайной строкой', E_USER_WARNING);
         Config()->set('project.salt', md5(date('Ymd')));
     }

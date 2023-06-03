@@ -7,6 +7,8 @@ namespace Project;
  */
 class Role extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\UrlAssetInterface
 {
+    use History;
+
     public function id()
     {
         return $this->data['id'] ?? null;
@@ -68,7 +70,7 @@ class Role extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
 
         switch ("$scope:$key") {
-            case 'admin:url.view' : return ShortUrl('@consultant/roles/one/', ['role_id' => $this->id()]);
+            case 'admin:url.view' : return ShortUrl('@consultant/administration/roles/one/', ['role_id' => $this->id()]);
 
             case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без названия)'), $this->urlAsset('url.view', $params), $param('title')));
         }

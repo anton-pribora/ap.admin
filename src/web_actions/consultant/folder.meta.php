@@ -11,6 +11,10 @@ return [
             ['text' => 'Пустая страница', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/blank.php')],
             ['text' => 'Страница с текстом', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/text.php')],
         ]],
+        ['text' => 'Администрирование', 'visible' => $visible('administration'), 'url' => ShortUrl('@consultant/examples/'), 'submenu' => [
+            ['text' => 'Пользователи', 'url' => ShortUrl('@consultant/administration/profiles/')],
+            ['text' => 'Роли', 'url' => ShortUrl('@consultant/administration/roles/')],
+        ]],
         ['text' => 'Инструменты', 'visible' => $visible('tools'), 'url' => ShortUrl('@consultant/tools/'), 'submenu' => [
             ['text' => 'Генератор разделов', 'visible' => $visible('tools'), 'url' => ShortUrl(__dir('development/tools/partgen/'))],
             ['text' => 'Генератор виджетов', 'visible' => $visible('tools'), 'url' => ShortUrl(__dir('development/tools/widgetgen/'))],

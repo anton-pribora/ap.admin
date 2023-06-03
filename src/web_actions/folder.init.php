@@ -7,7 +7,7 @@ PathAlias()->set('~/', '@views/');
 
 Url()->setAlias(__DIR__ . '/', '@root/');
 
-Layout()->prepend('head.title', 'Ap.Admin');
+Layout()->prepend('head.title', Config()->get('project.name'));
 
 foreach (Meta(__DIR__)->get('menu', []) as $row) {
     $link = new A($row['text'], $row['url']);
