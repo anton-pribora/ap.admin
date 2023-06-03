@@ -22,6 +22,7 @@ $props[] = ['Фамилия'              , $data['name']['last'    ] ?? '', [$r
 $props[] = ['Отчество'             , $data['name']['middle'  ] ?? '', [$record, 'middleName'     ], [$record, 'setMiddleName'     ], $defaultFormat];
 $props[] = ['Должность'            , $data['post']             ?? '', [$record, 'post'           ], [$record, 'setPost'           ], $defaultFormat];
 $props[] = ['Контакты'             , $data['contacts']         ?? '', [$record, 'contactsRaw'    ], [$record, 'setContactsRaw'    ], $defaultFormat];
+$props[] = ['Заметки'              , $data['comment']          ?? '', [$record, 'comment'        ], [$record, 'setComment'        ], $defaultFormat];
 
 $changes = [];
 
