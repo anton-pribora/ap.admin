@@ -16,7 +16,7 @@ app.component('{$editDialogComponent}', {
   }),
   methods: {
     show(e) {
-      this.data = {...e}
+      this.data = this.$clone(e);
       this._dirty = undefined;
 
       return new Promise((resolve) => {
