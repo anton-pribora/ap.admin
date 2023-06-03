@@ -91,7 +91,7 @@ function intl_date($format, $time = null, $timezone = null, $locale = null)
     return $fmt->format($time instanceof DateTime ? $time : new DateTime(strtr($time ?? 'now', ['0000' => date('Y')])));
 }
 
-function activateUrls($text, $maxLen = 40) {
+function activate_urls($text, $maxLen = 40) {
     $re = [
         '(https?://[^\s)]+)',
         '(\w[\w.-]*@[\w.-]*\w)',

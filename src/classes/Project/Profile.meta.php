@@ -39,12 +39,5 @@ return [
             'decode'  => NULL,
             'default' => '0',
         ],
-        'name' => [
-            'field'   => 'name',
-            'title'   => 'name',
-            'encode'  => NULL,
-            'decode'  => NULL,
-            'default' => NULL,
-        ],
     ],
 ];

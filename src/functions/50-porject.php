@@ -26,3 +26,37 @@ function __path_to_permission($fullpath)
        '/'                              => '.'  // заменяем слэши на точки
     ]), '.');
 }
+
+function text_udiff($oldText, $newText) {
+    $cmd = sprintf('diff -u2 <(echo %s) <(echo %s) | tail -n +3', escapeshellarg($oldText), escapeshellarg($newText));
+    return shell_exec('bash -c ' . escapeshellarg($cmd));
+}
+
+function contactsToList($contacts) {
+    $result = [];
+
+    foreach ((array) $contacts as $row) {
+        $extra = [];
+        if ($row['primary'] ?? null) {
+            $extra[] = 'основной контакт';
+        }
+
+        $type    = trim($row['type'] ?? '');
+        $comment = trim($row['comment'] ?? '');
+        $value   = trim($row['value'] ?? '');
+
+        if ($comment) {
+            $extra[] = $comment;
+        }
+
+        $extra = join(', ', $extra);
+
+        if ($extra) {
+            $extra = '- ' . $extra;
+        }
+
+        $result[] = trim(":{$type}: {$value} {$extra}");
+    }
+
+    return join(PHP_EOL, $result);
+}

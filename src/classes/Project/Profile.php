@@ -8,6 +8,7 @@ namespace Project;
 class Profile extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\UrlAssetInterface
 {
     use Meta,
+        Contacts,
         ProfileProps,
         Files,
         Roles,
@@ -51,12 +52,6 @@ class Profile extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\
 
     public function name()
     {
-        return $this->data['name'] ?? null;
-    }
-
-    public function setName($value)
-    {
-        $this->data['name'] = $value;
-        return $this;
+        return $this->fullName();
     }
 }

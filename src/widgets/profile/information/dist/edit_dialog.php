@@ -4,6 +4,8 @@
 /* @var $record Project\Profile */
 
 RequireLib('vue3');
+RequireLib('toast');
+RequireLib('project/contacts');
 
 Layout()->append('body.js.code', file_get_contents(__dir('edit_controller.js')));
 
@@ -21,15 +23,47 @@ Layout()->startGrab('body.content.end');
             </div>
             <div class="modal-body">
               <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">Тип профиля</label>
+                <label class="col-sm-2 col-form-label">ФИО</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" v-model="data.type">
+                  <div class="row">
+                    <div class="col">
+                      <div class="form-floating">
+                        <input type="text" class="form-control" v-model="data.name.last" id="name.last">
+                        <label for="name.last">Фамилия</label>
+                      </div>
+                    </div>
+                    <div class="col">
+                    <div class="form-floating">
+                      <input type="text" class="form-control" v-model="data.name.first" id="name.first">
+                      <label for="name.first">Имя</label>
+                    </div>
+                    </div>
+                     <div class="col">
+                   <div class="form-floating">
+                      <input type="text" class="form-control" v-model="data.name.middle" id="name.middle">
+                      <label for="name.middle">Отчество</label>
+                    </div>
+                    </div>
+                  </div>
                 </div>
               </div>
+
               <div class="mb-3 row">
-                <label class="col-sm-2 col-form-label">name</label>
+                <label class="col-sm-2 col-form-label">Должность</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" v-model="data.name">
+                  <input type="text" class="form-control" v-model="data.post">
+                </div>
+              </div>
+
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Контакты</label>
+                <div class="col-sm-10"><contacts-edit :list="data.contacts" @change="onChange"/></div>
+              </div>
+
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Заметки</label>
+                <div class="col-sm-10">
+                  <textarea class="form-control" v-model="data.comment"></textarea>
                 </div>
               </div>
             </div>

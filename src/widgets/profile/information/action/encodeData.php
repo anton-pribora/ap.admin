@@ -7,6 +7,13 @@ $record = $this->argument();
 
 return [
     'id'   => $record->id(),
-    'type' => $record->type(),
-    'name' => $record->name(),
+    'name' => [
+        'first'  => $record->firstName(),
+        'last'   => $record->lastName(),
+        'middle' => $record->middleName(),
+        'full'   => $record->fullName(),
+    ],
+    'post'     => $record->post(),
+    'contacts' => $record->contactsRaw(),
+    'comment'  => $record->comment(),
 ];

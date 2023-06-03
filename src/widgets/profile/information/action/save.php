@@ -17,8 +17,11 @@ $defaultFormat = static fn($v) => $v;
 // Изменяемые свойства
 $props = [];
 
-$props[] = ['Тип профиля', $data['type'] ?? '', [$record, 'type'], [$record, 'setType'], $defaultFormat];
-$props[] = ['name', $data['name'] ?? '', [$record, 'name'], [$record, 'setName'], $defaultFormat];
+$props[] = ['Имя'                  , $data['name']['first'   ] ?? '', [$record, 'firstName'      ], [$record, 'setFirstName'      ], $defaultFormat];
+$props[] = ['Фамилия'              , $data['name']['last'    ] ?? '', [$record, 'lastName'       ], [$record, 'setLastName'       ], $defaultFormat];
+$props[] = ['Отчество'             , $data['name']['middle'  ] ?? '', [$record, 'middleName'     ], [$record, 'setMiddleName'     ], $defaultFormat];
+$props[] = ['Должность'            , $data['post']             ?? '', [$record, 'post'           ], [$record, 'setPost'           ], $defaultFormat];
+$props[] = ['Контакты'             , $data['contacts']         ?? '', [$record, 'contactsRaw'    ], [$record, 'setContactsRaw'    ], $defaultFormat];
 
 $changes = [];
 
@@ -30,7 +33,11 @@ foreach ($props as [$prop, $new, $getter, $setter, $format]) {
 
         if ($diff) {
             $setter($new);
-            $changes[] = 'Изменено поле «<b>' . $prop . '</b>»: <ul><li>' . join('</li><li>', \Data\ArrayUtils::changesToTextArray($diff)) . '</li></ul>';
+            if ($prop === 'Контакты') {
+                $changes[] = 'Изменено поле «<b>' . $prop . '</b>»: <pre class="diff">' . Html(text_udiff(contactsToList($old), contactsToList($new))) . '</pre>';
+            } else {
+                $changes[] = 'Изменено поле «<b>' . $prop . '</b>»: <ul><li>' . join('</li><li>', \Data\ArrayUtils::changesToTextArray($diff)) . '</li></ul>';
+            }
         }
     } elseif ($old != $new) {
         $setter($new);
@@ -40,7 +47,7 @@ foreach ($props as [$prop, $new, $getter, $setter, $format]) {
 
 if ($changes) {
     $record->save();
-    $record->addHistory('В запись <b>' . $record->name() . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
+    $record->addHistory('В сотрудника <b data-profile>' . $record->fullName() . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
 }
 
 $this->include('data.php');

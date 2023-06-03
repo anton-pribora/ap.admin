@@ -9,6 +9,7 @@ $enableEdit = $this->param('enableEdit');
 RequireLib('vue3');
 RequireLib('toast');
 RequireLib('confirm');
+RequireLib('project/contacts');
 
 if ($enableEdit) {
     $this->include(__dir('edit_dialog.php'));
@@ -46,12 +47,20 @@ Layout()->startGrab('body.content.end');
       <table class="table mb-0 table-sm">
         <tbody>
           <tr>
-            <td class="px-3 col-md-4 col-lg-3">Тип профиля</td>
-            <td class="px-3">{{data.type}}</td>
+            <td class="px-3 col-md-4 col-lg-3">Имя</td>
+            <td class="px-3">{{data.name.full}}</td>
           </tr>
           <tr>
-            <td class="px-3 col-md-4 col-lg-3">name</td>
-            <td class="px-3">{{data.name}}</td>
+            <td class="px-3">Должность</td>
+            <td class="px-3">{{data.post}}</td>
+          </tr>
+          <tr>
+            <td class="px-3">Контакты</td>
+            <td class="px-3"><contacts-view :list="data.contacts" /></td>
+          </tr>
+          <tr>
+            <td class="px-3">Заметки</td>
+            <td class="px-3" style="white-space: pre-wrap">{{data.comment}}</td>
           </tr>
         </tbody>
       </table>

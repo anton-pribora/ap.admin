@@ -76,6 +76,19 @@ ol, ul {
 }
 CSS);
 
+$replaceIcons = function ($text) {
+    $icons = Module('misc')->execute('lib/project/contacts/icons.php');
+
+    unset($icons['default']);
+    $re = [];
+
+    foreach ($icons as $type => $icon) {
+        $re[":{$type}:"] = $icon;
+    }
+
+    return strtr($text, $re);
+};
+
 $hl = function ($text) {
     return preg_replace_callback('~<pre class="u?diff">([\s\S]+)</pre>~', function ($matches) {
         return '<pre class="diff">' . preg_replace(['~^\+.*~m', ' ~^-.*~m'], ['<span class="w-75 fw-bold d-inline-block" style="background-color: #dfe">$0</span>', '<span class="w-75 fw-bold d-inline-block" style="background-color: #fdd">$0</span>'], $matches[1]) . '</pre>';
@@ -97,7 +110,7 @@ foreach ($rows as $row) {
 ?>
   <tr>
     <td><?=$date?> <span class="text-muted small ms-2"><?=$time?>&nbsp;<?=(new DateTime())->format('T')?></span></td>
-    <td><?=$hl($row['text'])?></td>
+    <td><?=$hl($replaceIcons($row['text']))?></td>
   </tr>
 <?php } ?>
 </table>

@@ -111,4 +111,15 @@ trait ProfileProps
     {
         return File::getInstance($this->photoId());
     }
+
+    public function comment()
+    {
+        return $this->meta('comment');
+    }
+
+    public function setComment($value)
+    {
+         $this->setMeta('comment', $value);
+         return $this;
+    }
 }
