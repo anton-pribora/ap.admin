@@ -47,7 +47,7 @@ foreach ($props as [$prop, $new, $getter, $setter, $format]) {
 
 if ($changes) {
     $record->save();
-    $record->addHistory('В сотрудника <b data-profile>' . $record->fullName() . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
+    $record->addHistory('В пользователя <b data-profile>' . $record->fullName() . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
 }
 
 $this->include('data.php');
