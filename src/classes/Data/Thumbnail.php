@@ -30,10 +30,20 @@ class Thumbnail implements \JsonSerializable
         return $this->path;
     }
 
+    public function shortUrl()
+    {
+        return (string) ShortUrl($this->path, [], true);
+    }
+
+    public function fullPath()
+    {
+        return ExpandPath($this->path);
+    }
+
     public function jsonSerialize(): array
     {
         return [
-            'path'   => $this->path(),
+            'url'    => $this->shortUrl(),
             'width'  => $this->width(),
             'height' => $this->height(),
         ];

@@ -11,7 +11,7 @@ $parentId   = $this->param('parentId');
 $source     = $this->param('path');
 $name       = $this->param('name');
 $mime       = $this->param('mime');
-$group      = $this->param('group', 'thumbnail');
+$subFolder  = $this->param('subFolder');
 
 $image = new Image($source);
 
@@ -26,11 +26,10 @@ if (empty($mime)) {
 $file = new File();
 $file->setName($name);
 $file->setMime($mime);
-$file->setGroup($group);
 $file->setParentType($parentType);
 $file->setParentId($parentId);
 
-$file->makePath();
+$file->makePath($subFolder);
 
 $dest   = $file->fullPath();
 $folder = dirname($dest);
@@ -51,8 +50,8 @@ chmod($dest, 0644);
 
 $sizes = [
     'small'  => [100, true],
-    'medium' => [350, false],
-    'big'    => [600, false],
+    'medium' => [400, false],
+    'big'    => [900, false],
     'source' => [PHP_INT_MAX, false],
 ];
 

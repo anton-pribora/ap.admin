@@ -2,7 +2,7 @@
 
 namespace Project;
 
-use ApCode\Web\Pagination;
+use ApCode\Misc\Pagination;
 
 class FileRepository
 {
@@ -72,6 +72,10 @@ class FileRepository
     {
         $sql = 'DELETE FROM ' . Db()->quoteName($item::tableName()) . ' WHERE `id` = ?';
         Db()->query($sql, [$item->billetId()]);
+
+        if (is_file($item->fullPath())) {
+            unlink($item->fullPath());
+        }
     }
 
     private static function buildWhere(&$params)
@@ -83,21 +87,6 @@ class FileRepository
             unset($params['id']);
         }
 
-        if (isset($params['guid'])) {
-            $where[] = '`guid` = ' . Db()->quote($params['guid']);
-            unset($params['guid']);
-        }
-
-        if (isset($params['group'])) {
-            $where[] = '`group` = ' . Db()->quote($params['group']);
-            unset($params['group']);
-        }
-
-        if (isset($params['name'])) {
-            $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
-            unset($params['name']);
-        }
-
         if (isset($params['parentType'])) {
             $where[] = '`parent_type` = ' . Db()->quote($params['parentType']);
             unset($params['parentType']);
@@ -106,6 +95,31 @@ class FileRepository
         if (isset($params['parentId'])) {
             $where[] = '`parent_id` = ' . Db()->quote($params['parentId']);
             unset($params['parentId']);
+        }
+
+        if (isset($params['public'])) {
+            $where[] = '`public` = ' . Db()->quote($params['public']);
+            unset($params['public']);
+        }
+
+        if (isset($params['guid'])) {
+            $where[] = '`guid` = ' . Db()->quote($params['guid']);
+            unset($params['guid']);
+        }
+
+        if (isset($params['mime'])) {
+            $where[] = '`mime` = ' . Db()->quote($params['mime']);
+            unset($params['mime']);
+        }
+
+        if (isset($params['name'])) {
+            $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
+            unset($params['name']);
+        }
+
+        if (isset($params['path'])) {
+            $where[] = '`path` = ' . Db()->quote($params['path']);
+            unset($params['path']);
         }
 
         return $where;

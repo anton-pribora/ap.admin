@@ -113,7 +113,7 @@ class ProfileRepository
         }
 
         if (isset($params['name'])) {
-            $where[] = '(`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
+            $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
             unset($params['name']);
         }
 

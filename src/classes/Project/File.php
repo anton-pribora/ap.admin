@@ -2,14 +2,21 @@
 
 namespace Project;
 
-use ApCode\Html\Element\A;
 use Data\Thumbnail;
 
 /**
- * Файлы
+ * (Без названия)
  */
 class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\UrlAssetInterface
 {
+    use Meta;
+
+    public function makeGuid()
+    {
+        $this->setGuid(substr(sha1(random_bytes(16)), 0, 10));
+        return $this;
+    }
+
     public function id()
     {
         return $this->data['id'] ?? null;
@@ -18,50 +25,6 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
     public function setId($value)
     {
         $this->data['id'] = $value;
-        return $this;
-    }
-
-    public function guid()
-    {
-        return $this->data['guid'] ?? null;
-    }
-
-    public function setGuid($value)
-    {
-        $this->data['guid'] = $value;
-        return $this;
-    }
-
-    public function group()
-    {
-        return $this->data['group'] ?? null;
-    }
-
-    public function setGroup($value)
-    {
-        $this->data['group'] = $value;
-        return $this;
-    }
-
-    public function path()
-    {
-        return $this->data['path'] ?? null;
-    }
-
-    public function setPath($value)
-    {
-        $this->data['path'] = $value;
-        return $this;
-    }
-
-    public function name()
-    {
-        return $this->data['name'] ?? null;
-    }
-
-    public function setName($value)
-    {
-        $this->data['name'] = $value;
         return $this;
     }
 
@@ -87,6 +50,28 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
+    public function public()
+    {
+        return boolval($this->data['public'] ?? null);
+    }
+
+    public function setPublic($value)
+    {
+        $this->data['public'] = boolval($value);
+        return $this;
+    }
+
+    public function guid()
+    {
+        return $this->data['guid'] ?? null;
+    }
+
+    public function setGuid($value)
+    {
+        $this->data['guid'] = $value;
+        return $this;
+    }
+
     public function mime()
     {
         return $this->data['mime'] ?? null;
@@ -98,6 +83,51 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
+    public function name()
+    {
+        return $this->data['name'] ?? null;
+    }
+
+    public function setName($value)
+    {
+        $this->data['name'] = $value;
+        return $this;
+    }
+
+    public function path()
+    {
+        return $this->data['path'] ?? null;
+    }
+
+    public function setPath($value)
+    {
+        $this->data['path'] = $value;
+        return $this;
+    }
+
+    public function makePath($subFolder = null)
+    {
+        if (empty($this->guid())) {
+            $this->makeGuid();
+        }
+
+        $path = join('/', array_filter([
+            trim((string) $subFolder, '/'),
+            substr($this->guid(), 0, 2),
+            substr($this->guid(), 2, 2),
+            substr($this->guid(), 4),
+        ]));
+
+        $this->setPath($path);
+
+        return $this;
+    }
+
+    public function fullPath()
+    {
+        return PathAlias()->expand('@files/' . $this->path());
+    }
+
     public function size()
     {
         return $this->data['size'] ?? null;
@@ -106,19 +136,6 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
     public function setSize($value)
     {
         $this->data['size'] = $value;
-        return $this;
-    }
-
-    public function meta($path, $default = null)
-    {
-        $key = strtr($path, ['.' => "']['"]);
-        return eval("return \$this->data['meta']['{$key}'] ?? \$default;");
-    }
-
-    public function setMeta($path, $value)
-    {
-        $key = strtr($path, ['.' => "']['"]);
-        eval("\$this->data['meta']['{$key}'] = \$value;");
         return $this;
     }
 
@@ -133,7 +150,7 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
-    public function getThumbnail($size)
+    public function thumbnail($size)
     {
         if (isset($this->data['meta']['thumbnails'][$size])) {
             return new Thumbnail(
@@ -175,47 +192,17 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
-    public function makeGuid()
-    {
-        $this->setGuid(substr(sha1(uniqid()), 4, 16));
-        return $this;
-    }
-
-    public function makePath()
-    {
-        if (empty($this->guid())) {
-            $this->makeGuid();
-        }
-
-        $guid = $this->guid();
-        $path = join('/', [
-            mb_substr($guid, 0, 2),
-            mb_substr($guid, 2, 2),
-            mb_substr($guid, 4)
-        ]);
-
-        $this->setPath("@uploads/$path");
-
-        return $this;
-    }
-
-    public function fullPath()
-    {
-        return ExpandPath($this->path());
-    }
-
-    public function urlAsset($key, $params = NULL)
+    public function urlAsset($key, $params = null)
     {
         $param = function($name, $default = null) use(&$params) { return isset($params[$name]) ? $params[$name] : $default; };
         $scope = $param('scope', Config()->get('urlAsset.scope', 'admin'));
 
         switch ("$scope:$key") {
-            case 'admin:url.view' : return UrlAlias()->expand("@root/public/file/{$this->guid()}/{$this->name()}");
-            case 'admin:url.download' : return ShortUrl("@root/public/file/{$this->guid()}/{$this->name()}", [], true);
-            case 'admin:link.download': return (new A($param('text', $this->name() ?: '(без имени)'), $this->urlAsset('url.view', $params), $param('title')));
+            case 'admin:url.view' : return ShortUrl('@root/public/file/index.php', ['guid' => $this->guid(), 'fileName' => $this->name()], true);
+
+            case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без названия)'), $this->urlAsset('url.view', $params), $param('title')));
         }
 
-        trigger_error(sprintf('Unknown url asset %s in scope %s', $key, $scope), E_USER_WARNING);
-        return null;
+        throw new \Exception(sprintf('Unknown url asset %s in scope %s', $key, $scope));
     }
 }

@@ -7,11 +7,14 @@ $list = $this->argument(0);
 $startFrom = $this->argument(1);
 
 foreach ($list as $i => $item) {
+    $photo = $item->photo();
+    $smallPhoto = $photo->id() ? $photo->thumbnail('small') : new \Data\DefaultProfilePhotoThumbnail();
+
 ?>
 <div class="mb-3">
   <div class="d-flex align-items-stretch">
-    <div style="min-width: 80px">
-      <svg class="bd-placeholder-img img-fluid rounded" width="80" height="80" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#868e96"></rect></svg>
+    <div style="min-width: 64px">
+      <img class="rounded-2" src="<?=$smallPhoto->shortUrl()?>" width="64">
     </div>
     <div class="flex-fill">
       <div class="ms-3">

@@ -24,7 +24,7 @@ return [
     ],
 
     'usermenu' => [
-        ['text' => Icon('profile') . 'Мой профиль' , 'url' => ShortUrl('@consultant/profiles/all/profile/')],
+        ['text' => Icon('profile') . 'Мой профиль' , 'url' => Identity()->getActiveEntry()->urlAsset('url.view')],
         false,
         ['text' => '<i class="bi bi-box-arrow-right me-1"></i>Выйти', 'url' => ShortUrl('@root/consultant/logout/')],
     ],

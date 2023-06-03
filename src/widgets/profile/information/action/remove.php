@@ -16,7 +16,7 @@ if (!$editable) {
 $record->setDel(1);
 $record->save();
 
-$record->addHistory('Запись <b>' . $record->name() . '</b> была удалёна');
+$record->addHistory('Пользователь <b>' . $record->name() . '</b> был удалён');
 
 AddSessionAlert("Пользователь «{$record->name()}» был удалён");
 

@@ -16,7 +16,7 @@ $file = $this->argument();
 foreach ($file->thumbnails() as $thumbnail) {
     $path = ExpandPath($thumbnail->path());
 
-    if (file_exists($path) || is_link($path)) {
+    if (is_file($path) || is_link($path)) {
         unlink($path);
 
         // Удаляем папку файла и папку на уровень выше

@@ -1,25 +1,21 @@
 <?php
 
-use Project\File;
-
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $file Project\File */
 
 $parentType = $this->param('parentType');
 $parentId   = $this->param('parentId');
 $source     = $this->param('path');
 $name       = $this->param('name');
 $mime       = $this->param('mime');
-$group      = $this->param('group', 'attachment');
+$subFolder  = $this->param('subFolder');
 
-$file = new File();
+$file = new Project\File();
 $file->setName($name);
 $file->setMime($mime);
-$file->setGroup($group);
 $file->setParentType($parentType);
 $file->setParentId($parentId);
 
-$file->makePath();
+$file->makePath($subFolder);
 
 $dest   = $file->fullPath();
 $folder = dirname($dest);
