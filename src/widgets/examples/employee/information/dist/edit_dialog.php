@@ -40,16 +40,16 @@ Layout()->startGrab('body.content.end');
               </div>
             </div>
             <div class="modal-footer">
+              <button type="button" class="btn btn-default" data-bs-dismiss="modal">
+                <i class="bi bi-x-lg text-danger"></i>
+                Отменить
+              </button>
               <button type="submit" class="btn btn-default">
                 <div v-if="loading" class="spinner-border spinner-border-sm text-primary" role="status">
                   <span class="visually-hidden">Загрузка...</span>
                 </div>
                 <i v-if="!loading" class="bi bi-check-lg text-success"></i>
                 Сохранить
-              </button>
-              <button type="button" class="btn btn-default" data-bs-dismiss="modal">
-                <i class="bi bi-x-lg text-danger"></i>
-                Отменить
               </button>
             </div>
           </fieldset>
