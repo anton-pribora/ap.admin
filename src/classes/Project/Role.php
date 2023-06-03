@@ -75,6 +75,7 @@ class Role extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
             case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без названия)'), $this->urlAsset('url.view', $params), $param('title')));
         }
 
-        throw new \Exception(sprintf('Unknown url asset %s in scope %s', $key, $scope));
+        trigger_error(sprintf('Unknown url asset %s in scope %s', $key, $scope), E_USER_WARNING);
+        return null;
     }
 }

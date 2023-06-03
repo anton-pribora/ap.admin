@@ -25,6 +25,6 @@ class Storage
             return $this->icons[$icon][$size];
         }
 
-        throw new \Exception(sprintf('Unkown icon "%s" size "%s". Please setup the icon in the config file.', $icon, $size));
+        trigger_error(sprintf('Unkown icon "%s" size "%s". Please setup the icon in the config file.', $icon, $size), E_USER_WARNING);
     }
 }

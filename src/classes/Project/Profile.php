@@ -31,7 +31,8 @@ class Profile extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\
             case 'admin:link.view': return (new \ApCode\Html\Element\A($param('text', $this->name() ?: '(без имени)'), $this->urlAsset('url.view', $params), $param('title')));
         }
 
-        throw new \Exception(sprintf('Unknown url asset %s in scope %s', $key, $scope));
+        trigger_error(sprintf('Unknown url asset %s in scope %s', $key, $scope), E_USER_WARNING);
+        return null;
     }
 
     public function toArray()
