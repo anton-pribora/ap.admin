@@ -21,7 +21,7 @@ foreach (glob(__dir('assets/*.css')) as $css) {
     <?php echo Layout()->renderIfNotEmpty('body.css.code')?>
     <?php echo Layout()->renderIfNotEmpty('body.js.begin')?>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg bg-dark border-bottom border-bottom-dark" data-bs-theme="dark">
       <div class="container-md">
         <a class="navbar-brand" href="/"><?=Config()->get('project.name')?></a>
           <ul class="navbar-nav  me-auto">
