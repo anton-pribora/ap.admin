@@ -52,7 +52,7 @@
       </div>
       <div class="row mb-3">
         <div class="col">
-          <label class="" for="part[key]">Ключ записи <span class="text-muted small">(через точку)</span></label>
+          <label class="" for="part[key]">Ключ записи <span class="text-body-secondary small">(через точку)</span></label>
           <input type="text" class="form-control" id="part[key]" name="part[key]" v-model="part.key">
         </div>
       </div>
@@ -79,7 +79,7 @@
         <h4>Права доступа</h4>
         <div class="row mb-3">
           <div class="col">
-            <label class="" for="permissions[path]">Путь папки с правами <span class="text-muted small">(через точку)</span></label>
+            <label class="" for="permissions[path]">Путь папки с правами <span class="text-body-secondary small">(через точку)</span></label>
             <input type="text" class="form-control" id="permissions[path]" name="permissions[path]" v-model="permissions.path">
           </div>
         </div>
@@ -89,7 +89,7 @@
         <h4>Widget</h4>
         <div class="row mb-3">
           <div class="col">
-            <label class="" for="widget[path]">Путь виджета <span class="text-muted small">(через точку)</span></label>
+            <label class="" for="widget[path]">Путь виджета <span class="text-body-secondary small">(через точку)</span></label>
             <input type="text" class="form-control" id="widget[path]" name="widget[path]" v-model="widget.path">
           </div>
         </div>
@@ -131,7 +131,7 @@
         </div>
         <div class="row mb-3">
           <div class="col">
-            <label class="" for="part[path]">Путь раздела  <span class="text-muted small">(через слэш)</span></label>
+            <label class="" for="part[path]">Путь раздела  <span class="text-body-secondary small">(через слэш)</span></label>
             <input type="text" class="form-control" id="part[path]" name="part[path]" v-model="part.path">
           </div>
         </div>
@@ -185,10 +185,10 @@
             </td>
           </tr>
           <tr v-if="!fields.length && !fieldsLoading">
-            <td colspan="8" class="text-center text-muted">(нет данных)</td>
+            <td colspan="8" class="text-center text-body-secondary">(нет данных)</td>
           </tr>
           <tr v-if="fieldsLoading">
-            <td colspan="8" class="text-center text-muted">
+            <td colspan="8" class="text-center text-body-secondary">
               <div class="spinner-border spinner-border-sm text-primary" role="status">
               </div>
               Загрузка...

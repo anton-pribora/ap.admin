@@ -75,7 +75,7 @@ Layout()->startGrab('body.content.end');
 Layout()->endGrab();
 ?>
 <{$viewForm}>
-  <div class="text-center text-muted">
+  <div class="text-center text-body-secondary">
     <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
     Загрузка...
   </div>

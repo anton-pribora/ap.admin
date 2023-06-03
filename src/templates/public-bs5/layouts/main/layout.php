@@ -43,7 +43,7 @@ foreach (glob(__dir('assets/*.css')) as $css) {
 
     <footer class="footer mt-auto py-3 bg-light">
       <div class="container">
-        <span class="text-muted small">&copy; <?=date('Y')?> Антон Прибора <a class="text-muted" href="https://anton-pribora.ru">https://anton-pribora.ru</a> </span>
+        <span class="text-body-secondary small">&copy; <?=date('Y')?> Антон Прибора <a class="text-body-secondary" href="https://anton-pribora.ru">https://anton-pribora.ru</a> </span>
       </div>
     </footer>
 

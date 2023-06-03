@@ -76,7 +76,7 @@ Layout()->startGrab('body.content.end');
         <td class="text-end">
           <div class="btn-group btn-group-sm" v-if="!e.deleting">
             <button class="btn btn-default" @click="edit(e)"><i class="bi bi-pencil me-1"></i>Изменить</button>
-            <button type="button" class="btn btn-default btn-sm py-0 px-1 text-muted" data-bs-toggle="dropdown">
+            <button type="button" class="btn btn-default btn-sm py-0 px-1 text-body-secondary" data-bs-toggle="dropdown">
               <i class="bi bi-caret-down-fill small"></i>
             </button>
             <ul class="dropdown-menu dropdown-menu-end">
@@ -94,7 +94,7 @@ Layout()->startGrab('body.content.end');
       </tbody>
     </table>
     <div v-if="filtered.length === 0" class="m-3">
-      <div class="text-center text-muted">(Нет данных)</div>
+      <div class="text-center text-body-secondary">(Нет данных)</div>
     </div>
 
 <?php Template()->render('@extra/widget/list-footer.php');?>
@@ -107,7 +107,7 @@ Layout()->startGrab('body.content.end');
 Layout()->endGrab();
 ?>
 <{$viewForm}>
-  <div class="text-center text-muted">
+  <div class="text-center text-body-secondary">
     <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
     Загрузка...
   </div>

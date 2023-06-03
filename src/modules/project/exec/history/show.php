@@ -109,7 +109,7 @@ foreach ($rows as $row) {
     [$date, $time] = explode('+', intl_date('d MMM y+HH:mm:ss', $row['date']));
 ?>
   <tr>
-    <td><?=$date?> <span class="text-muted small ms-2"><?=$time?>&nbsp;<?=(new DateTime())->format('T')?></span></td>
+    <td><?=$date?> <span class="text-body-secondary small ms-2"><?=$time?>&nbsp;<?=(new DateTime())->format('T')?></span></td>
     <td><?=$hl($replaceIcons($row['text']))?></td>
   </tr>
 <?php } ?>

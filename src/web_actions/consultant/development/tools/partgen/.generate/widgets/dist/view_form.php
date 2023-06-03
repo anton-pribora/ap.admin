@@ -57,7 +57,7 @@ Layout()->startGrab('body.content.end');
       <div v-if="!data.deleting" class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
         <div class="btn-group" role="group">
-          <button type="button" class="btn btn-default btn-sm py-0 px-1 text-muted" data-bs-toggle="dropdown">
+          <button type="button" class="btn btn-default btn-sm py-0 px-1 text-body-secondary" data-bs-toggle="dropdown">
             <i class="bi bi-caret-down-fill small"></i>
           </button>
           <ul class="dropdown-menu dropdown-menu-end">
@@ -88,7 +88,7 @@ Layout()->startGrab('body.content.end');
 Layout()->endGrab();
 ?>
 <{$viewForm}>
-  <div class="text-center text-muted">
+  <div class="text-center text-body-secondary">
     <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
     Загрузка...
   </div>

@@ -26,7 +26,7 @@ HTML
     </div>
     <div class="col-md-4  order-1 order-md-2">
       <div class="menu sticky-top p-3 bg-light">
-        <h5 class="text-muted">Содержание</h5>
+        <h5 class="text-body-secondary">Содержание</h5>
         <div class="nav flex-column">
           {!TOC}
           <div class="px-3"><a href="#">[Наверх]</a></div>

@@ -15,7 +15,7 @@ $i = 0;
 foreach ($fields as ['view' => $view, 'getter' => $getter, 'prop' => $prop, 'title' => $title]) {
     if ($view && $getter !== 'name') {
         $prop = ucfirst($prop);
-        $body .= "        <div><span class=\"text-muted\">{$title}:</span> <?=Html(\$item->{$getter}())?></div>\n";
+        $body .= "        <div><span class=\"text-body-secondary\">{$title}:</span> <?=Html(\$item->{$getter}())?></div>\n";
 
         if (++$i >= 3) {
             break;
@@ -41,7 +41,7 @@ foreach (\$list as \$i => \$item) {
     </div>
     <div class="flex-fill">
       <div class="ms-3">
-        <h5 class="card-title"><?=\$item->urlAsset('link.view')?> <small class="text-muted ms-3">#<?=\$item->id()?></small></h5>
+        <h5 class="card-title"><?=\$item->urlAsset('link.view')?> <small class="text-body-secondary ms-3">#<?=\$item->id()?></small></h5>
 {$body}
       </div>
     </div>

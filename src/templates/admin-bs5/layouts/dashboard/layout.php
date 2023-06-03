@@ -39,7 +39,7 @@ Layout()->appendOnce('head.css.code', file_get_contents(__dir('style.css')));
         <span class="navbar-toggler-icon"></span>
       </button>
 
-      <a href="/" class="d-md-none d-flex align-items-center mx-auto link-dark text-muted text-decoration-none">
+      <a href="/" class="d-md-none d-flex align-items-center mx-auto link-dark text-body-secondary text-decoration-none">
         <span class="fs-5 fw-semibold">
           <?=Config()->get('project.logo')?>
           <?=Config()->get('project.name')?>

@@ -27,7 +27,7 @@ Layout()->startGrab('body.content.end');
 <?php if ($enableEdit) { ?>
       <div v-if="!data.deleting" class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
-        <button type="button" class="btn btn-default btn-sm py-0 px-1 text-muted" data-bs-toggle="dropdown">
+        <button type="button" class="btn btn-default btn-sm py-0 px-1 text-body-secondary" data-bs-toggle="dropdown">
           <i class="bi bi-caret-down-fill small"></i>
         </button>
         <ul class="dropdown-menu dropdown-menu-end">
@@ -53,7 +53,7 @@ Layout()->startGrab('body.content.end');
           <div class="mt-1">
             <div class="btn-group" role="group">
               <button :disabled="data.avatarDeleting" class="btn btn-default btn-sm py-1" @click="uploadAvatar(data)" title="Загрузить фото"><i class="bi bi-upload me-1"></i>Загрузить</button>
-              <button :disabled="data.avatarDeleting" type="button" class="btn btn-default btn-sm py-1 px-2 text-muted" data-bs-toggle="dropdown">
+              <button :disabled="data.avatarDeleting" type="button" class="btn btn-default btn-sm py-1 px-2 text-body-secondary" data-bs-toggle="dropdown">
                 <i class="bi bi-caret-down-fill small"></i>
               </button>
               <ul class="dropdown-menu">
@@ -92,7 +92,7 @@ Layout()->startGrab('body.content.end');
 Layout()->endGrab();
 ?>
 <examples-employee-information-view-form>
-  <div class="text-center text-muted">
+  <div class="text-center text-body-secondary">
     <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
     Загрузка...
   </div>
