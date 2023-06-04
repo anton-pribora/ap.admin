@@ -48,8 +48,12 @@ $value = function ($name, $default = null) use ($data) {
 ?>
 <form method="post" action="">
   {$rows}
-  <div class=" text-end">
-    <button type="submit" class="btn btn-default">Сохранить</button>
+  <div class="text-end">
+    <button type="submit" class="btn btn-default" name="action" value="save"
+            onclick="document.querySelector('#loader').className='spinner-border text-primary spinner-border-sm'; setTimeout(() => this.disabled = true)"
+    >
+      <i id="loader" class="bi bi-check-lg text-success"></i> Сохранить
+    </button>
   </div>
 </form>
 
