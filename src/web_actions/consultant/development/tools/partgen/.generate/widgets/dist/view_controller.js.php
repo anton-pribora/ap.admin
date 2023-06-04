@@ -29,9 +29,10 @@ app.component('{$viewForm}', {
     async remove(e) {
       if (await this.$confirm('{$textConfirmRemove}')) {
         e.deleting = true;
+        const result = await this.$do(`${this.widget}::remove`, e);
 
-        if (await this.$do(`${this.widget}::remove`, e)) {
-          location.reload();
+        if (result && result.url) {
+          location.href = result.url;
         } else {
           e.deleting = undefined;
         }

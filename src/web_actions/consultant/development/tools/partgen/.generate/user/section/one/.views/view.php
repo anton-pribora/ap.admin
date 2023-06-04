@@ -13,6 +13,10 @@ $data = <<<'PHP'
 
 $record = $this->argument(0);
 
+if ($record->del()) {
+    Alert('Запись отмечена как удалённая', 'warning');
+}
+
 ?>
 <div class="row widget">
   <div class="col-md-7">

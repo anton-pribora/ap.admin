@@ -28,7 +28,10 @@ $record->addHistory('Запись <b>' . $record->name() . '</b> была уда
 
 AddSessionAlert("{$textAfterRemove}");
 
-ReturnJson(true);
+ReturnJson([
+    'url' => ShortUrl($record->urlAsset('url.view'), ['{$recordIdKey}' => null])
+]);
+
 
 PHP;
 
@@ -37,7 +40,8 @@ $data = strtr($data, [
     '{$repositoryClass}' => $this->param('part.repository'),
     '{$recordKey}'       => $this->param('part.key'),
     '{$widgetName}'      => $this->param('widget.name'),
-    '{$textAfterRemove}' => $this->param('text.afterRemove')
+    '{$textAfterRemove}' => $this->param('text.afterRemove'),
+    '{$recordIdKey}'     => $this->param('part.recordIdKey'),
 ]);
 
 $fullPath = "{$this->param('cwd')}/{$fileName}";
