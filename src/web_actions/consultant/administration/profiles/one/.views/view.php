@@ -14,4 +14,7 @@ if ($record->del()) {
   <div class="col-md-7">
     <?php echo Widget('profile.information', $record, $this->paramList())?>
   </div>
+  <div class="col">
+    <?php echo Widget('profile.roles', $record, $this->paramList())?>
+  </div>
 </div>
