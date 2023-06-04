@@ -16,8 +16,10 @@ if (!$editable) {
 $record->setDel(1);
 $record->save();
 
-$record->addHistory('Пользователь <b>' . $record->name() . '</b> был удалён');
+$record->addHistory('Пользователь #' . $record->id() . ' «<b>' . $record->name() . '</b>» был удалён');
 
 AddSessionAlert("Пользователь «{$record->name()}» был удалён");
 
-ReturnJson(true);
+ReturnJson([
+    'url' => ShortUrl($record->urlAsset('url.view'), ['profile_id' => null])
+]);

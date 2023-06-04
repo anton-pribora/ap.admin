@@ -8,12 +8,16 @@ if (!Identity()->getPermit('profile.add')) {
     return;
 }
 
-$data = Request()->getPostVariables();
+$data = Request()->get('data', []);
 
 if (Request()->isPost()) {
     $record = new Project\Profile;
-    $record->setType(Request()->get('type'));
-    $record->setName(Request()->get('name'));
+    $record->setType('consultant');
+    $record->setFirstName($data['name']['first'] ?? '');
+    $record->setMiddleName($data['name']['middle'] ?? '');
+    $record->setLastName($data['name']['last'] ?? '');
+    $record->setPost($data['post'] ?? '');
+    $record->setComment($data['comment']);
 
     $errors = [];
 
@@ -23,10 +27,11 @@ if (Request()->isPost()) {
         $record->save();
 
         $changes = [];
-        $changes[] = "«<b>Тип профиля</b>»: «" . Html($record->type()) . "»";
-        $changes[] = "«<b>name</b>»: «" . Html($record->name()) . "»";
+        $changes[] = "«<b>Имя</b>»: «" . Html($record->fullName()) . "»";
+        $changes[] = "«<b>Должность</b>»: «" . Html($record->post()) . "»";
+        $changes[] = "«<b>Заметки</b>»: «" . Html($record->comment()) . "»";
 
-        $message = "Создана запись: <ul><li>" . join('</li><li>', $changes) . "</li></ul>";
+        $message = "Создана запись #{$record->id()}: <ul><li>" . join('</li><li>', $changes) . "</li></ul>";
         $record->addHistory($message);
 
         Redirect($record->urlAsset('url.view'));

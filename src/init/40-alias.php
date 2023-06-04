@@ -2,7 +2,8 @@
 
 UrlAlias()->set('@root' , '/');
 UrlAlias()->set('@root/', '/');
-UrlAlias()->set('@webroot', '@root');
+UrlAlias()->set('@webroot', '/');
+UrlAlias()->set('@webroot/', '/');
 
 PathAlias()->set('@root'   , ROOT_DIR);
 PathAlias()->set('@webroot', Config()->get('server.webroot'));
@@ -32,10 +33,10 @@ PathAlias()->set('@pagination', '@extra/pagination.php');
 PathAlias()->set('@code'      , '@extra/code.php');
 PathAlias()->set('@totalFound', '@extra/totalFound.php');
 
-PathAlias()->set('@files', '@root/files');
+PathAlias()->set('@files', '@root/uploads');
 
 PathAlias()->set('@thumbnails', '@webroot/thumbnails');
-UrlAlias()->set('@thumbnails' , '@root/thumbnails');
+UrlAlias()->set('@thumbnails' , '@webroot/thumbnails');
 
 PathAlias()->set('@web_actions', Config()->get('server.webactions'));
 

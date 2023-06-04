@@ -4,7 +4,6 @@ use ApCode\File\Image;
 use Project\File;
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $file Project\File */
 
 $parentType = $this->param('parentType');
 $parentId   = $this->param('parentId');

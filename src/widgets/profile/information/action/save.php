@@ -26,6 +26,8 @@ $props[] = ['Заметки'              , $data['comment']          ?? '', [$r
 
 $changes = [];
 
+$oldName = $record->fullName();
+
 foreach ($props as [$prop, $new, $getter, $setter, $format]) {
     $old = $getter();
 
@@ -48,7 +50,7 @@ foreach ($props as [$prop, $new, $getter, $setter, $format]) {
 
 if ($changes) {
     $record->save();
-    $record->addHistory('В пользователя <b data-profile>' . $record->fullName() . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
+    $record->addHistory('В пользователя <b data-profile>' . $oldName . '</b> внесены изменения: <ul><li>' . join('</li><li>', $changes) . '</li></ul>');
 }
 
 $this->include('data.php');

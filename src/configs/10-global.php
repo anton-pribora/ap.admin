@@ -49,11 +49,6 @@ Config()->setup([
         ],
     ],
 
-    'file' => [
-        'uploads'    => ROOT_DIR . '/uploads/',
-        'thumbnails' => ROOT_DIR . '/public/thumbnails/',
-    ],
-
     'js' => [
         'ENV' => 'prod',  // Vue 3 extension (used by module misc vue3)
     ],

@@ -6,7 +6,7 @@ foreach (Url()->getStaticParams() as $name => $value) {
 ?>
   <div class="col-12">
     <label class="visually-hidden" for="inlineFormInput-name">name</label>
-    <input type="text" class="form-control" id="inlineFormInput-name" placeholder="name" value="<?php echo Html($this->param('name'))?>" name="name">
+    <input type="text" class="form-control" id="inlineFormInput-name" placeholder="ФИО" value="<?php echo Html($this->param('name'))?>" name="name">
   </div>
   <div class="col-12">
     <button type="submit" class="btn btn-default">Найти</button>
