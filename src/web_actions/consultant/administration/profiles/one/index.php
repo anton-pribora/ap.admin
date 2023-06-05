@@ -8,6 +8,7 @@ $record = $this->param('record');
 $params = [
     'profile.information.edit' => Identity()->getPermit('profile.edit', $record),
     'profile.roles.edit'       => Identity()->getPermit('profile.roles_edit', $record),
+    'profile.password.edit'    => Identity()->getPermit('profile.password_edit', $record),
 ];
 
 Module('widgets')->execute('handle.php', $record, $params);

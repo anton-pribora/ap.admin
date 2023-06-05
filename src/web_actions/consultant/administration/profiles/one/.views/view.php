@@ -16,5 +16,7 @@ if ($record->del()) {
   </div>
   <div class="col">
     <?php echo Widget('profile.roles', $record, $this->paramList())?>
+    <br />
+    <?php echo Widget('profile.password', $record, $this->paramList())?>
   </div>
 </div>

@@ -83,6 +83,11 @@ class ProfileCredentialRepository
             unset($params['id']);
         }
 
+        if (isset($params['id!='])) {
+            $where[] = '`id` != ' . Db()->quote($params['id!=']);
+            unset($params['id!=']);
+        }
+
         if (isset($params['profileId'])) {
             $where[] = '`profile_id` = ' . Db()->quote($params['profileId']);
             unset($params['profileId']);

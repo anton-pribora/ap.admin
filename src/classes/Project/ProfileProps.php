@@ -122,4 +122,16 @@ trait ProfileProps
          $this->setMeta('comment', $value);
          return $this;
     }
+
+    public function credential()
+    {
+        $credential = ProfileCredentialRepository::findOne(['profileId' => $this->id()]);
+
+        if (!$credential) {
+            $credential = new ProfileCredential();
+            $credential->setProfileId($this->id());
+        }
+
+        return $credential;
+    }
 }
