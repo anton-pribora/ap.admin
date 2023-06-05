@@ -18,6 +18,7 @@ if (Request()->isPost()) {
     $record->setLastName($data['name']['last'] ?? '');
     $record->setPost($data['post'] ?? '');
     $record->setComment($data['comment']);
+    $record->addRole('consultant');
 
     $errors = [];
 

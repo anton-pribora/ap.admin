@@ -33,4 +33,13 @@ trait Roles
     {
         return in_array($role, $this->rolesRaw());
     }
+
+    public function addRole($role)
+    {
+        if (!$this->hasRole($role)) {
+            $this->setRolesRaw([...$this->rolesRaw(), $role]);
+        }
+
+        return $this;
+    }
 }
