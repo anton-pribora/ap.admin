@@ -139,6 +139,17 @@ class File extends \ApCode\Billet\AbstractBillet implements \Interfaces\Data\Url
         return $this;
     }
 
+    public function comment()
+    {
+        return $this->meta('comment');
+    }
+
+    public function setComment($value)
+    {
+        $this->setMeta('comment', $value);
+        return $this;
+    }
+
     public function createdAt()
     {
         return $this->data['createdAt'] ?? null;

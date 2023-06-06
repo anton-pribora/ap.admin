@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $record Project\Examples\Employee */
+/* @var $record Project\Profile */
 
 $record = $this->argument();
 

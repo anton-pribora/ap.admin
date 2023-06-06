@@ -1,4 +1,4 @@
-store.registerModule('examplesEmployeeFiles', {
+store.registerModule('profileFiles', {
   namespaced: true,
   state: () => ({
     list: []

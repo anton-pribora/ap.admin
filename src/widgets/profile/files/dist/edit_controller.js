@@ -1,7 +1,7 @@
-app.component('examples-employee-files-edit-dialog', {
-  template: '#examplesEmployeeFilesEditDialog',
+app.component('profile-files-edit-dialog', {
+  template: '#profileFilesEditDialog',
   data: () => ({
-    widget: 'examples.employee.files',
+    widget: 'profile.files',
 
     data: {},
     loading: false
@@ -54,6 +54,6 @@ app.component('examples-employee-files-edit-dialog', {
       }
     });
 
-    this.$externalMethods.set('examples-employee-files-edit-dialog()', this.show);
+    this.$externalMethods.set('profile-files-edit-dialog()', this.show);
   }
 });

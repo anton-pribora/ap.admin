@@ -1,12 +1,12 @@
 <?php
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $record Project\Examples\Employee */
+/* @var $record Project\Profile */
 
 $record = $this->argument();
 
 $result = [];
 
-foreach ($record->attachments() as $attachment) {
+foreach ($record->files(['subFolder' => 'profile_files']) as $attachment) {
     $result[] = $this->execute('encodeData.php', $attachment);
 }
 

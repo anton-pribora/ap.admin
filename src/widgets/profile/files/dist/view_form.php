@@ -1,7 +1,7 @@
 <?php
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $record Project\Examples\Employee */
+/* @var $record Project\Profile */
 
 $record = $this->argument();
 $enableEdit = $this->param('enableEdit');
@@ -17,7 +17,7 @@ if ($enableEdit) {
 Layout()->append('body.js.code', file_get_contents(__dir('view_controller.js')));
 Layout()->startGrab('body.content.end');
 ?>
-<script type="text/html" id="examplesEmployeeFilesViewForm">
+<script type="text/html" id="profileFilesViewForm">
   <div class="card">
     <div class="card-header py-1 d-flex justify-content-between align-middle">
       <div>
@@ -30,6 +30,7 @@ Layout()->startGrab('body.content.end');
       <button class="btn btn-default btn-sm py-0" @click="pickAndUpload"><i class="bi bi-upload me-1"></i>Загрузить</button>
 <?php } ?>
     </div>
+    <div style="overflow-x: auto">
     <file-dropzone @drop="upload" class-name="widget-body">
       <table class="table table-hover mb-0" style="">
         <thead>
@@ -50,10 +51,10 @@ Layout()->startGrab('body.content.end');
             {{i + 1 + pager.page * pager.limit}}
           </td>
           <td>
-            {{e.date}}
+            {{e.createdAt.formatted}}
           </td>
           <td>
-            <a :href="e.url.view" target="_blank"><i class="bi bi-box-arrow-up-right me-1 small"></i>{{e.name || '(без названия)'}}</a>
+            <a :href="e.url.view" target="_blank"><span v-html="e.mime.icon"></span>{{e.name}}<i class="bi bi-box-arrow-up-right ms-2"></i></a>
           </td>
           <td>
             {{e.size.formatted}}
@@ -86,18 +87,19 @@ Layout()->startGrab('body.content.end');
         <div class="text-center text-body-secondary">(Нет данных)</div>
       </div>
     </file-dropzone>
+    </div>
 <?php Template()->render('@extra/widget/list-footer.php');?>
   </div>
 <?php if ($enableEdit) { ?>
-  <examples-employee-files-edit-dialog></examples-employee-files-edit-dialog>
+  <profile-files-edit-dialog></profile-files-edit-dialog>
 <?php } ?>
 </script>
 <?php
 Layout()->endGrab();
 ?>
-<examples-employee-files-view-form>
+<profile-files-view-form>
   <div class="text-center text-body-secondary">
     <div class="spinner-border spinner-border-sm text-secondary" role="status"></div>
     Загрузка...
   </div>
-</examples-employee-files-view-form>
+</profile-files-view-form>

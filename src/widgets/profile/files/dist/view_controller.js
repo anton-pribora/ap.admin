@@ -1,8 +1,8 @@
-app.component('examples-employee-files-view-form', {
-  template: '#examplesEmployeeFilesViewForm',
+app.component('profile-files-view-form', {
+  template: '#profileFilesViewForm',
   data: () => ({
-    store: 'examplesEmployeeFiles',
-    widget: 'examples.employee.files',
+    store: 'profileFiles',
+    widget: 'profile.files',
     pager: {
       page : 0,
       limit : 50
@@ -64,7 +64,7 @@ app.component('examples-employee-files-view-form', {
       }
     },
     async edit(e) {
-      const result = await this.$externalMethods.call('examples-employee-files-edit-dialog()', e);
+      const result = await this.$externalMethods.call('profile-files-edit-dialog()', e);
 
       if (result) {
         this.$store.commit(`${this.store}/updateItem`, result.data);

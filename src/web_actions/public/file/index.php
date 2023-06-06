@@ -4,7 +4,7 @@ use Project\FileRepository;
 
 $file = FileRepository::findOne(['guid' => Request()->get('guid')]);
 
-if (!$file || !$file->id() || !is_readable($file->fullPath())) {
+if (!$file || !$file->id() || !is_file($file->fullPath())) {
     return Module('errors')->execute('http/404.php');
 }
 

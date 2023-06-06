@@ -9,6 +9,7 @@ $params = [
     'profile.information.edit' => Identity()->getPermit('profile.edit', $record),
     'profile.roles.edit'       => Identity()->getPermit('profile.roles_edit', $record),
     'profile.password.edit'    => Identity()->getPermit('profile.password_edit', $record),
+    'profile.files.edit'       => Identity()->getPermit('profile.files_edit', $record),
 ];
 
 Module('widgets')->execute('handle.php', $record, $params);

@@ -122,6 +122,11 @@ class FileRepository
             unset($params['path']);
         }
 
+        if (isset($params['subFolder'])) {
+            $where[] = '`path` LIKE ' . Db()->quote($params['subFolder'] . '%');
+            unset($params['subFolder']);
+        }
+
         return $where;
     }
 
