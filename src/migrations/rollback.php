@@ -12,7 +12,7 @@ define('ROLLBACK', true);
 $argument = $argv[1] ?? 1;
 
 $pattern    = is_numeric($argument) ? null : $argument;
-$limit      = is_numeric($argument) ? $pattern : null;
+$limit      = is_numeric($argument) ? $argument : null;
 $migrations = migrations_from_db($limit);
 $files      = migrations_from_disk();
 
