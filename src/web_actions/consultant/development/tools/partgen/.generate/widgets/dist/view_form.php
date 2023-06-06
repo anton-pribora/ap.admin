@@ -33,8 +33,9 @@ $data = <<<'PHP'
 /* @var $this ApCode\Executor\RuntimeInterface */
 /* @var $record {$billetClass} */
 
-$record = $this->argument();
-$enableEdit = $this->param('enableEdit');
+$record       = $this->argument();
+$enableEdit   = $this->param('enableEdit');
+$enableRemove = $this->param('enableRemove');
 
 RequireLib('vue3');
 RequireLib('toast');
@@ -56,6 +57,7 @@ Layout()->startGrab('body.content.end');
 <?php if ($enableEdit) { ?>
       <div v-if="!data.deleting" class="btn-group" role="group">
         <button class="btn btn-default btn-sm py-0" @click="edit(data)"><i class="bi bi-pencil me-1"></i>Изменить</button>
+<?php if ($enableRemove) { ?>
         <div class="btn-group" role="group">
           <button type="button" class="btn btn-default btn-sm py-0 px-1 text-body-secondary" data-bs-toggle="dropdown">
             <i class="bi bi-caret-down-fill small"></i>
@@ -64,6 +66,7 @@ Layout()->startGrab('body.content.end');
             <li><a class="dropdown-item" href="#" @click.prevent="remove(data)"><i class="bi bi-trash me-1"></i>Удалить</a></li>
           </ul>
         </div>
+<?php } ?>
       </div>
       <div v-if="data.deleting">
         <div class="spinner-border spinner-border-sm text-primary" role="status">

@@ -84,13 +84,22 @@ class RoleRepository
         }
 
         if (isset($params['tag'])) {
-            $where[] = '`tag` = ' . Db()->quote($params['tag']);
+            $where[] = '`tag` LIKE ' . Db()->quote('%' . $params['tag'] . '%');
             unset($params['tag']);
         }
 
         if (isset($params['name'])) {
             $where[] = '`name` LIKE ' . Db()->quote('%' . $params['name'] . '%');
             unset($params['name']);
+        }
+
+        if (isset($params['del'])) {
+            if (!in_array($params['del'], ['any', 'all'])) {
+                $where[] = '`del` = ' . Db()->quote($params['del']);
+                unset($params['del']);
+            }
+        } else {
+            $where[] = '`del` = 0';
         }
 
         return $where;

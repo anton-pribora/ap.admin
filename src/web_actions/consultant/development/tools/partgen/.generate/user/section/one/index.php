@@ -14,7 +14,8 @@ $data = <<<'PHP'
 $record = $this->param('record');
 
 $params = [
-    '{$recordKey}.edit' => Identity()->getPermit('{$recordKey}.edit', $record),
+    '{$recordKey}.edit'   => Identity()->getPermit('{$recordKey}.edit', $record),
+    '{$recordKey}.remove' => Identity()->getPermit('{$recordKey}.remove', $record),
 ];
 
 Module('widgets')->execute('handle.php', $record, $params);

@@ -6,7 +6,8 @@
 $record = $this->param('record');
 
 $params = [
-    'role.edit' => Identity()->getPermit('role.edit', $record),
+    'role.edit'   => Identity()->getPermit('role.edit', $record),
+    'role.remove' => Identity()->getPermit('role.remove', $record),
 ];
 
 Module('widgets')->execute('handle.php', $record, $params);

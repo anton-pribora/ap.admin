@@ -13,9 +13,9 @@ $data = <<<'PHP'
 
 $record = $this->argument();
 
-$editable = $this->param('{$recordKey}.edit') || $this->param('{$recordKey}.{$widgetName}.edit');
+$enableRemove = $this->param('{$recordKey}.remove') || $this->param('{$recordKey}.{$widgetName}.remove');
 
-if (!$editable) {
+if (!$enableRemove) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');
 }
 

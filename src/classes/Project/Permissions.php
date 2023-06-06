@@ -20,4 +20,9 @@ trait Permissions
 
         return $this->permissions[$permission] ?? $default;
     }
+
+    public function permissions()
+    {
+        return $this->permissions;
+    }
 }

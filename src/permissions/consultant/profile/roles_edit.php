@@ -1,10 +1,10 @@
 <?php
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $consultant */
+/* @var $consultant \Project\Profile */
 /* @var $record Project\Profile */
 
 $consultant = $this->argument(0);
 $record = $this->argument(1);
 
-return true;
+return $consultant->isAdmin();

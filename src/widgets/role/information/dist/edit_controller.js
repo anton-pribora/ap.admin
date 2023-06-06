@@ -3,7 +3,9 @@ app.component('role-information-edit-dialog', {
   data: () => ({
     widget: 'role.information',
 
-    data: {},
+    data: {
+      permissions: {}
+    },
     loading: false
   }),
   methods: {

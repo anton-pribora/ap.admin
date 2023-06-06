@@ -46,5 +46,19 @@ return [
             'decode'  => 'json_decode_array',
             'default' => [],
         ],
+        'meta'        => [
+            'field'   => 'meta',
+            'title'   => 'Дополнительные данные',
+            'encode'  => 'json_encode_array',
+            'decode'  => 'json_decode_array',
+            'default' => [],
+        ],
+        'del'         => [
+            'field'   => 'del',
+            'title'   => 'Флаг "удалён"',
+            'encode'  => NULL,
+            'decode'  => NULL,
+            'default' => '0',
+        ],
     ],
 ];

@@ -1,9 +1,9 @@
 <?php
 
-/* @permission.name Примеры страниц */
+/* @permission.name Раздел консультанта */
 
 /* @var $this ApCode\Executor\RuntimeInterface */
-/* @var $consultant \Project\Profile */
+/* @var $consultant Project\Profile */
 
 $consultant = $this->argument(0);
 

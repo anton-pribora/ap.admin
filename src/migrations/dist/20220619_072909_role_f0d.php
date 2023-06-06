@@ -19,12 +19,14 @@ CREATE TABLE IF NOT EXISTS `role` (
   `name` VARCHAR(512) NOT NULL DEFAULT '' COMMENT 'Название',
   `comment` TEXT NOT NULL DEFAULT '' COMMENT 'Описание',
   `permissions` JSON NOT NULL DEFAULT '{}' COMMENT 'Права роли',
+  `meta` JSON NULL DEFAULT NULL COMMENT 'Дополнительные данные',
+  `del` TINYINT NOT NULL DEFAULT 0 COMMENT 'Флаг "удалён"',
   PRIMARY KEY (`id`)
 ) COMMENT 'Роли пользователей';
 
 INSERT INTO `role` (`name`, `tag`, `comment`, `permissions`) VALUES
-    ('Пользователь'         , 'consultant'        , 'Базовая роль для всех сотрудников'          , '{"consultant": true}'),
-    ('Администратор'        , 'admin'             , 'Расширенный доступ к системе'               , '{"consultant": true, "consultant.role": true, "consultant.role.add": true, "consultant.role.edit": true}')
+    ('Пользователь'         , 'consultant'        , 'Базовая роль для всех пользователей', '{"consultant":true,"consultant.examples":true}'),
+    ('Администратор'        , 'admin'             , 'Расширенный доступ к системе'       , '{"consultant.administration":true,"consultant.tools":true}')
 ;
 SQL
 );

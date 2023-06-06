@@ -23,7 +23,7 @@ Layout()->startGrab('body.content.end');
               <div class="mb-3 row">
                 <label class="col-sm-2 col-form-label">Коротая метка</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" v-model="data.tag">
+                  <input type="text" class="form-control" v-model="data.tag" disabled>
                 </div>
               </div>
               <div class="mb-3 row">
@@ -36,6 +36,19 @@ Layout()->startGrab('body.content.end');
                 <label class="col-sm-2 col-form-label">Описание</label>
                 <div class="col-sm-10">
                   <textarea type="text" rows="3" class="form-control" v-model="data.comment"></textarea>
+                </div>
+              </div>
+              <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Права роли</label>
+                <div class="col-sm-10">
+<?php foreach (Module('permissions')->execute('list') as $permission => $data) { ?>
+              <div class="form-check" style="margin-left: <?=substr_count($permission, '.') * 1.75?>rem;">
+                <input class="form-check-input" type="checkbox" id="e_<?=$permission?>" v-model="data.permissions['<?=$permission?>']">
+                <label class="form-check-label" for="e_<?=$permission?>">
+                  <?=$data['name']?>
+                </label>
+              </div>
+<?php } ?>
                 </div>
               </div>
             </div>

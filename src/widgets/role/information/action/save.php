@@ -5,10 +5,10 @@
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', [])['data'] ?? [];
-$editable = $this->param('role.edit') || $this->param('role.information.edit');
+$data       = $this->param('widget_data', [])['data'] ?? [];
+$enableEdit = $this->param('role.edit') || $this->param('role.information.edit');
 
-if (!$editable) {
+if (!$enableEdit) {
     ReturnJsonError('У вас нет прав на редактирование этих данных', 'forbidden');
 }
 
@@ -17,9 +17,10 @@ $defaultFormat = static fn($v) => $v;
 // Изменяемые свойства
 $props = [];
 
-$props[] = ['Коротая метка', $data['tag'] ?? '', [$record, 'tag'], [$record, 'setTag'], $defaultFormat];
+//$props[] = ['Коротая метка', $data['tag'] ?? '', [$record, 'tag'], [$record, 'setTag'], $defaultFormat];
 $props[] = ['Название', $data['name'] ?? '', [$record, 'name'], [$record, 'setName'], $defaultFormat];
 $props[] = ['Описание', $data['comment'] ?? '', [$record, 'comment'], [$record, 'setComment'], $defaultFormat];
+$props[] = ['Права роли', array_filter($data['permissions'] ?? []), [$record, 'permissions'], [$record, 'setPermissions'], $defaultFormat];
 
 $changes = [];
 

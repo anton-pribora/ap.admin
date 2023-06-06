@@ -17,6 +17,10 @@ function json_encode_array_pretty_print($data) {
 }
 
 function json_decode_array($data) {
+    if (is_null($data)) {
+        return null;
+    }
+
     return json_decode($data, true);
 }
 

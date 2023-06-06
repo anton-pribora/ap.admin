@@ -12,13 +12,19 @@ $data = Request()->getPostVariables();
 
 if (Request()->isPost()) {
     $record = new Project\Role;
-    $record->setTag(Request()->get('tag'));
+    $record->setTag(trim(Request()->get('tag'), ''));
     $record->setName(Request()->get('name'));
     $record->setComment(Request()->get('comment'));
 
     $errors = [];
 
     // Обработка ошибок
+
+    if (empty($record->tag())) {
+        $errors[] = 'Необходимо задать короткую метку';
+    } elseif (\Project\RoleRepository::findOne(['tag' => $record->tag()])) {
+        $errors[] = 'Короткая метка '  . json_encode_array($record->tag()) . ' уже используется, придумайте новую';
+    }
 
     if (empty($errors)) {
         $record->save();

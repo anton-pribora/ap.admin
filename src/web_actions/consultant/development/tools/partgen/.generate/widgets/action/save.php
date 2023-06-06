@@ -23,10 +23,10 @@ $data = <<<'PHP'
 
 $record = $this->argument();
 
-$data     = $this->param('widget_data', [])['data'] ?? [];
-$editable = $this->param('{$recordKey}.edit') || $this->param('{$recordKey}.{$widgetName}.edit');
+$data       = $this->param('widget_data', [])['data'] ?? [];
+$enableEdit = $this->param('{$recordKey}.edit') || $this->param('{$recordKey}.{$widgetName}.edit');
 
-if (!$editable) {
+if (!$enableEdit) {
     ReturnJsonError('У вас нет прав на редактирование этих данных', 'forbidden');
 }
 

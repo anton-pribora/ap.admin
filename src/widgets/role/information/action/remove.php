@@ -5,9 +5,9 @@
 
 $record = $this->argument();
 
-$editable = $this->param('role.edit') || $this->param('role.information.edit');
+$enableRemove = $this->param('role.remove') || $this->param('role.information.remove');
 
-if (!$editable) {
+if (!$enableRemove) {
     ReturnJsonError('У вас нет прав на удаление', 'forbidden');
 }
 
@@ -20,4 +20,7 @@ $record->addHistory('Запись <b>' . $record->name() . '</b> была уда
 
 AddSessionAlert("Запись «{$record->name()}» была удалена");
 
-ReturnJson(true);
+ReturnJson([
+    'url' => ShortUrl($record->urlAsset('url.view'), ['role_id' => null])
+]);
+
