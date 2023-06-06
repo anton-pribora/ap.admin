@@ -41,7 +41,7 @@ app.component('examples-employee-files-view-form', {
     },
     async reloadList() {
       this.loading = true;
-      const result = await this.$do(`${this.widget}::list`);
+      const result = await this.$delay(this.$do(`${this.widget}::list`));
       this.loading = false;
 
       if (result) {
@@ -75,7 +75,7 @@ app.component('examples-employee-files-view-form', {
       if (await this.$confirm(`Вы действительно хотите удалить «${e.name}»?`)) {
         e.deleting = true;
 
-        if (await this.$do(`${this.widget}::removeFile`, {data: e})) {
+        if (await this.$delay(this.$do(`${this.widget}::removeFile`, {data: e}))) {
           this.$store.commit(`${this.store}/removeItem`, e);
           this.$toast.success(`Файл «${e.name}» был удалён`);
         } else {

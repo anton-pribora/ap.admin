@@ -20,7 +20,7 @@ app.component('examples-employee-files-edit-dialog', {
       this.modal._config.backdrop = 'static';
       this.loading = true;
 
-      this.result = await this.$do(`${this.widget}::updateFile`, {data: this.data});
+      this.result = await this.$delay(this.$do(`${this.widget}::updateFile`, {data: this.data}));
 
       this.loading = false;
       this.modal._config.backdrop = true;

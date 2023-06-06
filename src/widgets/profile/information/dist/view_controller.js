@@ -29,7 +29,7 @@ app.component('profile-information-view-form', {
             this.$toast.success('Файлы успешно загружены');
           }
 
-          const result = await this.$do(`${this.widget}::data`);
+          const result = await this.$delay(this.$do(`${this.widget}::data`));
 
           if (result) {
             this.$store.commit(`${this.store}/save`, result.data);
@@ -38,7 +38,7 @@ app.component('profile-information-view-form', {
       });
     },
     async removePhoto() {
-      if (await this.$delay(this.$confirm('Вы действительно хотите удалить фото?'))) {
+      if (await this.$confirm('Вы действительно хотите удалить фото?')) {
         this.photoDeleting = true;
 
         const result = await this.$delay(this.$do(`${this.widget}::removePhoto`));
@@ -64,7 +64,7 @@ app.component('profile-information-view-form', {
     async remove(e) {
       if (await this.$confirm('Вы действительно хотите удалить этого пользователя?')) {
         e.deleting = true;
-        const result = await this.$do(`${this.widget}::remove`, e);
+        const result = await this.$delay(this.$do(`${this.widget}::remove`, e));
 
         if (result && result.url) {
           location.href = result.url;

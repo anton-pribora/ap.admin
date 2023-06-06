@@ -22,7 +22,7 @@ app.component('examples-employee-information-view-form', {
       if (await this.$confirm('Вы действительно хотите удалить этого сотрудника?')) {
         e.deleting = true;
 
-        if (await this.$do(`${this.widget}::remove`, e)) {
+        if (await this.$delay(this.$do(`${this.widget}::remove`, e))) {
           location.reload();
         } else {
           e.deleting = undefined;
@@ -50,7 +50,7 @@ app.component('examples-employee-information-view-form', {
             this.$toast.success('Файлы успешно загружены');
           }
 
-          const result = await this.$do(`${this.widget}::data`);
+          const result = await this.$delay(this.$do(`${this.widget}::data`));
 
           if (result) {
             this.$store.commit(`${this.store}/save`, result.data);
@@ -62,7 +62,7 @@ app.component('examples-employee-information-view-form', {
       if (await this.$confirm('Вы действительно хотите удалить фото?')) {
         e.avatarDeleting = true;
 
-        const result = await this.$do('examples.employee.information::removeAvatar', e);
+        const result = await this.$delay(this.$do('examples.employee.information::removeAvatar', e));
 
         if (result) {
           this.$store.commit('examplesEmployeeInformation/save', result.data);

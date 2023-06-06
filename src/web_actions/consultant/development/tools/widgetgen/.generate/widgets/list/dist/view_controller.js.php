@@ -35,7 +35,7 @@ app.component('{$viewForm}', {
   methods: {
     async reloadList() {
       this.loading = true;
-      const result = await this.$do(`${this.widget}::list`);
+      const result = await this.$delay(this.$do(`${this.widget}::list`));
       this.loading = false;
 
       if (result) {
@@ -54,7 +54,7 @@ app.component('{$viewForm}', {
       if (await this.$confirm(`Вы действительно хотите удалить этот элемент?`)) {
         e.deleting = true;
 
-        if (await this.$do(`${this.widget}::removeItem`, {data: e})) {
+        if (await this.$delay(this.$do(`${this.widget}::removeItem`, {data: e}))) {
           this.$store.commit(`${this.store}/removeItem`, e);
           this.$toast.success(`Элемент был удалён`);
         } else {

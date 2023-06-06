@@ -28,7 +28,7 @@ app.component('{$editDialogComponent}', {
       this.modal._config.backdrop = 'static';
       this.loading = true;
 
-      this.result = await this.$do(`${this.widget}::saveItem`, {data: this.data});
+      this.result = await this.$delay(this.$do(`${this.widget}::saveItem`, {data: this.data}));
 
       this.loading = false;
       this.modal._config.backdrop = true;

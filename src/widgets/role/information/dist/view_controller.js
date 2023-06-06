@@ -21,7 +21,7 @@ app.component('role-information-view-form', {
     async remove(e) {
       if (await this.$confirm('Вы действительно хотите удалить эту запись?')) {
         e.deleting = true;
-        const result = await this.$do(`${this.widget}::remove`, e);
+        const result = await this.$delay(this.$do(`${this.widget}::remove`, e));
 
         if (result && result.url) {
           location.href = result.url;
