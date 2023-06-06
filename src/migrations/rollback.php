@@ -9,11 +9,20 @@ install_db();
 
 define('ROLLBACK', true);
 
-$limit      = $argv[1] ?? 1;
+$argument = $argv[1] ?? 1;
+
+$pattern    = is_numeric($argument) ? null : $argument;
+$limit      = is_numeric($argument) ? $pattern : null;
 $migrations = migrations_from_db($limit);
 $files      = migrations_from_disk();
 
 foreach ($migrations as ['name' => $migration]) {
+    if ($pattern) {
+        if (mb_stripos($migration, $pattern) === false) {
+            continue;
+        }
+    }
+
     echo "Rollback migration ", $migration, ": ";
 
     if (isset($files[$migration])) {
