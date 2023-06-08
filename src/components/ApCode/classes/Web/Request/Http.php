@@ -144,15 +144,18 @@ class Http implements RequestInterface
     {
         $https = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] == 'on';
         $port  = $_SERVER['SERVER_PORT'];
+        $host  = $_SERVER['HTTP_HOST'];
 
         $uri[] = $https ? 'https' : 'http';
         $uri[] = '://';
-        $uri[] = $_SERVER['SERVER_NAME'];
+        $uri[] = $_SERVER['HTTP_HOST'];
 
-        if ($https && $port == '443') {
-            ;
+        if (str_contains($host, ':')) {
+            // Хост содержит информацию по порту
+        } elseif ($https && $port == '443') {
+            // Стандартный порт для HTTPS
         } elseif (!$https && $port == '80') {
-            ;
+            // Стандартный порт для HTTP
         } else {
             $uri[] = ':';
             $uri[] = $port;

@@ -1,13 +1,16 @@
 server {
     listen *:80;
-    server_name ap.admin;
+    server_name ap.admin2;
 
-    root       /var/www/ap.admin/src/web_docroot;
-    access_log /var/www/ap.admin/logs/access.log;
-    error_log  /var/www/ap.admin/logs/error.log;
+    root       /app/src/web_docroot;
+    access_log /app/logs/access.log;
+    error_log  /app/logs/error.log;
 
     set $phpini "
-        error_log=/var/www/ap.admin/logs/php-errors.log
+        display_errors=On;
+        error_reporting=E_ALL;
+        error_log=/app/logs/php-errors.log;
+        log_errors=On;
     ";
 
     index index.php index.html;
@@ -31,6 +34,6 @@ server {
 
         fastcgi_param PHP_VALUE $phpini;
         fastcgi_param SCRIPT_FILENAME $document_root/index.php;
-        fastcgi_pass unix:/run/php/php7.4-fpm.sock;
+        fastcgi_pass php:9000;
     }
 }

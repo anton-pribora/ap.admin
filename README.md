@@ -1,9 +1,38 @@
 # ap.admin
 Платформа для разработки личных кабинетов
 
-## Установка
+## Установка в докер
 
-1. Клонируйте репозиторий в свою систему и перейдите в папку с репозиторием
+1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием
+
+   ```bash
+   git clone --depth 1 https://github.com/anton-pribora/ap.admin.git
+   cd ap.admin
+   ```
+
+2. Поменяйте группу папки с проектом на www-data
+
+   ```bash
+   sudo chown -R :www-data .
+   ```
+
+3. Запустите контейнеры
+   
+   ```bash
+   docker-compose up -d
+   ```
+
+4. Примените миграции
+   
+   ```bash
+   docker exec -ti ap.admin2 php /app/src/migrations/apply.php
+   ```
+
+По умолчанию панель администратора будет доступна по адресу http://127.0.0.1:3001
+
+## Установка в систему
+
+1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием
 
    ```bash
    mkdir /var/www/ВАШ_ДОМЕН
@@ -16,7 +45,7 @@
    Для NGINX:
    
    ```bash
-   sed -e "s/ap.admin/$(basename $PWD)/g" conf/nginx.conf.example > conf/nginx.conf
+   sed -e "s/ap.admin2/$(basename $PWD)/g" conf/nginx.conf.example > conf/nginx.conf
    ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/$(basename $PWD).conf
    service nginx reload
    ```
@@ -24,52 +53,44 @@
 3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера
 
    ```
-   chown www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/
+   chown -R :www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/
    ```
 
-4. Установка завершена!
+4. Создайте файл с настройками базы данных `src/configs/50-local.php`
+   
+   ```php
+   <?php
+   
+   Config()->setup([
+       // Настройки базы данных
+       'db' => [
+           'dsn'      => 'mysql:dbname=test;host=localhost;charset=utf8',
+           'login'    => 'test',
+           'password' => 'test',
+       ],
+   ]);
+   ```
 
-   Теперь можно удалить репозиторий ap.admin и инициализировать свой:
+5. Примените миграции
    
    ```bash
-   rm -rf .git LICENSE README.md
-   git init
-   git add .
-   git commit -m 'Начальный коммит'
+   php src/migrations/apply.php
+   ```
+
+Теперь можно удалить репозиторий ap.admin и инициализировать свой:
+
+```bash
+rm -rf .git LICENSE README.md
+git init
+git add .
+git commit -m 'Начальный коммит'
    ```
 
 Приятной работы :)
 
 ### Вход в систему
 
-По умолчанию войти в систему под логином `test` с паролем `123`. При этом подключение к базе данных не требуется.
-
-### Настройка базы данных и применение миграций
-
-Создайте файл с локальными настройками `src/configs/10-local.php`:
-
-```php
-<?php
-
-Config()->setup([
-    // Настройки базы данных
-    'db' => [
-        'dsn'      => 'mysql:dbname=test;host=localhost;charset=utf8',
-        'login'    => 'test',
-        'password' => '123',
-    ],
-
-    // Настройки для модулей
-    'js' => [
-        // 'ENV' => 'dev',  // Vue 3 расширение для режима разработки (требует дополнительной загрузки библиотек)
-    ],
-]);
-```
-Примените миграции:
-
-```bash
-$ php src/migrations/apply.php
-```
+Для окружения `development` создаётся пользователь с логином `test` с паролем `test`.
 
 ## Composer
 

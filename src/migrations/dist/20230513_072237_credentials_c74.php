@@ -12,9 +12,9 @@ goto END;
 APPLY:
 
 // Пароль администратора
-$login = 'admin_' . substr(sha1(random_bytes(30)), 0, 5);
-$password = sha1(random_bytes(30));
-$hash = password_hash($password, PASSWORD_DEFAULT);
+$login    = getenv('APPLICATION_ENV') === 'development' ? 'test' : 'admin_' . substr(sha1(random_bytes(30)), 0, 5);
+$password = getenv('APPLICATION_ENV') === 'development' ? 'test' : sha1(random_bytes(30));
+$hash     = password_hash($password, PASSWORD_DEFAULT);
 
 // credentials
 Db()->query(<<<SQL

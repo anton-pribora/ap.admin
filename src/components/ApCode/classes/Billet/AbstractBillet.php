@@ -41,7 +41,7 @@ abstract class AbstractBillet extends BaseBillet
         if (!$meta->has('defaults')) {
             $defaults = [];
 
-            foreach (MetaManager::classMeta(static::class)->get('db.map') as $prop => $dbfield) {
+            foreach (MetaManager::classMeta(static::class)->get('db.map', []) as $prop => $dbfield) {
                 $default = $dbfield['default'] ?? null;
 
                 if (isset($default)) {

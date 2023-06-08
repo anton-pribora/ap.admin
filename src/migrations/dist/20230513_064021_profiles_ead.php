@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS `profile` (
   PRIMARY KEY (`id`)
 ) COMMENT 'Профили пользователей';
 
-INSERT INTO `profile` (`id`, `type`, `meta`) VALUES (1, 'consultant', '{"name": {"first": "Администратор"}}');
+INSERT INTO `profile` (`id`, `type`, `meta`) VALUES (1, 'consultant', '{"name": {"first": "Администратор"},"roles":["admin","consultant"]}');
 SQL
 );
 

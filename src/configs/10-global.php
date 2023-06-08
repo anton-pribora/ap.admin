@@ -13,7 +13,7 @@ Config()->setup([
     ],
 
     'db' => [
-        'dsn'      => 'mysql:dbname=ap_admin2;host=localhost;charset=utf8',
+        'dsn'      => 'mysql:dbname=ap_admin2;host=db;charset=utf8',
         'login'    => 'test',
         'password' => 'test',
     ],
@@ -31,7 +31,8 @@ Config()->setup([
     ],
 
     'console' => [
-        '_SERVER' => [
+        'developer_uid' => 1000,
+        '_SERVER'       => [
             'HTTPS'       => 'on',
             'SERVER_PORT' => '443',
             'SERVER_NAME' => 'ap.admin2',
@@ -50,6 +51,6 @@ Config()->setup([
     ],
 
     'js' => [
-        'ENV' => 'prod',  // Vue 3 extension (used by module misc vue3)
+        'ENV' => getenv('APPLICATION_ENV') === 'development' ? 'dev' : 'prod',  // Vue 3 extension (used by module misc vue3)
     ],
 ]);
