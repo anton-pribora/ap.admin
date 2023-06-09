@@ -3,36 +3,36 @@
 
 ## Установка в докер
 
-1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием
+1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием:
 
    ```bash
    git clone --depth 1 https://github.com/anton-pribora/ap.admin.git
    cd ap.admin
    ```
 
-2. Поменяйте группу папки с проектом на www-data
+2. Создайте настройки окружения, чтобы php-fpm работал с правами вашего пользователя:
 
    ```bash
-   sudo chown -R :www-data .
+   echo -e "UID=$(id -u)\nGID=$(id -g)" >> .env
    ```
 
-3. Запустите контейнеры
+3. Запустите контейнеры:
    
    ```bash
    docker-compose up -d
    ```
 
-4. Примените миграции
+4. Примените миграции:
    
    ```bash
-   docker exec -ti ap.admin2 php /app/src/migrations/apply.php
+   docker exec -ti ap.admin php /app/src/migrations/apply.php
    ```
 
 По умолчанию панель администратора будет доступна по адресу http://127.0.0.1:3001
 
 ## Установка в систему
 
-1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием
+1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием:
 
    ```bash
    mkdir /var/www/ВАШ_ДОМЕН
@@ -40,7 +40,7 @@
    git clone --depth 1 https://github.com/anton-pribora/ap.admin.git .
    ```
 
-2. Установите конфиг сайта
+2. Установите конфиг сайта:
 
    Для NGINX:
    
@@ -50,13 +50,13 @@
    service nginx reload
    ```
 
-3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера
+3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера:
 
    ```
    chown -R :www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/
    ```
 
-4. Создайте файл с настройками базы данных `src/configs/50-local.php`
+4. Создайте файл с настройками базы данных `src/configs/50-local.php`:
    
    ```php
    <?php

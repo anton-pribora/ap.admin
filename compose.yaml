@@ -1,7 +1,12 @@
 services:
   php:
-    container_name: ap.admin2
-    build: ./conf/docker-php
+    container_name: ap.admin
+    user: "${UID}:${GID}"
+    build:
+      context: ./conf/docker-php
+      args:
+        UID: "${UID}"
+        GID: "${GID}"
     environment:
       APPLICATION_ENV: development
     volumes:
@@ -12,7 +17,7 @@ services:
     image: mariadb:10.5
     environment:
       MYSQL_ROOT_PASSWORD: admin
-      MYSQL_DATABASE: ap_admin2
+      MYSQL_DATABASE: ap_admin
       MYSQL_USER: test
       MYSQL_PASSWORD: test
     volumes:

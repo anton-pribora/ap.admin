@@ -2,7 +2,7 @@
 
 Config()->setup([
     'project' => [
-        'name' => 'Ap.admin2',
+        'name' => 'Ap.admin',
         'logo' => '<i class="bi bi-tools" style="font-size: 1.3rem;"></i>',
         'help' => 'help@example.com',
     ],
@@ -13,7 +13,7 @@ Config()->setup([
     ],
 
     'db' => [
-        'dsn'      => 'mysql:dbname=ap_admin2;host=db;charset=utf8',
+        'dsn'      => 'mysql:dbname=ap_admin;host=db;charset=utf8',
         'login'    => 'test',
         'password' => 'test',
     ],
@@ -35,7 +35,7 @@ Config()->setup([
         '_SERVER'       => [
             'HTTPS'       => 'on',
             'SERVER_PORT' => '443',
-            'SERVER_NAME' => 'ap.admin2',
+            'SERVER_NAME' => 'ap.admin',
             'REQUEST_URI' => '/',
         ],
     ],

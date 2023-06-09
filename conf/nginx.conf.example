@@ -1,6 +1,6 @@
 server {
     listen *:80;
-    server_name ap.admin2;
+    server_name ap.admin;
 
     root       /app/src/web_docroot;
     access_log /app/logs/access.log;

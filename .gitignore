@@ -16,3 +16,4 @@ nbproject/
 vendor/
 
 database/
+.env
