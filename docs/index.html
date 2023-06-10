@@ -1,25 +1,108 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Мастер установки Ap.admin</title>
-    <link href="https://unpkg.com/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.css" rel="stylesheet">
-  </head>
-  <body>
-      <nav class="navbar bg-body-tertiary">
-        <div class="container">
-          <a class="navbar-brand" href="">
-            <img src="favicon-32x32.png" alt="Logo" height="24" class="d-inline-block align-text-top">
-            Ap.admin
-          </a>
-        </div>
-      </nav>
-    <div class="container">
-      <h1>Привет, мир!</h1>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="apple-touch-icon" sizes="120x120" href="/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
+  <title>Мастер установки Ap.admin</title>
+  <link href="https://unpkg.com/bootstrap@5/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/bootstrap-icons@1/font/bootstrap-icons.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar bg-body-tertiary">
+  <div class="container">
+    <a class="navbar-brand" href="">
+      <img src="favicon-32x32.png" alt="Logo" height="24" class="d-inline-block align-text-top">
+      Ap.admin
+    </a>
+  </div>
+</nav>
+<div class="container">
+  <h1>Мастер установки</h1>
+  <form>
+    <div class="mb-3">
+      <label for="data.name" class="form-label">Название проекта</label>
+      <input type="text" class="form-control" id="data.name">
     </div>
-    <script src="https://unpkg.com/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
-  </body>
+    <div class="mb-3">
+      <label for="data.domain" class="form-label">Домен</label>
+      <input type="password" class="form-control" id="data.domain">
+    </div>
+    <div class="mb-3">
+      <label for="data.description" class="form-label">Краткое описание проекта</label>
+      <textarea class="form-control" rows="3" id="data.description"></textarea>
+    </div>
+    <div class="mb-3">
+      <ul class="nav nav-underline">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" href="#">Установить через docker compose</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="#">Установить в систему</a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="row align-items-center mb-3">
+      <div class="col-2">
+        Подключения к базе данных
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.host" placeholder="Хост">
+          <label for="data.db.host">Хост</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь">
+          <label for="data.db.user">Пользователь</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль">
+          <label for="data.db.password">Пароль</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="data.db.create">
+          <label class="form-check-label" for="data.db.create">
+            Создать базу и пользователя
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <button type="button" onclick="return false" class="btn btn-light"><i class="bi bi-clipboard me-1"></i>Скопировать</button>
+    </div>
+
+    <div class="card text-bg-light mb-3">
+      <div class="card-body">
+        <pre class="mb-0"><code>bash &lt;&lt;SETUP
+git clone --depth 1 https://github.com/anton-pribora/ap.admin.git
+cd ap.admin
+echo -e "UID=\$(id -u)\\nGID=\$(id -g)" >> .env
+docker-compose up -d
+docker exec -ti ap.admin php /app/src/migrations/apply.php
+rm -rf .git LICENSE README.md docs
+git init
+git add .
+git commit -m 'Начальный коммит'
+SETUP</code></pre>
+      </div>
+    </div>
+  </form>
+</div>
+<script src="https://unpkg.com/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+</body>
 </html>
