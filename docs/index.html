@@ -51,44 +51,6 @@
 
     <div class="row align-items-center mb-3" v-if="type === 'host'">
       <div class="col-2">
-        Настройки базы
-      </div>
-      <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.name" placeholder="Название" v-model="db_name">
-          <label for="data.db.name">Название</label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.host" placeholder="Хост" v-model="db_host">
-          <label for="data.db.host">Хост</label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь" v-model="db_user">
-          <label for="data.db.user">Пользователь</label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль" v-model="db_pass">
-          <label for="data.db.password">Пароль</label>
-        </div>
-      </div>
-      <div class="col">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="data.db.create" v-model="db_create">
-          <label class="form-check-label" for="data.db.create">
-            Создать базу и пользователя
-          </label>
-        </div>
-      </div>
-    </div>
-
-    <div class="row align-items-center mb-3" v-if="type === 'host'">
-      <div class="col-2">
         Окружение
       </div>
       <div class="col">
@@ -99,6 +61,49 @@
         <div class="form-check form-check-inline">
           <input class="form-check-input" type="radio" id="app_env.production" value="production" v-model="app_env">
           <label class="form-check-label" for="app_env.production">production</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row align-items-start mb-3" v-if="type === 'host'">
+      <div class="col-2">
+        Настройки базы
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.name" placeholder="Название" v-model="db_name">
+          <label for="data.db.name">Название</label>
+        </div>
+        <div class="form-check mt-1">
+          <input class="form-check-input" type="checkbox" value="" id="data.db.create" v-model="db_create">
+          <label class="form-check-label" for="data.db.create">
+            Создать базу
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь" v-model="db_user">
+          <label for="data.db.user">Пользователь</label>
+        </div>
+        <div class="form-check mt-1">
+          <input class="form-check-input" type="checkbox" value="" id="data.db.create_user" v-model="db_create_user">
+          <label class="form-check-label" for="data.db.create_user">
+            Создать пользователя
+          </label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль" v-model="db_pass" autocomplete="off">
+          <label for="data.db.password">Пароль</label>
+        </div>
+        <a href="" class="d-block mt-1" @click.prevent="db_pass = this.passwd()"><i class="bi bi-shuffle me-1"></i>Случайный</a>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.host" placeholder="Хост" v-model="db_host">
+          <label for="data.db.host">Хост</label>
         </div>
       </div>
     </div>
@@ -145,6 +150,7 @@
       db_user: 'ap_user',
       db_pass: '123',
       db_create: true,
+      db_create_user: true,
       output: 'console'
     }),
     computed: {
@@ -176,8 +182,36 @@
           script.push('echo -e "UID=$(id -u)\\nGID=$(id -g)" >> .env')
           script.push('docker-compose up -d');
           script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+          script.push('');
         }
 
+        if (this.type === 'host') {
+          if (this.db_create) {
+            script.push('# Создаём базу данных');
+            script.push(`sudo mysql -e ${this.escapeshellarg(`CREATE DATABASE IF NOT EXISTS \`${this.escape(this.db_name, '`\\')}\`;`)}`);
+            script.push('');
+          }
+
+          if (this.db_create_user) {
+            script.push('# Создаём пользователя');
+            script.push(`sudo mysql -e ${this.escapeshellarg(`GRANT ALL PRIVILEGES ON '${this.escape(this.db_name, '\'\\')}'.* TO '${this.escape(this.db_name, '\'\\')}'@'${this.db_host === 'localhost' ? 'localhost' : '%'}' IDENTIFIED BY '${this.escape(this.db_pass, '\'\\')}';`)}`);
+            script.push('');
+          }
+
+          script.push('# Конфиг базы');
+          script.push('cat > src/configs/50-db.local.php <<DATABASE');
+          script.push('<?php');
+          script.push('');
+          script.push('Config()->setup([');
+          script.push(`    'db' => [`);
+          script.push(`        'dsn'      => 'mysql:dbname=${this.escape(this.db_name, '\' ;,\\')};host=${this.escape(this.db_host, '\' ;,\\')};charset=utf8',`);
+          script.push(`        'login'    => '${this.escape(this.db_name, '\'\\')}',`);
+          script.push(`        'password' => '${this.escape(this.db_pass, '\'\\')}',`);
+          script.push(`    ],`);
+          script.push(']);');
+          script.push('DATABASE');
+          script.push('');
+        }
 
         if (this.output === 'console') {
           script.push('SETUP');
@@ -187,9 +221,28 @@
         return script.join('\n');
       }
     },
+    mounted() {
+      this.$watch('domain', n => {
+        this.db_name = this.db_user = n.replaceAll('.', '_');
+      });
+
+      this.$watch('app_env', n => {
+        if (n === 'development') {
+          this.db_pass = 123;
+        }
+
+        if (n === 'production') {
+          this.db_pass = this.passwd();
+        }
+      });
+    },
     methods: {
+      passwd() {
+        const chars = [33,34,36,37,38,40,41,42,43,45,48,49,50,51,52,53,54,55,56,57,61,63,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,94,95,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,120,121,122];
+        return new Array(Math.round(Math.random() * 10 + 16)).fill(0).reduce(p => p + String.fromCharCode(chars[Math.floor(Math.random()*chars.length)]), '');
+      },
       escape(str, chars) {
-        return str.replace(new RegExp(`[${chars.replace(']', '\\]').replace('\\', '\\\\')}]`, 'g'), '\\$&');
+        return String(str).replace(new RegExp(`[${chars.replaceAll(']', '\\]').replaceAll('\\', '\\\\')}]`, 'g'), '\\$&');
       },
       escapeshellarg(str) {
         return '$\'' + this.escape(str, '\r\n\t\'\\') + '\'';
