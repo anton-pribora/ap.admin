@@ -10,16 +10,16 @@ namespace ApCode\Html\Element;
 class ContentableElement extends AbstractElement
 {
     protected $alwaysCloseTag = true;
-    
+
     protected $addHtmlInsteadOfText = false;
-    
+
     public function __construct($contents = null)
     {
         if ( isset($contents) )
         {
             $this->addContents($contents);
         }
-        
+
         parent::__construct();
     }
 
@@ -44,7 +44,7 @@ class ContentableElement extends AbstractElement
             {
                 $this->addHtml((string) $contents);
             }
-            else 
+            else
             {
                 $this->addText((string) $contents);
             }
@@ -53,22 +53,22 @@ class ContentableElement extends AbstractElement
         {
             $this->addSubElement($contents);
         }
-        
+
         return $this;
     }
-    
+
     public function hasContents()
     {
         return count($this->subElements) > 0;
     }
-    
-    private function addText($text)
+
+    protected function addText($text)
     {
         $this->createSubElement(EscapedText::class, $text);
         return $this;
     }
-    
-    private function addHtml($html)
+
+    protected function addHtml($html)
     {
         $this->createSubElement(UnescapedText::class, $html);
         return $this;
