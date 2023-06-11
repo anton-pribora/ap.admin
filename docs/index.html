@@ -23,16 +23,16 @@
     </a>
   </div>
 </nav>
-<div class="container">
+<div class="container" id="content">
   <h1>Мастер установки</h1>
   <form>
     <div class="mb-3">
       <label for="data.name" class="form-label">Название проекта</label>
-      <input type="text" class="form-control" id="data.name">
+      <input type="text" class="form-control" id="data.name" v-model="name">
     </div>
     <div class="mb-3">
       <label for="data.domain" class="form-label">Домен</label>
-      <input type="password" class="form-control" id="data.domain">
+      <input type="text" class="form-control" id="data.domain" v-model="domain">
     </div>
     <div class="mb-3">
       <label for="data.description" class="form-label">Краткое описание проекта</label>
@@ -41,39 +41,45 @@
     <div class="mb-3">
       <ul class="nav nav-underline">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" href="#">Установить через docker compose</a>
+          <a class="nav-link" :class="{active: this.type === 'docker'}" @click.prevent="type = 'docker'" href="javascript:void(0)">Установка через docker compose</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="#">Установить в систему</a>
+          <a class="nav-link" :class="{active: this.type === 'host'}" @click.prevent="type = 'host'" href="javascript:void(0)">Установка в систему</a>
         </li>
       </ul>
     </div>
 
-    <div class="row align-items-center mb-3">
+    <div class="row align-items-center mb-3" v-if="type === 'host'">
       <div class="col-2">
-        Подключения к базе данных
+        Настройки базы
       </div>
       <div class="col">
         <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.host" placeholder="Хост">
+          <input type="text" class="form-control" id="data.db.name" placeholder="Название" v-model="db_name">
+          <label for="data.db.name">Название</label>
+        </div>
+      </div>
+      <div class="col">
+        <div class="form-floating">
+          <input type="text" class="form-control" id="data.db.host" placeholder="Хост" v-model="db_host">
           <label for="data.db.host">Хост</label>
         </div>
       </div>
       <div class="col">
         <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь">
+          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь" v-model="db_user">
           <label for="data.db.user">Пользователь</label>
         </div>
       </div>
       <div class="col">
         <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль">
+          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль" v-model="db_pass">
           <label for="data.db.password">Пароль</label>
         </div>
       </div>
       <div class="col">
         <div class="form-check">
-          <input class="form-check-input" type="checkbox" value="" id="data.db.create">
+          <input class="form-check-input" type="checkbox" value="" id="data.db.create" v-model="db_create">
           <label class="form-check-label" for="data.db.create">
             Создать базу и пользователя
           </label>
@@ -81,28 +87,124 @@
       </div>
     </div>
 
-    <div class="mb-3">
-      <button type="button" onclick="return false" class="btn btn-light"><i class="bi bi-clipboard me-1"></i>Скопировать</button>
+    <div class="row align-items-center mb-3" v-if="type === 'host'">
+      <div class="col-2">
+        Окружение
+      </div>
+      <div class="col">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="app_env.development" value="development" v-model="app_env">
+          <label class="form-check-label" for="app_env.development">development</label>
+        </div>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input" type="radio" id="app_env.production" value="production" v-model="app_env">
+          <label class="form-check-label" for="app_env.production">production</label>
+        </div>
+      </div>
     </div>
 
-    <div class="card text-bg-light mb-3">
+    <div class="card mb-5">
+      <div class="card-header">
+        <ul class="nav nav-tabs card-header-tabs">
+          <li class="nav-item">
+            <a class="nav-link" :class="{active: output === 'console'}" @click.prevent="output = 'console'" href="javascript: void(0)">Консоль</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" :class="{active: output === 'file'}" @click.prevent="output = 'file'" href="javascript: void(0)">setup.sh</a>
+          </li>
+        </ul>
+      </div>
       <div class="card-body">
-        <pre class="mb-0"><code>bash &lt;&lt;SETUP
-git clone --depth 1 https://github.com/anton-pribora/ap.admin.git
-cd ap.admin
-echo -e "UID=\$(id -u)\\nGID=\$(id -g)" >> .env
-docker-compose up -d
-docker exec -ti ap.admin php /app/src/migrations/apply.php
-rm -rf .git LICENSE README.md docs
-git init
-git add .
-git commit -m 'Начальный коммит'
-SETUP</code></pre>
+        <div class="mb-3">
+          <button type="button" @click="copy()" class="btn border-secondary btn-light">
+            <i v-if="copyState === 'ready'" class="bi bi-clipboard me-1"></i>
+            <i v-if="copyState === 'error'" class="bi bi-x-circle text-danger me-1"></i>
+            <i v-if="copyState === 'success'" class="bi bi-check-lg text-success me-1"></i>
+            <span v-if="copyState === 'copying'" class="spinner-border ms-1 text-primary spinner-border-sm"></span>
+            Скопировать
+          </button>
+        </div>
+        <pre class="mb-0"><code>{{script}}</code></pre>
       </div>
     </div>
   </form>
 </div>
 <script src="https://unpkg.com/bootstrap@5/dist/js/bootstrap.bundle.min.js"></script>
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+  const app = Vue.createApp({
+    data: () => ({
+      type: 'docker',
+      copyState: 'ready',
+      name: 'Ap.admin',
+      domain: 'ap.admin',
+      description: '',
+      app_env: 'development',
+      db_name: 'ap_admin',
+      db_host: 'localhost',
+      db_user: 'ap_user',
+      db_pass: '123',
+      db_create: true,
+      output: 'console'
+    }),
+    computed: {
+      script() {
+        const script = [];
+
+        if (this.output === 'console') {
+          script.push('bash <<SETUP');
+        }
+
+        if (this.output === 'file') {
+          script.push('#!/usr/bin/bash');
+          script.push('');
+        }
+
+        script.push('# Клонируем репозиторий');
+        script.push(`git clone --depth 1 https://github.com/anton-pribora/ap.admin.git ${this.escapeshellarg(this.domain)}`);
+        script.push(`cd ${this.escapeshellarg(this.domain)}`);
+        script.push('');
+
+        script.push('# Задаём настройки проекта');
+        script.push(`sed -i -E ${this.escapeshellarg(`s/'name' => '.*',/'name' => '${this.escape(this.escape(this.name, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
+        script.push(`sed -i -E ${this.escapeshellarg(`s/'SERVER_NAME' => '.*',/'name' => '${this.escape(this.escape(this.domain, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
+        script.push(`sed -i -E ${this.escapeshellarg(`s/container_name: ap.admin'/container_name: ${this.domain}/`)} compose.yaml`);
+        script.push('');
+
+        if (this.type === 'docker') {
+          script.push('# Настройки для докера');
+          script.push('echo -e "UID=$(id -u)\\nGID=$(id -g)" >> .env')
+          script.push('docker-compose up -d');
+          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+        }
+
+
+        if (this.output === 'console') {
+          script.push('SETUP');
+          return this.escape(script.join('\n'), '$\\');
+        }
+
+        return script.join('\n');
+      }
+    },
+    methods: {
+      escape(str, chars) {
+        return str.replace(new RegExp(`[${chars.replace(']', '\\]').replace('\\', '\\\\')}]`, 'g'), '\\$&');
+      },
+      escapeshellarg(str) {
+        return '$\'' + this.escape(str, '\r\n\t\'\\') + '\'';
+      },
+      async copy() {
+        this.copyState = 'copying';
+        new Promise(resolve => setTimeout(resolve, 300))
+          .then(() => navigator.clipboard.writeText(this.script)
+            .then(() => this.copyState = 'success', () => this.copyState = 'error')
+            .then(() => setTimeout(() => this.copyState = 'ready', 1000)))
+        ;
+      }
+    }
+  });
+  app.mount('#content');
+</script>
 </body>
 </html>
