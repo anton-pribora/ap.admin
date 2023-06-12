@@ -27,16 +27,16 @@
   <h1>Мастер установки</h1>
   <form>
     <div class="mb-3">
-      <label for="data.name" class="form-label">Название проекта</label>
-      <input type="text" class="form-control" id="data.name" v-model="name">
+      <label for="name" class="form-label">Название проекта</label>
+      <input type="text" class="form-control border-secondary" id="name" v-model="name">
     </div>
     <div class="mb-3">
-      <label for="data.domain" class="form-label">Домен</label>
-      <input type="text" class="form-control" id="data.domain" v-model="domain">
+      <label for="domain" class="form-label">Домен</label>
+      <input type="text" class="form-control border-secondary" id="domain" v-model="domain">
     </div>
     <div class="mb-3">
-      <label for="data.description" class="form-label">Краткое описание проекта</label>
-      <textarea class="form-control" rows="3" id="data.description"></textarea>
+      <label for="description" class="form-label">Краткое описание проекта</label>
+      <textarea class="form-control border-secondary" rows="3" id="description" v-model="description"></textarea>
     </div>
     <div class="mb-3">
       <ul class="nav nav-underline">
@@ -49,18 +49,58 @@
       </ul>
     </div>
 
-    <div class="row align-items-center mb-3" v-if="type === 'host'">
+    <div class="row align-items-center mb-3">
       <div class="col-2">
         Окружение
       </div>
       <div class="col">
         <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="app_env.development" value="development" v-model="app_env">
-          <label class="form-check-label" for="app_env.development">development</label>
+          <input class="form-check-input border-secondary" type="radio" id="app_env.development" value="development" v-model="app_env">
+          <label class="form-check-label" for="app_env.development">Development</label>
         </div>
-        <div class="form-check form-check-inline">
-          <input class="form-check-input" type="radio" id="app_env.production" value="production" v-model="app_env">
-          <label class="form-check-label" for="app_env.production">production</label>
+        <div class="form-check form-check-inline" title="Доступно только для установки в систему">
+          <input class="form-check-input border-secondary" type="radio" id="app_env.production" value="production" :disabled="type === 'docker'" v-model="app_env">
+          <label class="form-check-label" for="app_env.production">Production</label>
+        </div>
+      </div>
+    </div>
+
+    <div class="row align-items-center mb-3" v-if="type === 'docker'">
+      <div class="col-2">Контейнер PHP</div>
+      <div class="col">
+        <div class="row row-cols-4">
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="docker_php_name" placeholder="Название контейнера" v-model="docker_php_name">
+              <label for="docker_php_name">Название контейнера</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center mb-3" v-if="type === 'docker'">
+      <div class="col-2">Контейнер NGINX</div>
+      <div class="col">
+        <div class="row row-cols-4">
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="docker_nginx_local_port" placeholder="Локальный порт" v-model="docker_nginx_local_port">
+              <label for="docker_nginx_local_port">Локальный порт</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center mb-3" v-if="type === 'docker'">
+      <div class="col-2">Контейнер MariaDB</div>
+      <div class="col">
+        <div class="row row-cols-4">
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="docker_db_local_port" placeholder="Локальный порт" v-model="docker_db_local_port">
+              <label for="docker_db_local_port">Локальный порт</label>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -70,40 +110,86 @@
         Настройки базы
       </div>
       <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.name" placeholder="Название" v-model="db_name">
-          <label for="data.db.name">Название</label>
+        <div class="row row-cols-4">
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="db_name" placeholder="Название" v-model="db_name">
+              <label for="db_name">Название</label>
+            </div>
+            <div class="form-check mt-1">
+              <input class="form-check-input border-secondary" type="checkbox" value="" id="db_create" v-model="db_create">
+              <label class="form-check-label" for="db_create">
+                Создать базу
+              </label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="db_user" placeholder="Пользователь" v-model="db_user">
+              <label for="db_user">Пользователь</label>
+            </div>
+            <div class="form-check mt-1">
+              <input class="form-check-input border-secondary" type="checkbox" value="" id="db_create_user" v-model="db_create_user">
+              <label class="form-check-label" for="db_create_user">
+                Создать пользователя
+              </label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="db_pass" placeholder="Пароль" v-model="db_pass" autocomplete="off">
+              <label for="db_pass">Пароль</label>
+            </div>
+            <a href="" class="d-block mt-1" @click.prevent="db_pass = this.passwd()"><i class="bi bi-shuffle me-1"></i>Случайный</a>
+          </div>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="db_host" placeholder="Хост" v-model="db_host">
+              <label for="db_host">Хост</label>
+            </div>
+          </div>
         </div>
-        <div class="form-check mt-1">
-          <input class="form-check-input" type="checkbox" value="" id="data.db.create" v-model="db_create">
-          <label class="form-check-label" for="data.db.create">
-            Создать базу
-          </label>
+      </div>
+    </div>
+
+    <div class="row align-items-center mb-3">
+      <div class="col-2">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input border-secondary" type="checkbox" id="local_domain" v-model="local_domain">
+          <label class="form-check-label" for="local_domain">Локальный домен</label>
         </div>
       </div>
       <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.user" placeholder="Пользователь" v-model="db_user">
-          <label for="data.db.user">Пользователь</label>
-        </div>
-        <div class="form-check mt-1">
-          <input class="form-check-input" type="checkbox" value="" id="data.db.create_user" v-model="db_create_user">
-          <label class="form-check-label" for="data.db.create_user">
-            Создать пользователя
-          </label>
+        <div class="row row-cols-4">
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="local_domain_name" placeholder="Название" v-model="local_domain_name" :disabled="!local_domain">
+              <label for="local_domain_name">Название</label>
+            </div>
+          </div>
+          <div class="col">
+            <div class="form-floating">
+              <input type="text" class="form-control border-secondary" id="local_domain_ip" placeholder="Адрес" v-model="local_domain_ip" :disabled="!local_domain">
+              <label for="local_domain_ip">Адрес</label>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+
+    <div class="row align-items-center mb-3">
       <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.password" placeholder="Пароль" v-model="db_pass" autocomplete="off">
-          <label for="data.db.password">Пароль</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input border-secondary" type="checkbox" id="local_domain_add_to_hosts" v-model="local_domain_add_to_hosts" :disabled="!local_domain_is_valid">
+          <label class="form-check-label" for="local_domain_add_to_hosts">Добавить локальный домен в /etc/hosts</label>
         </div>
-        <a href="" class="d-block mt-1" @click.prevent="db_pass = this.passwd()"><i class="bi bi-shuffle me-1"></i>Случайный</a>
       </div>
+    </div>
+    <div class="row align-items-center mb-3">
       <div class="col">
-        <div class="form-floating">
-          <input type="text" class="form-control" id="data.db.host" placeholder="Хост" v-model="db_host">
-          <label for="data.db.host">Хост</label>
+        <div class="form-check form-check-inline">
+          <input class="form-check-input border-secondary" type="checkbox" id="local_domain_add_to_global_web_server" v-model="local_domain_add_to_global_web_server" :disabled="!local_domain_is_valid">
+          <label class="form-check-label" for="local_domain_add_to_global_web_server">Добавить ссылку на конфиг в /etc/nginx/sites-enabled/</label>
         </div>
       </div>
     </div>
@@ -145,6 +231,15 @@
       domain: 'ap.admin',
       description: '',
       app_env: 'development',
+      docker_php_name: 'ap.admin',
+      docker_nginx_local_port: '127.0.0.1:3001',
+      docker_db_local_port: '127.0.0.1:3002',
+      local_domain: false,
+      local_domain_name: 'ap.admin.local',
+      local_domain_ip: '127.0.0.1',
+      local_domain_add_to_hosts: true,
+      local_domain_add_to_global_web_server: true,
+      local_domain_is_valid: true,
       db_name: 'ap_admin',
       db_host: 'localhost',
       db_user: 'ap_user',
@@ -224,17 +319,37 @@
     mounted() {
       this.$watch('domain', n => {
         this.db_name = this.db_user = n.replaceAll('.', '_');
+        this.docker_php_name = n;
+        this.local_domain_name = this.app_env === 'development' ? `${n}.local` : n;
       });
 
       this.$watch('app_env', n => {
         if (n === 'development') {
           this.db_pass = 123;
+          this.local_domain_name = `${this.domain}.local`;
         }
 
         if (n === 'production') {
           this.db_pass = this.passwd();
+          this.local_domain_name = this.domain;
         }
       });
+
+      this.$watch('type', n => {
+        if (n === 'docker') {
+          this.app_env = 'development';
+        }
+      });
+
+      const watcher_local_domain_is_valid = () => {
+        this.local_domain_is_valid = this.local_domain && this.local_domain_name && this.local_domain_ip;
+      };
+
+      this.$watch('local_domain', watcher_local_domain_is_valid);
+      this.$watch('local_domain_name', watcher_local_domain_is_valid);
+      this.$watch('local_domain_ip', watcher_local_domain_is_valid);
+
+      watcher_local_domain_is_valid();
     },
     methods: {
       passwd() {
