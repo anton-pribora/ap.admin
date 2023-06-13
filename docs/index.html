@@ -338,7 +338,7 @@
         script.push(`<?php`);
         script.push(``);
         script.push(`Config()->set('APPLICATION_ENV', '${this.escape(this.app_env, '\'\\')}');`);
-        script.push(`putenv('APPLICATION_ENV', '${this.escape(this.app_env, '\'\\')}');`);
+        script.push(`putenv('APPLICATION_ENV=${this.escape(this.app_env, '\'\\')}');`);
         script.push('CONF');
         script.push('');
 
@@ -465,17 +465,17 @@
         }
 
         if (this.type === 'docker') {
-          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} bash /app/src/bin/update_cdn_libs.sh`);
-          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+          script.push(`docker exec ${this.escapeshellarg(this.domain)} bash /app/src/bin/update_cdn_libs.sh`);
+          script.push(`docker exec ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
           script.push('');
         }
 
         if (this.type === 'host') {
           if (this.app_env === 'development') {
-            script.push(`php src/bin/update_cdn_libs.sh`);
+            script.push(`bash src/bin/update_cdn_libs.sh`);
           }
 
-          script.push(`bash src/migrations/apply.php`);
+          script.push(`php src/migrations/apply.php`);
           script.push('');
         }
 
