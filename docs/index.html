@@ -366,7 +366,6 @@
           script.push('echo -e "UID=$(id -u)\\nGID=$(id -g)" >> .env')
           script.push('compose=$((docker compose version 2>/dev/null 1>/dev/null) && echo docker compose || echo docker-compose)');
           script.push('$compose up -d');
-          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
           script.push('');
           script.push('# Конфиг для NGINX');
           script.push('cat > conf/nginx.conf <<CONF');
@@ -403,10 +402,6 @@
           script.push(`    ],`);
           script.push(']);');
           script.push('CONF');
-          script.push('');
-
-          script.push('# Применяем миграции');
-          script.push(`php src/migrations/apply.php`);
           script.push('');
 
           script.push('# Конфиг для NGINX');
@@ -466,6 +461,21 @@
             script.push('sudo nginx -t && sudo service nginx reload');
           }
 
+          script.push('');
+        }
+
+        if (this.type === 'docker') {
+          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} bash /app/src/bin/update_cdn_libs.sh`);
+          script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+          script.push('');
+        }
+
+        if (this.type === 'host') {
+          if (this.app_env === 'development') {
+            script.push(`php src/bin/update_cdn_libs.sh`);
+          }
+
+          script.push(`bash src/migrations/apply.php`);
           script.push('');
         }
 

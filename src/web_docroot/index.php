@@ -1,8 +1,10 @@
 <?php
 
-ini_set('display_errors', Config()->get('APPLICATION_ENV') !== 'production');
+//ini_set('display_errors', true);
 
 include '../bootstrap.php';
+
+ini_set('display_errors', Config()->get('APPLICATION_ENV') !== 'production');
 
 Layout()->startGrab('body.content');
 
