@@ -16,6 +16,6 @@ if ($uid === 0 && $changeOwner) {
 
     if ($data) {
         posix_setgid($data['gid']);
-        posix_setuid(getenv('APPLICATION_ENV') === 'development' ? Config()->get('console.developer_uid', 1000) : $data['uid']);
+        posix_setuid(Config()->get('APPLICATION_ENV') === 'development' ? Config()->get('console.developer_uid', 1000) : $data['uid']);
     }
 }

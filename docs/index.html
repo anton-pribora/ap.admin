@@ -28,15 +28,36 @@
   <form>
     <div class="mb-3">
       <label for="name" class="form-label">Название проекта</label>
-      <input type="text" class="form-control border-secondary" id="name" v-model="name">
+      <div class="row align-items-start">
+        <div class="col-6">
+          <input type="text" class="form-control border-secondary" id="name" v-model="name">
+        </div>
+        <div class="col text-body-secondary small">
+          Название проекта добавляется в &lt;title>, а также показывается над левым меню.
+        </div>
+      </div>
     </div>
     <div class="mb-3">
       <label for="domain" class="form-label">Домен</label>
-      <input type="text" class="form-control border-secondary" id="domain" v-model="domain">
+      <div class="row align-items-start">
+        <div class="col-6">
+          <input type="text" class="form-control border-secondary" id="domain" v-model="domain">
+        </div>
+        <div class="col text-body-secondary small">
+          Относительно домена вычисляются папка проекта, локальный домен и название контейнера с PHP (если используется докер).
+        </div>
+      </div>
     </div>
     <div class="mb-3">
       <label for="description" class="form-label">Краткое описание проекта</label>
-      <textarea class="form-control border-secondary" rows="3" id="description" v-model="description"></textarea>
+      <div class="row align-items-start">
+        <div class="col-6">
+          <textarea class="form-control border-secondary" rows="3" id="description" v-model="description"></textarea>
+        </div>
+        <div class="col text-body-secondary small">
+          Описание проекта для начального README.md
+        </div>
+      </div>
     </div>
     <div class="mb-3">
       <ul class="nav nav-underline">
@@ -249,11 +270,27 @@
       output: 'console'
     }),
     computed: {
+      http_host() {
+        if (this.local_domain_is_valid) {
+          return this.local_domain_name;
+        }
+
+        if (this.type === 'docker') {
+          if (String(this.docker_nginx_local_port).match(/^\d+$/)) {
+            return `127.0.0.1:${this.docker_nginx_local_port}`;
+          }
+
+          return this.docker_nginx_local_port;
+        }
+
+        return this.domain;
+      },
       script() {
         const script = [];
 
         if (this.output === 'console') {
           script.push('bash <<SETUP');
+          script.push('');
         }
 
         if (this.output === 'file') {
@@ -261,22 +298,83 @@
           script.push('');
         }
 
-        script.push('# Клонируем репозиторий');
-        script.push(`git clone --depth 1 https://github.com/anton-pribora/ap.admin.git ${this.escapeshellarg(this.domain)}`);
-        script.push(`cd ${this.escapeshellarg(this.domain)}`);
-        script.push('');
+        if (this.app_env === 'production') {
+          script.push('# Защита от неверной директории');
+          script.push('[ -d src/web_actions ] || (echo -e "Текущая директория не является проектом Ap.admin\\nСклонируйте свой репозиторий на сервер и перейдите в директорию, где находится папка .git"; exit 1)');
+          script.push('');
+        } else {
+          script.push('# Клонируем репозиторий');
+          script.push(`git clone --depth 1 https://github.com/anton-pribora/ap.admin.git ${this.escapeshellarg(this.domain)}`);
+          script.push(`cd ${this.escapeshellarg(this.domain)}`);
+          script.push('');
+        }
 
-        script.push('# Задаём настройки проекта');
-        script.push(`sed -i -E ${this.escapeshellarg(`s/'name' => '.*',/'name' => '${this.escape(this.escape(this.name, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
-        script.push(`sed -i -E ${this.escapeshellarg(`s/'SERVER_NAME' => '.*',/'name' => '${this.escape(this.escape(this.domain, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
-        script.push(`sed -i -E ${this.escapeshellarg(`s/container_name: ap.admin'/container_name: ${this.domain}/`)} compose.yaml`);
+        if (this.app_env === 'development') {
+          script.push('# Задаём настройки проекта');
+          script.push(`sed -i -e ${this.escapeshellarg(`s/'name' => '.*',/'name' => '${this.escape(this.escape(this.name, '\'\\'), '/\\')}',/`)} \\`);
+          script.push(`       -e ${this.escapeshellarg(`s/'SERVER_NAME' => '.*',/'SERVER_NAME' => '${this.escape(this.escape(this.domain, '\'\\'), '/\\')}',/`)} \\`);
+          script.push(`       -e ${this.escapeshellarg(`s/'HTTP_HOST'   => '.*',/'HTTP_HOST'   => '${this.escape(this.escape(this.domain, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
+          script.push('');
+
+          script.push('# Локальные настройки хоста');
+          script.push('cat > src/configs/50-server.local.php <<CONF');
+          script.push(`<?php`);
+          script.push(``);
+          script.push(`Config()->setup([`);
+          script.push(`    'console' => [`);
+          script.push(`        '_SERVER'       => [`);
+          script.push(`            'HTTPS'       => 'off',`);
+          script.push(`            'SERVER_PORT' => '80',`);
+          script.push(`            'HTTP_HOST'   => '${this.escape(this.http_host, '\'\\')}',`);
+          script.push(`        ],`);
+          script.push(`    ],`);
+          script.push(`]);`);
+          script.push('CONF');
+          script.push('');
+        }
+
+        script.push('# Настройки окружения');
+        script.push('cat > src/configs/05-application_env.local.php <<CONF');
+        script.push(`<?php`);
+        script.push(``);
+        script.push(`Config()->set('APPLICATION_ENV', '${this.escape(this.app_env, '\'\\')}');`);
+        script.push(`putenv('APPLICATION_ENV', '${this.escape(this.app_env, '\'\\')}');`);
+        script.push('CONF');
         script.push('');
 
         if (this.type === 'docker') {
           script.push('# Настройки для докера');
+
+          const compose_re = [];
+
+          if (this.docker_php_name !== 'ap.admin') {
+            compose_re.push(`s/container_name: ap.admin/container_name: ${this.escape(this.docker_php_name, '/\\')}/`);
+          }
+
+          if (this.docker_nginx_local_port !== '127.0.0.1:3001') {
+            compose_re.push(`s/127.0.0.1:3001/${this.docker_nginx_local_port}/`);
+          }
+
+          if (this.docker_db_local_port !== '127.0.0.1:3002') {
+            compose_re.push(`s/127.0.0.1:3002/${this.docker_db_local_port}/`);
+          }
+
+          if (compose_re.length) {
+            script.push(`sed -i ${compose_re.map(re => `-e ${this.escapeshellarg(re)}`).join(' \\\n       ')} compose.yaml`);
+          }
+
           script.push('echo -e "UID=$(id -u)\\nGID=$(id -g)" >> .env')
-          script.push('docker-compose up -d');
+          script.push('compose=$((docker compose version 2>/dev/null 1>/dev/null) && echo docker compose || echo docker-compose)');
+          script.push('$compose up -d');
           script.push(`docker exec -ti ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+          script.push('');
+          script.push('# Конфиг для NGINX');
+          script.push('cat > conf/nginx.conf <<CONF');
+          script.push('server {');
+          script.push(`  name ${this.local_domain_name};`);
+          script.push(`  proxy_pass ${this.docker_nginx_local_port};`);
+          script.push('}');
+          script.push('CONF');
           script.push('');
         }
 
@@ -294,7 +392,7 @@
           }
 
           script.push('# Конфиг базы');
-          script.push('cat > src/configs/50-db.local.php <<DATABASE');
+          script.push('cat > src/configs/50-db.local.php <<CONF');
           script.push('<?php');
           script.push('');
           script.push('Config()->setup([');
@@ -304,7 +402,70 @@
           script.push(`        'password' => '${this.escape(this.db_pass, '\'\\')}',`);
           script.push(`    ],`);
           script.push(']);');
-          script.push('DATABASE');
+          script.push('CONF');
+          script.push('');
+
+          script.push('# Применяем миграции');
+          script.push(`php src/migrations/apply.php`);
+          script.push('');
+
+          script.push('# Конфиг для NGINX');
+          script.push('cat > conf/nginx.conf <<CONF');
+          script.push('server {');
+          script.push('    listen *:80;');
+          script.push(`    server_name ${this.local_domain_name};`);
+          script.push('');
+          script.push('    root       $PWD/src/web_docroot;');
+          script.push('    access_log $PWD/logs/access.log;');
+          script.push('    error_log  $PWD/logs/error.log;');
+          script.push('');
+          script.push('    set \\$phpini "');
+          script.push(`        display_errors=${this.app_env === 'development' ? 'On' : 'Off'};`);
+          script.push('        log_errors=On;');
+          script.push('        error_reporting=E_ALL;');
+          script.push('        error_log=$PWD/logs/php-errors.log;');
+          script.push('    ";');
+          script.push('');
+          script.push('    index index.php index.html;');
+          script.push('');
+          script.push('    location ^~ /asset|cdn/ {');
+          script.push('    }');
+          script.push('');
+          script.push('    location ^~ /public/file/ {');
+          script.push('        try_files - @run_script;');
+          script.push('    }');
+          script.push('');
+          script.push('    location ~ ^[^\.]+(\.(php|html))?\\$ {');
+          script.push('        try_files - @run_script;');
+          script.push('    }');
+          script.push('');
+          script.push('    location @run_script {');
+          script.push('        include fastcgi_params;');
+          script.push('');
+          script.push('        ## Настройка окружения');
+          script.push(`        fastcgi_param APPLICATION_ENV ${this.app_env};`);
+          script.push('');
+          script.push('        fastcgi_param PHP_VALUE \$phpini;');
+          script.push('        fastcgi_param SCRIPT_FILENAME $document_root/index.php;');
+          script.push('        fastcgi_pass unix:/run/php/php-fpm.sock;');
+          script.push('    }');
+          script.push('}');
+          script.push('CONF');
+          script.push('');
+        }
+
+        if (this.local_domain && this.local_domain_is_valid && (this.local_domain_add_to_hosts || this.local_domain_add_to_global_web_server)) {
+          script.push('# Настройки локального домена');
+
+          if (this.local_domain_add_to_hosts) {
+            script.push(`echo ${this.local_domain_ip} ${this.local_domain_name} | sudo tee -a /etc/hosts > /dev/null`);
+          }
+
+          if (this.local_domain_add_to_global_web_server) {
+            script.push(`sudo ln -s conf/nginx.conf /etc/nginx/sites-enabled/${this.local_domain_name}.conf`);
+            script.push('sudo nginx -t && sudo service nginx reload');
+          }
+
           script.push('');
         }
 
@@ -338,6 +499,10 @@
       this.$watch('type', n => {
         if (n === 'docker') {
           this.app_env = 'development';
+        }
+
+        if (n === 'host') {
+          this.local_domain = true;
         }
       });
 

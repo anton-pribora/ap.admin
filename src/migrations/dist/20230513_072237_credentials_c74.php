@@ -12,9 +12,10 @@ goto END;
 APPLY:
 
 // Пароль администратора
-$login    = getenv('APPLICATION_ENV') === 'development' ? 'test' : 'admin_' . substr(sha1(random_bytes(30)), 0, 5);
-$password = getenv('APPLICATION_ENV') === 'development' ? 'test' : sha1(random_bytes(30));
+$login    = Config()->get('APPLICATION_ENV') === 'development' ? 'test' : 'admin_' . substr(sha1(random_bytes(30)), 0, 5);
+$password = Config()->get('APPLICATION_ENV') === 'development' ? 'test' : sha1(random_bytes(30));
 $hash     = password_hash($password, PASSWORD_DEFAULT);
+$url      = FullUrl('@consultant/');
 
 // credentials
 Db()->query(<<<SQL
@@ -36,6 +37,7 @@ SQL
 
 echo "===============================\n";
 echo "Данные для входа администратора\n";
+echo " Адрес: {$url}\n";
 echo " Логин: {$login}\n";
 echo "Пароль: {$password}\n";
 echo "===============================\n";

@@ -17,7 +17,7 @@ if (!extension_loaded('zip')) {
     Alert('Не установлено расширение <strong>zip</strong>. Скачивание архива недоступно.');
 }
 
-if (getenv('APPLICATION_ENV') !== 'development') {
+if (Config()->get('APPLICATION_ENV') !== 'development') {
     $disableHdd = true;
     Alert('Вы находитесь на окружении отличном от <strong>development</strong>. Запись на диск недоступна.');
 }

@@ -1,6 +1,6 @@
 <?php
 
-ini_set('display_errors', getenv('APPLICATION_ENV') !== 'production');
+ini_set('display_errors', Config()->get('APPLICATION_ENV') !== 'production');
 
 include '../bootstrap.php';
 

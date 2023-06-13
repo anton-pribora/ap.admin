@@ -36,6 +36,7 @@ Config()->setup([
             'HTTPS'       => 'on',
             'SERVER_PORT' => '443',
             'SERVER_NAME' => 'ap.admin',
+            'HTTP_HOST'   => 'ap.admin',
             'REQUEST_URI' => '/',
         ],
     ],
@@ -51,6 +52,6 @@ Config()->setup([
     ],
 
     'js' => [
-        'ENV' => getenv('APPLICATION_ENV') === 'development' ? 'dev' : 'prod',  // Vue 3 extension (used by module misc vue3)
+        'ENV' => Config()->get('APPLICATION_ENV') === 'development' ? 'dev' : 'prod',  // Vue 3 extension (used by module misc vue3)
     ],
 ]);
