@@ -1,96 +1,15 @@
 # ap.admin
 Платформа для разработки личных кабинетов
 
-## Установка в докер
+## Установка
 
-1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием:
+Воспользуйтесь [мастером по подготовке](https://anton-pribora.github.io/ap.admin/) рабочего окружения, чтобы развернуть проект.
+Мастер сформирует скрипт, который необходимо скопировать и выполнить в консоли (или через файл setup.sh).
 
-   ```bash
-   git clone --depth 1 https://github.com/anton-pribora/ap.admin.git
-   cd ap.admin
-   ```
+Для установки через докер требуется docker с плагином compose или docker-compose. Так же необходимо, чтобы пользователь 
+находился в группе docker.
 
-2. Создайте настройки окружения, чтобы php-fpm работал с правами вашего пользователя:
-
-   ```bash
-   echo -e "UID=$(id -u)\nGID=$(id -g)" >> .env
-   ```
-
-3. Запустите контейнеры:
-   
-   ```bash
-   docker-compose up -d
-   ```
-
-4. Примените миграции:
-   
-   ```bash
-   docker exec -ti ap.admin php /app/src/migrations/apply.php
-   ```
-
-По умолчанию панель администратора будет доступна по адресу http://127.0.0.1:3001
-
-## Установка в систему
-
-1. Склонируйте репозиторий в свою систему и перейдите в папку с репозиторием:
-
-   ```bash
-   mkdir /var/www/ВАШ_ДОМЕН
-   cd /var/www/ВАШ_ДОМЕН
-   git clone --depth 1 https://github.com/anton-pribora/ap.admin.git .
-   ```
-
-2. Установите конфиг сайта:
-
-   Для NGINX:
-   
-   ```bash
-   sed -e "s/ap.admin2/$(basename $PWD)/g" conf/nginx.conf.example > conf/nginx.conf
-   ln -s $PWD/conf/nginx.conf /etc/nginx/sites-enabled/$(basename $PWD).conf
-   service nginx reload
-   ```
-
-3. Поменяйте владельца для папок, в которых будут создаваться файлы от web-сервера:
-
-   ```
-   chown -R :www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/
-   ```
-
-4. Создайте файл с настройками базы данных `src/configs/50-local.php`:
-   
-   ```php
-   <?php
-   
-   Config()->setup([
-       // Настройки базы данных
-       'db' => [
-           'dsn'      => 'mysql:dbname=test;host=localhost;charset=utf8',
-           'login'    => 'test',
-           'password' => 'test',
-       ],
-   ]);
-   ```
-
-5. Примените миграции
-   
-   ```bash
-   php src/migrations/apply.php
-   ```
-
-Теперь можно удалить репозиторий ap.admin и инициализировать свой:
-
-```bash
-rm -rf .git LICENSE README.md
-git init
-git add .
-git commit -m 'Начальный коммит'
-   ```
-
-Приятной работы :)
-
-### Вход в систему
-
-Для окружения `development` создаётся пользователь с логином `test` с паролем `test`.
+Для установки в систему требуется nginx, php-fpm 8.1 и mariadb-10.5.
 
 ## Composer
 

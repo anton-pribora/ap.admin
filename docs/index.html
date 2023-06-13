@@ -214,6 +214,14 @@
         </div>
       </div>
     </div>
+    <div class="row align-items-center mb-3">
+      <div class="col">
+        <div class="form-check form-check-inline">
+          <input class="form-check-input border-secondary" type="checkbox" id="init_new_repo" v-model="init_new_repo" :disabled="app_env === 'production'">
+          <label class="form-check-label" for="init_new_repo">Инициализировать новый репозиторий</label>
+        </div>
+      </div>
+    </div>
 
     <div class="card mb-5">
       <div class="card-header">
@@ -250,7 +258,7 @@
       copyState: 'ready',
       name: 'Ap.admin',
       domain: 'ap.admin',
-      description: '',
+      description: 'Панель управления для сайта. Для установки клонируйте репозиторий и выполните `setup.sh`.',
       app_env: 'development',
       docker_php_name: 'ap.admin',
       docker_nginx_local_port: '127.0.0.1:3001',
@@ -267,6 +275,7 @@
       db_pass: '123',
       db_create: true,
       db_create_user: true,
+      init_new_repo: true,
       output: 'console'
     }),
     computed: {
@@ -464,6 +473,22 @@
           script.push('');
         }
 
+        if (this.app_env === 'development' && this.init_new_repo) {
+          script.push('cat > README.md <<VERYUNIQUEBLOB');
+          script.push(`# ${this.name}`);
+          script.push('');
+          script.push(this.description);
+          script.push('VERYUNIQUEBLOB');
+          script.push('');
+
+          script.push('# Новый репозиторий');
+          script.push('rm -rf .git LICENSE');
+          script.push('git init');
+          script.push('git add .');
+          script.push('git commit -m \'Начальный коммит\'');
+          script.push('');
+        }
+
         if (this.type === 'docker') {
           script.push(`docker exec ${this.escapeshellarg(this.domain)} bash /app/src/bin/update_cdn_libs.sh`);
           script.push(`docker exec ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
@@ -471,6 +496,11 @@
         }
 
         if (this.type === 'host') {
+          if (this.app_env === 'production') {
+            script.push('sudo chown -R www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/');
+            script.push('');
+          }
+
           if (this.app_env === 'development') {
             script.push(`bash src/bin/update_cdn_libs.sh`);
           }
