@@ -279,17 +279,20 @@
       output: 'console'
     }),
     computed: {
+      http_docker_host() {
+        if (String(this.docker_nginx_local_port).match(/^\d+$/)) {
+          return `127.0.0.1:${this.docker_nginx_local_port}`;
+        }
+
+        return this.docker_nginx_local_port;
+      },
       http_host() {
         if (this.local_domain_is_valid) {
           return this.local_domain_name;
         }
 
         if (this.type === 'docker') {
-          if (String(this.docker_nginx_local_port).match(/^\d+$/)) {
-            return `127.0.0.1:${this.docker_nginx_local_port}`;
-          }
-
-          return this.docker_nginx_local_port;
+          return this.http_docker_host;
         }
 
         return this.domain;
@@ -379,8 +382,11 @@
           script.push('# Конфиг для NGINX');
           script.push('cat > conf/nginx.conf <<CONF');
           script.push('server {');
-          script.push(`  name ${this.local_domain_name};`);
-          script.push(`  proxy_pass ${this.docker_nginx_local_port};`);
+          script.push(`  server_name ${this.local_domain_name};`);
+          script.push('  location / {');
+          script.push(`    proxy_pass http://${this.http_docker_host};`);
+          script.push('    proxy_set_header Host \\$host;');
+          script.push('  }');
           script.push('}');
           script.push('CONF');
           script.push('');
@@ -466,7 +472,7 @@
           }
 
           if (this.local_domain_add_to_global_web_server) {
-            script.push(`sudo ln -s conf/nginx.conf /etc/nginx/sites-enabled/${this.local_domain_name}.conf`);
+            script.push(`sudo ln -s "$PWD/conf/nginx.conf" /etc/nginx/sites-enabled/${this.local_domain_name}.conf`);
             script.push('sudo nginx -t && sudo service nginx reload');
           }
 
@@ -482,7 +488,7 @@
           script.push('');
 
           script.push('# Новый репозиторий');
-          script.push('rm -rf .git LICENSE');
+          script.push('rm -rf .git LICENSE docs');
           script.push('git init');
           script.push('git add .');
           script.push('git commit -m \'Начальный коммит\'');
