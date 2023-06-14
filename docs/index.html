@@ -401,7 +401,7 @@
 
           if (this.db_create_user) {
             script.push('# Создаём пользователя');
-            script.push(`sudo mysql -e ${this.escapeshellarg(`GRANT ALL PRIVILEGES ON '${this.escape(this.db_name, '\'\\')}'.* TO '${this.escape(this.db_name, '\'\\')}'@'${this.db_host === 'localhost' ? 'localhost' : '%'}' IDENTIFIED BY '${this.escape(this.db_pass, '\'\\')}';`)}`);
+            script.push(`sudo mysql -e ${this.escapeshellarg(`GRANT ALL PRIVILEGES ON \`${this.escape(this.db_name, '`\\')}\`.* TO '${this.escape(this.db_name, '\'\\')}'@'${this.db_host === 'localhost' ? 'localhost' : '%'}' IDENTIFIED BY '${this.escape(this.db_pass, '\'\\')}';`)}`);
             script.push('');
           }
 
@@ -425,15 +425,15 @@
           script.push('    listen *:80;');
           script.push(`    server_name ${this.local_domain_name};`);
           script.push('');
-          script.push('    root       $PWD/src/web_docroot;');
-          script.push('    access_log $PWD/logs/access.log;');
-          script.push('    error_log  $PWD/logs/error.log;');
+          script.push('    root       \'$PWD/src/web_docroot\';');
+          script.push('    access_log \'$PWD/logs/access.log\';');
+          script.push('    error_log  \'$PWD/logs/error.log\';');
           script.push('');
           script.push('    set \\$phpini "');
           script.push(`        display_errors=${this.app_env === 'development' ? 'On' : 'Off'};`);
           script.push('        log_errors=On;');
           script.push('        error_reporting=E_ALL;');
-          script.push('        error_log=$PWD/logs/php-errors.log;');
+          script.push('        error_log=\'$PWD/logs/php-errors.log\';');
           script.push('    ";');
           script.push('');
           script.push('    index index.php index.html;');
@@ -455,8 +455,8 @@
           script.push('        ## Настройка окружения');
           script.push(`        fastcgi_param APPLICATION_ENV ${this.app_env};`);
           script.push('');
-          script.push('        fastcgi_param PHP_VALUE \$phpini;');
-          script.push('        fastcgi_param SCRIPT_FILENAME $document_root/index.php;');
+          script.push('        fastcgi_param PHP_VALUE \\$phpini;');
+          script.push('        fastcgi_param SCRIPT_FILENAME \\$document_root/index.php;');
           script.push('        fastcgi_pass unix:/run/php/php-fpm.sock;');
           script.push('    }');
           script.push('}');
