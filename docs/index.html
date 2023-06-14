@@ -235,6 +235,10 @@
         </ul>
       </div>
       <div class="card-body">
+        <div class="alert" :class="['alert-' + e.type]" v-for="e in alerts">
+          <h4 v-if="e.head" class="alert-heading">{{e.head}}</h4>
+          <div v-if="e.body" v-html="e.body"></div>
+        </div>
         <div class="mb-3">
           <button type="button" @click="copy()" class="btn border-secondary btn-light">
             <i v-if="copyState === 'ready'" class="bi bi-clipboard me-1"></i>
@@ -261,8 +265,8 @@
       description: 'Панель управления для сайта. Для установки клонируйте репозиторий и выполните `setup.sh`.',
       app_env: 'development',
       docker_php_name: 'ap.admin',
-      docker_nginx_local_port: '127.0.0.1:3001',
-      docker_db_local_port: '127.0.0.1:3002',
+      docker_nginx_local_port: '127.0.0.1:4101',
+      docker_db_local_port: '127.0.0.1:4102',
       local_domain: false,
       local_domain_name: 'ap.admin.local',
       local_domain_ip: '127.0.0.1',
@@ -279,6 +283,35 @@
       output: 'console'
     }),
     computed: {
+      alerts() {
+        const alerts = [];
+
+        if (this.type === 'docker') {
+          alerts.push({
+            type: 'primary',
+            body: 'Требуется установленный <strong>docker-compose</strong> или docker с плагином <strong>compose</strong>.'
+          });
+        }
+
+        if (this.type === 'host') {
+          alerts.push({
+            type: 'warning',
+            body: 'Убедитесь, что в системе установлены следующие пакеты: <pre class="m-3"><code>git wget mariadb-server php8.1-gd php8.1-exif php8.1-pdo_mysql php8.1-intl php8.1-tidy php8.1-zip</code></pre>'
+          });
+
+          if (this.app_env === 'development') {
+            alerts.push({
+              type: 'primary',
+              body: 'Убедитесь, что nginx и php-frm имеют доступ на чтение и запись к папкам проекта. Для этого можно поменять владельца ' +
+                'в файлах <code>/etc/nginx/nginx.conf</code> и <code>/etc/php/8.1/fpm/pool.d/www.conf</code>, или же добавить группу пользователя ' +
+                'в www-data (требуется перезагрузка): ' +
+                '<pre class="m-3"><code>sudo usermod -a -G $(id -gn) www-data</code></pre>'
+            });
+          }
+        }
+
+        return alerts;
+      },
       http_docker_host() {
         if (String(this.docker_nginx_local_port).match(/^\d+$/)) {
           return `127.0.0.1:${this.docker_nginx_local_port}`;
