@@ -9,6 +9,7 @@ PathAlias()->set('@root'   , ROOT_DIR);
 PathAlias()->set('@webroot', Config()->get('server.webroot'));
 
 UrlAlias()->set('@cdn'         , '@root/cdn');
+PathAlias()->set('@cdn'        , '@webroot/cdn');
 UrlAlias()->set('@asseturl'    , '@root/asset');
 PathAlias()->set('@assetpath'  , '@webroot/asset');
 PathAlias()->set('@permissions', '@root/permissions');
