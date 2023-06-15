@@ -529,7 +529,6 @@
         }
 
         if (this.type === 'docker') {
-          script.push(`docker exec ${this.escapeshellarg(this.domain)} bash /app/src/bin/update_cdn_libs.sh`);
           script.push(`docker exec ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
           script.push('');
         }
@@ -538,10 +537,6 @@
           if (this.app_env === 'production') {
             script.push('sudo chown -R www-data src/uploads/ src/web_docroot/thumbnails/ src/web_docroot/asset/ src/web_docroot/cdn/ logs/');
             script.push('');
-          }
-
-          if (this.app_env === 'development') {
-            script.push(`bash src/bin/update_cdn_libs.sh`);
           }
 
           script.push(`php src/migrations/apply.php`);
@@ -604,7 +599,11 @@
         return String(str).replace(new RegExp(`[${chars.replaceAll(']', '\\]').replaceAll('\\', '\\\\')}]`, 'g'), '\\$&');
       },
       escapeshellarg(str) {
-        return '$\'' + this.escape(str, '\r\n\t\'\\') + '\'';
+        if (String(str).match(/[\r\n\t \\'"$]/)) {
+          return '$\'' + this.escape(str, '\r\n\t\'\\') + '\'';
+        }
+
+        return str;
       },
       async copy() {
         this.copyState = 'copying';
