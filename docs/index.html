@@ -529,7 +529,7 @@
         }
 
         if (this.type === 'docker') {
-          script.push(`docker exec ${this.escapeshellarg(this.domain)} php /app/src/migrations/apply.php`);
+          script.push(`docker exec ${this.escapeshellarg(this.docker_php_name)} php /app/src/migrations/apply.php`);
           script.push('');
         }
 
@@ -599,7 +599,7 @@
         return String(str).replace(new RegExp(`[${chars.replaceAll(']', '\\]').replaceAll('\\', '\\\\')}]`, 'g'), '\\$&');
       },
       escapeshellarg(str) {
-        if (String(str).match(/[\r\n\t \\'"$]/)) {
+        if (String(str).match(/[\r\n\t \\'"$\]\[<>?!#&()|`*]/)) {
           return '$\'' + this.escape(str, '\r\n\t\'\\') + '\'';
         }
 
