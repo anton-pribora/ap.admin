@@ -296,7 +296,7 @@
         if (this.type === 'host') {
           alerts.push({
             type: 'warning',
-            body: 'Убедитесь, что в системе установлены следующие пакеты: <pre class="m-3"><code>git wget mariadb-server php8.1-gd php8.1-exif php8.1-pdo_mysql php8.1-intl php8.1-tidy php8.1-zip</code></pre>'
+            body: 'Убедитесь, что в системе установлены следующие пакеты: <pre class="m-3"><code>git mariadb-server php8.1-gd php8.1-exif php8.1-pdo_mysql php8.1-intl php8.1-tidy php8.1-zip</code></pre>'
           });
 
           if (this.app_env === 'development') {
@@ -512,6 +512,20 @@
           script.push('');
         }
 
+        if (this.app_env === 'development') {
+          script.push('# Загрузка внешних библиотек');
+
+          if (this.type === 'host') {
+            script.push(`php src/bin/update_cdn_libs.php`);
+          }
+
+          if (this.type === 'docker') {
+            script.push(`docker exec ${this.escapeshellarg(this.docker_php_name)} php /app/src/bin/update_cdn_libs.php`);
+          }
+
+          script.push('');
+        }
+
         if (this.app_env === 'development' && this.init_new_repo) {
           script.push('cat > README.md <<VERYUNIQUEBLOB');
           script.push(`# ${this.name}`);
@@ -521,7 +535,7 @@
           script.push('');
 
           script.push('# Новый репозиторий');
-          script.push('rm -rf .git LICENSE docs');
+          script.push('rm -rf .git LICENSE docs src/web_docroot/cdn/.gitignore');
           script.push('git init');
           script.push('git add .');
           script.push('git commit -m \'Начальный коммит\'');
