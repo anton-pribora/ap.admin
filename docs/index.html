@@ -217,6 +217,14 @@
     <div class="row align-items-center mb-3">
       <div class="col">
         <div class="form-check form-check-inline">
+          <input class="form-check-input border-secondary" type="checkbox" id="example_table" v-model="example_table" :disabled="app_env === 'production'">
+          <label class="form-check-label" for="example_table">Пример таблицы для генератора разделов (<code>example_news</code>)</label>
+        </div>
+      </div>
+    </div>
+    <div class="row align-items-center mb-3">
+      <div class="col">
+        <div class="form-check form-check-inline">
           <input class="form-check-input border-secondary" type="checkbox" id="init_new_repo" v-model="init_new_repo" :disabled="app_env === 'production'">
           <label class="form-check-label" for="init_new_repo">Инициализировать новый репозиторий</label>
         </div>
@@ -280,6 +288,7 @@
       db_create: true,
       db_create_user: true,
       init_new_repo: true,
+      example_table: true,
       output: 'console'
     }),
     computed: {
@@ -523,6 +532,12 @@
             script.push(`docker exec ${this.escapeshellarg(this.docker_php_name)} php /app/src/bin/update_cdn_libs.php`);
           }
 
+          script.push('');
+        }
+
+        if (this.app_env === 'development' && !this.example_table) {
+          script.push('# Удаляем пример таблицы для генератора разделов')
+          script.push(`rm src/migrations/dist/20230617_074512_example_news_ba9.php`);
           script.push('');
         }
 
