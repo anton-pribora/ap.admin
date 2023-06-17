@@ -67,7 +67,7 @@ foreach ($res->fetchAllRows() as $row)
         $view    = false;
         $search  = true;
         $default = trim($default, "'");
-    } elseif (preg_match('/(text|blob)/ui', $type)) {
+    } elseif (preg_match('/(text|blob)/ui', $type) && str_contains($row['Collation'], 'bin')) {
         $format  = 'json';
         $edit    = false;
         $view    = false;
