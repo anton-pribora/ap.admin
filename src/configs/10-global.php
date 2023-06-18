@@ -31,8 +31,8 @@ Config()->setup([
     ],
 
     'console' => [
-        'developer_uid' => 1000,
-        '_SERVER'       => [
+        'default_user' => 'www-data',
+        '_SERVER'      => [
             'HTTPS'       => 'on',
             'SERVER_PORT' => '443',
             'SERVER_NAME' => 'ap.admin',

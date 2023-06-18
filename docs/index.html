@@ -305,7 +305,7 @@
         if (this.type === 'host') {
           alerts.push({
             type: 'warning',
-            body: 'Убедитесь, что в системе установлены следующие пакеты: <pre class="m-3"><code>git mariadb-server php8.1-gd php8.1-exif php8.1-pdo_mysql php8.1-intl php8.1-tidy php8.1-zip</code></pre>'
+            body: 'Убедитесь, что в системе установлены следующие пакеты: <pre class="m-3"><code>git mariadb-server php8.1-gd php8.1-exif php8.1-pdo_mysql php8.1-mb_string php8.1-intl php8.1-tidy php8.1-zip</code></pre>'
           });
 
           if (this.app_env === 'development') {
@@ -370,13 +370,23 @@
           script.push(`       -e ${this.escapeshellarg(`s/'HTTP_HOST'   => '.*',/'HTTP_HOST'   => '${this.escape(this.escape(this.domain, '\'\\'), '/\\')}',/`)} src/configs/10-global.php`);
           script.push('');
 
+          script.push('# Определяем владельца проекта');
+          if (this.type === 'host') {
+            script.push('user=$([ $UID == 0 ] && echo www-data || echo $USER)');
+          }
+          if (this.type === 'docker') {
+            script.push('user=$(id -u)');
+          }
+          script.push('');
+
           script.push('# Локальные настройки хоста');
           script.push('cat > src/configs/50-server.local.php <<CONF');
           script.push(`<?php`);
           script.push(``);
           script.push(`Config()->setup([`);
           script.push(`    'console' => [`);
-          script.push(`        '_SERVER'       => [`);
+          script.push(`        'default_user' => '$user',`);
+          script.push(`        '_SERVER'      => [`);
           script.push(`            'HTTPS'       => 'off',`);
           script.push(`            'SERVER_PORT' => '80',`);
           script.push(`            'HTTP_HOST'   => '${this.escape(this.http_host, '\'\\')}',`);
@@ -525,6 +535,7 @@
           script.push('# Загрузка внешних библиотек');
 
           if (this.type === 'host') {
+            script.push('[ $UID == 0 ] && chown -R $user src/ logs/');
             script.push(`php src/bin/update_cdn_libs.php`);
           }
 

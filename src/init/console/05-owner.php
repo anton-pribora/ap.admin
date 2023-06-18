@@ -5,17 +5,21 @@ $uid = posix_geteuid();
 
 $changeOwner = true;
 
-if (defined('KEEP_ROOT_UID')) {
-    if (KEEP_ROOT_UID === true) {
-        $changeOwner = false;
-    }
+if (constant('KEEP_ROOT_UID') === true) {
+    $changeOwner = false;
 }
 
 if ($uid === 0 && $changeOwner) {
-    $data = posix_getpwnam('www-data');
+    $user = Config()->get('console.default_user');
 
-    if ($data) {
-        posix_setgid($data['gid']);
-        posix_setuid(Config()->get('APPLICATION_ENV') === 'development' ? Config()->get('console.developer_uid', 1000) : $data['uid']);
+    if (is_numeric($user)) {
+        posix_setuid($user);
+    } else {
+        $data = posix_getpwnam(Config()->get('console.default_user'));
+
+        if ($data) {
+            posix_setgid($data['gid']);
+            posix_setuid($data['uid']);
+        }
     }
 }
