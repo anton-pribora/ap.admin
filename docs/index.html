@@ -235,10 +235,7 @@
       <div class="card-header">
         <ul class="nav nav-tabs card-header-tabs">
           <li class="nav-item">
-            <a class="nav-link" :class="{active: output === 'console'}" @click.prevent="output = 'console'" href="javascript: void(0)">Консоль</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" :class="{active: output === 'file'}" @click.prevent="output = 'file'" href="javascript: void(0)">setup.sh</a>
+            <a class="nav-link" :class="{active: output === 'console'}" @click.prevent="output = 'console'" href="javascript: void(0)"><i class="bi bi-filetype-sh me-1"></i>Сценарий установки</a>
           </li>
         </ul>
       </div>
@@ -248,12 +245,19 @@
           <div v-if="e.body" v-html="e.body"></div>
         </div>
         <div class="mb-3">
-          <button type="button" @click="copy()" class="btn border-secondary btn-light">
-            <i v-if="copyState === 'ready'" class="bi bi-clipboard me-1"></i>
-            <i v-if="copyState === 'error'" class="bi bi-x-circle text-danger me-1"></i>
-            <i v-if="copyState === 'success'" class="bi bi-check-lg text-success me-1"></i>
-            <span v-if="copyState === 'copying'" class="spinner-border ms-1 text-primary spinner-border-sm"></span>
-            Скопировать
+          <button type="button" @click="copyConsole()" class="btn border-secondary btn-light me-3" title="Скопировать текст для вставки в терминал">
+            <i v-if="copyState[0] === 'ready'" class="bi bi-terminal me-1"></i>
+            <i v-if="copyState[0] === 'error'" class="bi bi-x-circle text-danger me-1"></i>
+            <i v-if="copyState[0] === 'success'" class="bi bi-check-lg text-success me-1"></i>
+            <span v-if="copyState[0] === 'copying'" class="spinner-border ms-1 text-primary spinner-border-sm"></span>
+            Скопировать одной строкой
+          </button>
+          <button type="button" @click="copyText()" class="btn border-secondary btn-light" title="Скопировать текст в буфер обмена">
+            <i v-if="copyState[1] === 'ready'" class="bi bi-clipboard me-1"></i>
+            <i v-if="copyState[1] === 'error'" class="bi bi-x-circle text-danger me-1"></i>
+            <i v-if="copyState[1] === 'success'" class="bi bi-check-lg text-success me-1"></i>
+            <span v-if="copyState[1] === 'copying'" class="spinner-border ms-1 text-primary spinner-border-sm"></span>
+            Скопировать текст
           </button>
         </div>
         <pre class="mb-0"><code>{{script}}</code></pre>
@@ -267,7 +271,7 @@
   const app = Vue.createApp({
     data: () => ({
       type: 'docker',
-      copyState: 'ready',
+      copyState: ['ready', 'ready'],
       name: 'Ap.admin',
       domain: 'ap.admin',
       description: 'Панель управления для сайта. Для установки клонируйте репозиторий и выполните `setup.sh`.',
@@ -341,11 +345,6 @@
       },
       script() {
         const script = [];
-
-        if (this.output === 'console') {
-          script.push('bash <<SETUP');
-          script.push('');
-        }
 
         if (this.output === 'file') {
           script.push('#!/usr/bin/bash');
@@ -584,11 +583,6 @@
           script.push('');
         }
 
-        if (this.output === 'console') {
-          script.push('SETUP');
-          return this.escape(script.join('\n'), '$\\');
-        }
-
         return script.join('\n');
       }
     },
@@ -646,12 +640,22 @@
 
         return str;
       },
-      async copy() {
-        this.copyState = 'copying';
+      async copyConsole() {
+        const stateIndex = 0;
+        this.copyState[stateIndex] = 'copying';
+        new Promise(resolve => setTimeout(resolve, 300))
+          .then(() => navigator.clipboard.writeText(`echo -e '${String(this.script).replace(/[\r'\\]/g, c => `\\x${c.charCodeAt(0).toString(16).padStart(2, '0')}`).replaceAll('\n', '\\n')}' | bash`)
+            .then(() => this.copyState[stateIndex] = 'success', () => this.copyState[stateIndex] = 'error')
+            .then(() => setTimeout(() => this.copyState[stateIndex] = 'ready', 1000)))
+        ;
+      },
+      async copyText() {
+        const stateIndex = 1;
+        this.copyState[stateIndex] = 'copying';
         new Promise(resolve => setTimeout(resolve, 300))
           .then(() => navigator.clipboard.writeText(this.script)
-            .then(() => this.copyState = 'success', () => this.copyState = 'error')
-            .then(() => setTimeout(() => this.copyState = 'ready', 1000)))
+            .then(() => this.copyState[stateIndex] = 'success', () => this.copyState[stateIndex] = 'error')
+            .then(() => setTimeout(() => this.copyState[stateIndex] = 'ready', 1000)))
         ;
       }
     }
