@@ -402,7 +402,8 @@
         script.push(`<?php`);
         script.push(``);
         script.push(`Config()->set('APPLICATION_ENV', '${this.escape(this.app_env, '\'\\')}');`);
-        script.push(`putenv('APPLICATION_ENV=${this.escape(this.app_env, '\'\\')}');`);
+        script.push(``);
+        script.push(`putenv('APPLICATION_ENV=' . Config()->get('APPLICATION_ENV'));`);
         script.push('CONF');
         script.push('');
 
