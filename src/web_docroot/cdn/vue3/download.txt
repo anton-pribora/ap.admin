@@ -1,4 +1,4 @@
-https://unpkg.com/vue@3/dist/vue.global.prod.js
-https://unpkg.com/vuex@4/dist/vuex.global.prod.js
-https://unpkg.com/vue@3/dist/vue.global.js
-https://unpkg.com/vuex@4/dist/vuex.global.js
+https://unpkg.com/vue@3/dist/vue.global.prod.js      vue.prod.js
+https://unpkg.com/vuex@4/dist/vuex.global.prod.js    vuex.prod.js
+https://unpkg.com/vue@3/dist/vue.global.js           vue.dev.js
+https://unpkg.com/vuex@4/dist/vuex.global.js         vuex.dev.js
