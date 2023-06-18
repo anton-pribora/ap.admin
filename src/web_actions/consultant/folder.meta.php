@@ -8,8 +8,9 @@ $visible = function ($section) {
 return [
     'menu' => [
         ['text' => 'Примеры страниц', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/'), 'submenu' => [
-            ['text' => 'Пустая страница', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/blank.php')],
+            ['text' => 'Страница с ошибкой', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/error.php')],
             ['text' => 'Страница с текстом', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/text.php')],
+            ['text' => 'Пустая страница', 'visible' => $visible('examples'), 'url' => ShortUrl('@consultant/examples/blank.php')],
         ]],
         ['text' => 'Администрирование', 'visible' => $visible('administration'), 'url' => ShortUrl('@consultant/administration/'), 'submenu' => [
             ['text' => 'Пользователи', 'url' => ShortUrl('@consultant/administration/profiles/')],

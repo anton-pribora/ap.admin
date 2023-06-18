@@ -1,4 +1,8 @@
+<?php
 
+Layout()->append('breadcrumbs', 'Страница с текстом');
+
+?>
 <h1>Lorem ipsum dolor sit amet</h1>
 
 <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum metus quam, maximus in ullamcorper ut,
