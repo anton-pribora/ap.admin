@@ -147,7 +147,7 @@ class MySql implements DatabaseInterface
 
     public function tableExists($tableName)
     {
-        if (strpos('.', $tableName)) {
+        if (strpos($tableName, '.')) {
             [$db, $tableName] = explode('.', $tableName, 2);
             $sql = 'SHOW TABLES FROM ' . $this->quoteName($db) . ' LIKE ' . $this->quote($tableName);
         } else {
