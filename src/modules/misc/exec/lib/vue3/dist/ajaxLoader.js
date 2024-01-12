@@ -25,6 +25,7 @@ const ajaxLoader = {
         })
         .catch(error => {
           app.config.globalProperties.$toast.danger(`Ошибка: ${error.message}`);
+          app.config.globalProperties.$ajaxLoaderLastError = error;
         });
 
     app.config.globalProperties.$do = (action = '', data = {}) => q({
