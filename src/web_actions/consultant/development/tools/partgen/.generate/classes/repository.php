@@ -41,8 +41,8 @@ PHP;
         if (isset(\$params['{$prop}'])) {
             if (!in_array(\$params['{$prop}'], ['any', 'all'])) {
                 \$where[] = '{$quotedField} = ' . Db()->quote(\$params['{$prop}']);
-                unset(\$params['{$prop}']);
             }
+            unset(\$params['{$prop}']);
         } else {
             \$where[] = '{$quotedField} = 0';
         }
