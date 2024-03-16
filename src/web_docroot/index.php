@@ -8,7 +8,7 @@ ini_set('display_errors', Config()->get('APPLICATION_ENV') !== 'production');
 
 Layout()->startGrab('body.content');
 
-Module('http')->execute(Request()->action());
+Module('http')->initAndExecute(Request()->action());
 
 if (Halt()->render()) {
     return true;

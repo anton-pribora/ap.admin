@@ -5,6 +5,13 @@ use ApCode\Executor\PhpFileExecutor;
 $folder = ExpandPath(Config()->get('server.webactions'));
 
 return new class ($folder) extends PhpFileExecutor {
+    public function initAndExecute($action)
+    {
+        $this->action = $action;
+        $this->initAction();
+        return $this->doAction();
+    }
+
     protected function actionExists()
     {
         return true;
@@ -12,8 +19,6 @@ return new class ($folder) extends PhpFileExecutor {
 
     protected function doAction()
     {
-        $this->initAction();
-
         if (Halt()->action()) {
             return ;
         }
