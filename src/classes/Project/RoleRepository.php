@@ -84,7 +84,11 @@ class RoleRepository
         }
 
         if (isset($params['tag'])) {
-            $where[] = '`tag` LIKE ' . Db()->quote('%' . $params['tag'] . '%');
+            if (is_array($params['tag'])) {
+                $where[] = '`tag` IN (' . join(',', Db()->quoteArray($params['tag'] ?: [-1])) . ')';
+            } else {
+                $where[] = '`tag` = ' . Db()->quote($params['tag']);
+            }
             unset($params['tag']);
         }
 

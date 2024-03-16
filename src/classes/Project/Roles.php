@@ -20,13 +20,7 @@ trait Roles
      */
     public function roles()
     {
-        $result = [];
-
-        foreach ($this->rolesRaw() as $tag) {
-            $result[] = RoleRepository::findOne(['tag' => $tag]);
-        }
-
-        return array_filter($result);
+        return $this->rolesRaw() ? RoleRepository::findMany(['tag' => $this->rolesRaw()]) : [];
     }
 
     public function hasRole($role)
