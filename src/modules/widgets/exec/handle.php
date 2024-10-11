@@ -36,7 +36,11 @@ if (Request()->isPost()) {
         $item = mb_strimwidth((string) $item, 0, 40, '…');
     });
 
-    Logger()->log('widget', $widgetAction .'('. json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES).')');
+    $data = json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+
+    if (!preg_match('/password/i', $data)) {
+        Logger()->log('widget', $widgetAction . '(' . $data . ')');
+    }
 
     // Каждый виджет должен сам решать, в каком формате и какие данные возвращать
     echo Widget($widgetAction, ...$args);
