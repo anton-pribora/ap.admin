@@ -38,7 +38,7 @@ if (Request()->isPost()) {
 
     $data = json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
-    if (!preg_match('/password/i', $data)) {
+    if (preg_match('/password/i', $data)) {
         $data = '*************';
     }
 
