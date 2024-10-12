@@ -124,19 +124,19 @@ function Logger() {
                 "{datetime} {ip} {userId} [{userName}] «{message}»  time: {workTime}  queries: {queries}  q-time: {queriesTime}  mem: {memory}  inc: {files}  req: {requestId}  ses: {sessionId}  {method} {uri}\n"
             );
             $logger->format()->setStaticVariables([
-                'datetime'    => function() {return date('[d-M-Y H:i:s T]');},
+                'datetime'    => static fn() => date('[d-M-Y H:i:s T]'),
                 'ip'          => '-',
                 'requestId'   => Request()->id(),
-                'sessionId'   => Session()->id() ?: '-',
-                'userId'      => Identity()->getId() ?: '-',
-                'userName'    => Identity()->getName() ?: '-',
-                'workTime'    => function() {return sprintf('%.3f', Timer('system')->elapsed());},
-                'queries'     => function() {return Db()->totalQueries();},
-                'queriesTime' => function() {return sprintf('%.3f', Db()->totalTime());},
-                'memory'      => function() {return sprintf('%.1fМб', memory_get_peak_usage(true) / 1024 / 1024);},
-                'files'       => function() {return count(get_included_files());},
+                'sessionId'   => static fn() => substr(Session()->id() ?: '-', 0, 6),
+                'userId'      => static fn() => Identity()->getId() ?: '-',
+                'userName'    => static fn() => Identity()->getName() ?: '-',
+                'workTime'    => static fn() => sprintf('%.3f', Timer('system')->elapsed()),
+                'queries'     => static fn() => Db()->totalQueries(),
+                'queriesTime' => static fn() => sprintf('%.3f', Db()->totalTime()),
+                'memory'      => static fn() => sprintf('%.1fМб', memory_get_peak_usage(true) / 1024 / 1024),
+                'files'       => static fn() => count(get_included_files()),
                 'method'      => 'console',
-                'uri'         => $GLOBALS['argv'][0],
+                'uri'         => static fn() => $GLOBALS['argv'][0],
                 'message'     => '-',
             ]);
         } else {
@@ -144,19 +144,19 @@ function Logger() {
                 "{datetime} {ip} {userId} [{userName}] «{message}»  time: {workTime}  queries: {queries}  q-time: {queriesTime}  mem: {memory}  inc: {files}  req: {requestId}  ses: {sessionId}  {method} {uri}\n"
             );
             $logger->format()->setStaticVariables([
-                'datetime'    => function() {return date('[d-M-Y H:i:s T]');},
+                'datetime'    => static fn() => date('[d-M-Y H:i:s T]'),
                 'ip'          => Request()->ip(),
                 'requestId'   => Request()->id(),
-                'sessionId'   => Session()->id() ?: '-',
-                'userId'      => Identity()->getId() ?: '-',
-                'userName'    => Identity()->getName() ?: '-',
-                'workTime'    => function() {return sprintf('%.3f', Timer('system')->elapsed());},
-                'queries'     => function() {return Db()->totalQueries();},
-                'queriesTime' => function() {return sprintf('%.3f', Db()->totalTime());},
-                'memory'      => function() {return sprintf('%.1fМб', memory_get_peak_usage(true) / 1024 / 1024);},
-                'files'       => function() {return count(get_included_files());},
+                'sessionId'   => static fn() => substr(Session()->id() ?: '-', 0, 6),
+                'userId'      => static fn() => Identity()->getId() ?: '-',
+                'userName'    => static fn() => Identity()->getName() ?: '-',
+                'workTime'    => static fn() => sprintf('%.3f', Timer('system')->elapsed()),
+                'queries'     => static fn() => Db()->totalQueries(),
+                'queriesTime' => static fn() => sprintf('%.3f', Db()->totalTime()),
+                'memory'      => static fn() => sprintf('%.1fМб', memory_get_peak_usage(true) / 1024 / 1024),
+                'files'       => static fn() => count(get_included_files()),
                 'method'      => Request()->method(),
-                'uri'         => Request()->uri(),
+                'uri'         => static fn() => Request()->uri(),
                 'message'     => '-',
             ]);
         }
