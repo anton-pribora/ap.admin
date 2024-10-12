@@ -39,6 +39,10 @@ if (Request()->isPost()) {
     $data = json_encode($logData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
 
     if (preg_match('/password/i', $data)) {
+        // Mask login and password only
+/*        $data = preg_replace('/("[^"]*(?:login|password)[^"]*":")(?>(?:(?>[^"\\\]+)|\\\.)*)(")/ui', '$1*********$2', $data);*/
+
+        // Mask all data
         $data = '*************';
     }
 
