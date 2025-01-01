@@ -19,13 +19,14 @@ const ajaxLoader = {
         // Ошибки уровня пользователя
         .then(data => {
           if (data.error) {
-            throw new Error(`${data.error.code}: ${data.error.description}`);
+            throw new Error(data.error.description || data.error.code);
           }
           return data;
         })
         .catch(error => {
           app.config.globalProperties.$toast.danger(`Ошибка: ${error.message}`);
           app.config.globalProperties.$ajaxLoaderLastError = error;
+          return Promise.reject(error);
         });
 
     app.config.globalProperties.$do = (action = '', data = {}) => q({
