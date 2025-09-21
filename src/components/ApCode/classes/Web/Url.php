@@ -19,7 +19,7 @@ class Url implements \JsonSerializable
 
     private $queryParams = [];
 
-    public function __construct($url, Url $base = null)
+    public function __construct($url, ?Url $base = null)
     {
         $info = parse_url(trim($url));
 

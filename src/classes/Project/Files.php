@@ -6,7 +6,7 @@ use ApCode\Misc\Pagination;
 
 trait Files
 {
-    function files($params = [], Pagination $pagination = null)
+    function files($params = [], ?Pagination $pagination = null)
     {
         return FileRepository::findMany($params + ['parentType' => $this::tableName(), 'parentId' => $this->id() ?: -1], $pagination);
     }

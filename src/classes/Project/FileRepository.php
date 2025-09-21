@@ -11,7 +11,7 @@ class FileRepository
      * @param Pagination $pagination
      * @return File[]
      */
-    public static function findMany($params, Pagination $pagination = NULL)
+    public static function findMany($params, ?Pagination $pagination = NULL)
     {
         $params = array_filter($params);
 

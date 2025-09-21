@@ -11,15 +11,15 @@ use ApCode\Misc\Triggers;
 
 /**
  * Организует отправку почты через несколько транспортов.
- * 
+ *
  * @example
  * Пример использования:
- * 
+ *
  * $layer     = new Layer();
  * $transport = new Transport\PhpMail;
- * 
+ *
  * $layer->appendTransport($transport);
- * 
+ *
  * // Обратный адрес по умолчанию
  * $layer->appendTrigger('beforeSend', function(Message $message){
  *     if ( !$message->getSenderEmail() ) {
@@ -44,55 +44,55 @@ use ApCode\Misc\Triggers;
  *         $message->senderEmail()
  *     );
  * });
- * 
+ *
  * $message = new Message;
  * $messate->addRecipient('foo@bar');
  * $message->setContent('Привет, мир!');
- * 
+ *
  * if ( !$layer->send($message) ) {
  *     var_dump($layer->getErrors());
  * }
- * 
+ *
  * @author Anton Pribora <info@anton-pribora.ru>
  * @package rake-engine
  */
 class Layer
 {
     use Triggers;
-    
+
     private $transports = [];
     private $errors     = [];
-    
-    public function appendTranspport(TransportInterface $transport, callable $filter = null)
+
+    public function appendTranspport(TransportInterface $transport, ?callable $filter = null)
     {
         $this->transports[] = [$transport, $filter];
         return $this;
     }
-    
+
     public function send(Message $message)
     {
         $this->errors = [];
-        
+
         $this->launchTriggers('beforeSend', $message, $this);
-        
+
         foreach ( $this->transports as list($transport, $filter) ) {
             if ( $filter ) {
                 if ( !$filter($message) ) {
                     continue;
                 }
             }
-            
+
             if ( !$transport->send($message) ) {
                 $this->launchTriggers('error', $message, $transport, $this);
                 $this->errors[] = $transport->getLastError();
             }
         }
-        
+
         $this->launchTriggers('afterSend', $message, $this);
-        
+
         return empty($this->errors);
     }
-    
+
     public function getErrors()
     {
         return $this->errors;

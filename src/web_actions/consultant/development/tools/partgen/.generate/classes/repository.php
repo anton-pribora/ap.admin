@@ -78,7 +78,7 @@ class {$cname}
      * @param Pagination \$pagination
      * @return {$billetClass}[]
      */
-    public static function findMany(\$params, Pagination \$pagination = NULL)
+    public static function findMany(\$params, ?Pagination \$pagination = NULL)
     {
         \$params = array_filter(\$params);
 

@@ -28,7 +28,7 @@ Layout()->append('breadcrumbs', new A(new UnescapedText('<i class="bi bi-house-d
 $meta = Meta(__DIR__);
 
 $createMenu = null;
-$createMenu = function ($items, Data\Layout\Menu $menu = NULL) use (&$createMenu) {
+$createMenu = function ($items, ?Data\Layout\Menu $menu = NULL) use (&$createMenu) {
       if (is_null($menu)) {
           $menu = new Data\Layout\Menu;
       }

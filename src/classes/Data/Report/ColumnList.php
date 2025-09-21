@@ -17,7 +17,7 @@ class ColumnList
     /**
      * @return \Data\Report\Column
      */
-    public function createColumn($key = NULL, $title = NULL, array $params = NULL)
+    public function createColumn($key = NULL, $title = NULL, ?array $params = NULL)
     {
         if (is_null($key)) {
             $key = count($this->columns);

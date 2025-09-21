@@ -11,7 +11,7 @@ class ProfileRepository
      * @param Pagination $pagination
      * @return Profile[]
      */
-    public static function findMany($params, Pagination $pagination = NULL)
+    public static function findMany($params, ?Pagination $pagination = NULL)
     {
         $params = array_filter($params);
 

@@ -7,7 +7,7 @@ class Row
     private $values = [];
     private $params = [];
 
-    public function setValue($columnKey, $value, array $params = NULL)
+    public function setValue($columnKey, $value, ?array $params = NULL)
     {
         $this->values[ $columnKey ] = $value;
 

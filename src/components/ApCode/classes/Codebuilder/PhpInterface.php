@@ -15,7 +15,7 @@ class PhpInterface extends PhpElement
     protected $extensions = [];
     protected $functions = [];
 
-    public function __construct($name, PhpNamespace $namespace = null)
+    public function __construct($name, ?PhpNamespace $namespace = null)
     {
         parent::__construct($name);
 
@@ -25,7 +25,7 @@ class PhpInterface extends PhpElement
         }
     }
 
-    public function getFullName(PhpNamespace $currentNamespace = null)
+    public function getFullName(?PhpNamespace $currentNamespace = null)
     {
         if ( $this->hasNamespace() )
         {

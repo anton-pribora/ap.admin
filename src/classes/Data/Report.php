@@ -29,7 +29,7 @@ class Report
         return $this->title;
     }
 
-    public function addColumn($key, $title = NULL, array $params = NULL)
+    public function addColumn($key, $title = NULL, ?array $params = NULL)
     {
         if (is_null($title)) {
             $title = $key;

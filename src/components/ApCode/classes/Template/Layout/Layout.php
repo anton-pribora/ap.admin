@@ -24,7 +24,7 @@ class Layout implements LayoutInterface
     private $layoutFolder;
     private $alias;
 
-    public function __construct($layoutFolder = NULL, AliasInterface $PathAlias = NULL)
+    public function __construct($layoutFolder = NULL, ?AliasInterface $PathAlias = NULL)
     {
         $this->layoutFolder = $layoutFolder;
         $this->alias        = $PathAlias;
@@ -103,7 +103,7 @@ class Layout implements LayoutInterface
         return $result;
     }
 
-    public function render($blockId, RendererInterface $renderer = null)
+    public function render($blockId, ?RendererInterface $renderer = null)
     {
         if (empty($renderer) && isset($this->renders[$blockId])) {
             $renderer = $this->renders[$blockId];
@@ -123,7 +123,7 @@ class Layout implements LayoutInterface
         return $renderer->renderResult($values);
     }
 
-    public function renderIfNotEmpty($blockId, RendererInterface $renderer = null)
+    public function renderIfNotEmpty($blockId, ?RendererInterface $renderer = null)
     {
         if (empty($this->blocks[$blockId])) {
             return null;
@@ -154,7 +154,7 @@ class Layout implements LayoutInterface
 
         return $this;
     }
-    
+
     /**
      * {@inheritDoc}
      * @see \ApCode\Template\Layout\LayoutInterface::setVar()

@@ -8,7 +8,7 @@ class Column
     private $title;
     private $params = [];
 
-    public function __construct($key, $title = NULL, array $params = NULL)
+    public function __construct($key, $title = NULL, ?array $params = NULL)
     {
         $this->key    = $key;
         $this->title  = $title;

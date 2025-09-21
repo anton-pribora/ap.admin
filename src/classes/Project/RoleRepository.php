@@ -11,7 +11,7 @@ class RoleRepository
      * @param Pagination $pagination
      * @return Role[]
      */
-    public static function findMany($params, Pagination $pagination = NULL)
+    public static function findMany($params, ?Pagination $pagination = NULL)
     {
         $params = array_filter($params);
 
